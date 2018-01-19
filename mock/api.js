@@ -1,24 +1,30 @@
 import { getUrlParams } from './utils';
 
 const titles = [
-  'Alipay',
-  'Angular',
-  'Ant Design',
-  'Ant Design Pro',
-  'Bootstrap',
-  'React',
-  'Vue',
-  'Webpack',
+  '肖申克的救赎 The Shawshank Redemption',
+  '肖申克的救赎 The Shawshank Redemption',
+  '肖申克的救赎 The Shawshank Redemption',
+  '肖申克的救赎 The Shawshank Redemption',
+  '肖申克的救赎 The Shawshank Redemption',
+  '肖申克的救赎 The Shawshank Redemption',
+  '肖申克的救赎 The Shawshank Redemption',
+  '肖申克的救赎 The Shawshank Redemption',
+  '肖申克的救赎 The Shawshank Redemption',
+  '肖申克的救赎 The Shawshank Redemption',
 ];
 const avatars = [
-  'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png', // Alipay
-  'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png', // Angular
-  'https://gw.alipayobjects.com/zos/rmsportal/dURIMkkrRFpPgTuzkwnB.png', // Ant Design
-  'https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png', // Ant Design Pro
-  'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png', // Bootstrap
-  'https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png', // React
-  'https://gw.alipayobjects.com/zos/rmsportal/ComBAopevLwENQdKWiIn.png', // Vue
-  'https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png', // Webpack
+  'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p480747492.webp',
+  'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p480747492.webp',
+  'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p480747492.webp',
+  'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p480747492.webp',
+  'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p480747492.webp',
+  'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p480747492.webp',
+  'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p480747492.webp',
+  'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p480747492.webp',
+  'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p480747492.webp',
+  'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p480747492.webp',
+  'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p480747492.webp',
+  'https://img3.doubanio.com/view/photo/s_ratio_poster/public/p480747492.webp',
 ];
 
 const avatars2 = [
@@ -41,7 +47,7 @@ const covers = [
   'https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png',
 ];
 const desc = [
-  '那是一种内在的东西， 他们到达不了，也无法触及的',
+  ' 导演: 弗兰克·德拉邦特 主演: 蒂姆·罗宾斯 / 摩根·弗里曼 / 鲍勃·冈顿 ',
   '希望是一个好东西，也许是最好的，好东西是不会消亡的',
   '生命就像一盒巧克力，结果往往出人意料',
   '城镇中有那么多的酒馆，她却偏偏走进了我的酒馆',
@@ -128,7 +134,7 @@ export const getNotice = [
     id: 'xxx1',
     title: titles[0],
     logo: avatars[0],
-    description: '那是一种内在的东西，他们到达不了，也无法触及的',
+    description: '导演: 弗兰克·德拉邦特 <br />主演: 蒂姆·罗宾斯 / 摩根·弗里曼 / 鲍勃·冈顿',
     updatedAt: new Date(),
     member: '科学搬砖组',
     href: '',
@@ -138,7 +144,7 @@ export const getNotice = [
     id: 'xxx2',
     title: titles[1],
     logo: avatars[1],
-    description: '希望是一个好东西，也许是最好的，好东西是不会消亡的',
+    description: '导演: 弗兰克·德拉邦特 主演: 蒂姆·罗宾斯 / 摩根·弗里曼 / 鲍勃·冈顿',
     updatedAt: new Date('2017-07-24'),
     member: '全组都是吴彦祖',
     href: '',
