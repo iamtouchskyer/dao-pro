@@ -8,6 +8,15 @@ export function getTimeDistance(type) {
   const now = new Date();
   const oneDay = 1000 * 60 * 60 * 24;
 
+  if (type === 'thisYear') {
+    const year = now.getFullYear();
+    now.setHours(0);
+    now.setMinutes(0);
+    now.setSeconds(0);
+
+    return [moment(`${year}-01-01 00:00:00`), moment(now)];
+  }
+
   if (type === 'today') {
     now.setHours(0);
     now.setMinutes(0);

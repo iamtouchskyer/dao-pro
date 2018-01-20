@@ -28,6 +28,7 @@ import {
 import Trend from '../../components/Trend';
 import NumberInfo from '../../components/NumberInfo';
 import { getTimeDistance } from '../../utils/utils';
+import ChinaMapChart from '../../newmodules/Charts/ChinaMap';
 
 import styles from './Analysis.less';
 
@@ -50,7 +51,7 @@ export default class Analysis extends Component {
   state = {
     salesType: 'all',
     currentTabKey: '',
-    rangePickerValue: getTimeDistance('year'),
+    rangePickerValue: getTimeDistance('thisYear'),
   };
 
   componentDidMount() {
@@ -69,6 +70,12 @@ export default class Analysis extends Component {
   handleChangeSalesType = (e) => {
     this.setState({
       salesType: e.target.value,
+    });
+  };
+
+  handleAppChannelType = (e) => {
+    this.setState({
+      channelType: e.target.value,
     });
   };
 
@@ -113,7 +120,7 @@ export default class Analysis extends Component {
   }
 
   render() {
-    const { rangePickerValue, salesType, currentTabKey } = this.state;
+    const { rangePickerValue, salesType, currentTabKey, channelType } = this.state;
     const { chart, loading } = this.props;
     const {
       visitData,
@@ -121,7 +128,6 @@ export default class Analysis extends Component {
       salesData,
       searchData,
       offlineData,
-      offlineChartData,
       salesTypeData,
       salesTypeDataOnline,
       salesTypeDataOffline,
@@ -159,7 +165,7 @@ export default class Analysis extends Component {
           <a className={this.isActive('month')} onClick={() => this.selectDate('month')}>
             本月
           </a>
-          <a className={this.isActive('year')} onClick={() => this.selectDate('year')}>
+          <a className={this.isActive('year')} onClick={() => this.selectDate('thisYear')}>
             全年
           </a>
         </div>
@@ -246,54 +252,76 @@ export default class Analysis extends Component {
           <Col {...topColResponsiveProps}>
             <ChartCard
               bordered={false}
-              title="总销售额"
+              title="播放时长趋势"
               action={
                 <Tooltip title="指标说明">
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
               total={yuan(126560)}
-              footer={<Field label="日均销售额" value={`￥${numeral(12423).format('0,0')}`} />}
+              footer={
+                <div>
+                  <Trend flag="up" style={{ marginRight: 16 }}>
+                    周同比<span className={styles.trendText}>12%</span>
+                  </Trend>
+                  <Trend flag="down">
+                    日环比<span className={styles.trendText}>11%</span>
+                  </Trend>
+                </div>
+              }
               contentHeight={46}
             >
-              <Trend flag="up" style={{ marginRight: 16 }}>
-                周同比<span className={styles.trendText}>12%</span>
-              </Trend>
-              <Trend flag="down">
-                日环比<span className={styles.trendText}>11%</span>
-              </Trend>
+              <MiniArea color="#ed7d31" data={visitData} />
             </ChartCard>
           </Col>
           <Col {...topColResponsiveProps}>
             <ChartCard
               bordered={false}
-              title="访问量"
+              title="播放剧集量趋势"
               action={
                 <Tooltip title="指标说明">
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
               total={numeral(8846).format('0,0')}
-              footer={<Field label="日访问量" value={numeral(1234).format('0,0')} />}
+              footer={
+                <div>
+                  <Trend flag="up" style={{ marginRight: 16 }}>
+                    周同比<span className={styles.trendText}>12%</span>
+                  </Trend>
+                  <Trend flag="down">
+                    日环比<span className={styles.trendText}>11%</span>
+                  </Trend>
+                </div>
+              }
               contentHeight={46}
             >
-              <MiniArea color="#975FE4" data={visitData} />
+              <MiniArea color="#ffc000" data={visitData} />
             </ChartCard>
           </Col>
           <Col {...topColResponsiveProps}>
             <ChartCard
               bordered={false}
-              title="支付笔数"
+              title="客户端数量趋势"
               action={
                 <Tooltip title="指标说明">
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
               total={numeral(6560).format('0,0')}
-              footer={<Field label="转化率" value="60%" />}
+              footer={
+                <div>
+                  <Trend flag="up" style={{ marginRight: 16 }}>
+                    周同比<span className={styles.trendText}>12%</span>
+                  </Trend>
+                  <Trend flag="down">
+                    日环比<span className={styles.trendText}>11%</span>
+                  </Trend>
+                </div>
+              }
               contentHeight={46}
             >
-              <MiniBar data={visitData} />
+              <MiniBar color="#4472c4" data={visitData} />
             </ChartCard>
           </Col>
           <Col {...topColResponsiveProps}>
@@ -374,6 +402,32 @@ export default class Analysis extends Component {
               </TabPane>
             </Tabs>
           </div>
+        </Card>
+
+        <Card
+          loading={loading}
+          className={styles.salesCard}
+          bordered={false}
+          bodyStyle={{ padding: 24 }}
+          style={{ marginTop: 24, minHeight: 500 }}
+          title="地域分布"
+          extra={
+            <div className={styles.salesCardExtra}>
+              {salesExtra}
+              <div className={styles.salesTypeRadio}>
+                <Radio.Group value={salesType} onChange={this.handleAppChannelType}>
+                  <Radio.Button value="0">全部App</Radio.Button>
+                  <Radio.Button value="1005">1005</Radio.Button>
+                  <Radio.Button value="1008">1008</Radio.Button>
+                  <Radio.Button value="1031">1031</Radio.Button>
+                  <Radio.Button value="1000">1000</Radio.Button>
+                  <Radio.Button value="1012">1012</Radio.Button>
+                </Radio.Group>
+              </div>
+            </div>
+          }
+        >
+          <ChinaMapChart height={1200} />
         </Card>
 
         <Row gutter={24}>
@@ -461,28 +515,9 @@ export default class Analysis extends Component {
           </Col>
         </Row>
 
-        <Card
-          loading={loading}
-          className={styles.offlineCard}
-          bordered={false}
-          bodyStyle={{ padding: '0 0 32px 0' }}
-          style={{ marginTop: 32 }}
-        >
-          <Tabs activeKey={activeKey} onChange={this.handleTabChange}>
-            {offlineData.map(shop => (
-              <TabPane tab={<CustomTab data={shop} currentTabKey={activeKey} />} key={shop.name}>
-                <div style={{ padding: '0 24px' }}>
-                  <TimelineChart
-                    height={400}
-                    data={offlineChartData}
-                    titleMap={{ y1: '客流量', y2: '支付笔数' }}
-                  />
-                </div>
-              </TabPane>
-            ))}
-          </Tabs>
-        </Card>
+
       </div>
     );
   }
 }
+
