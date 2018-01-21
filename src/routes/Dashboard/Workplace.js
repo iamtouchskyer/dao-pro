@@ -79,6 +79,8 @@ export default class Workplace extends PureComponent {
       chart: { radarData },
     } = this.props;
 
+    if (projectLoading === undefined) return null;
+
     const loading=false;
     const aa = _.times(100, (n) => {return {key: n, 'Name': '肖申克的救赎', 'Date': (new Date()).toLocaleString()};});
     const bb = _.keys(aa[0]);

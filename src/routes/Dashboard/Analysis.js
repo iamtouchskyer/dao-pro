@@ -14,6 +14,7 @@ import {
   Dropdown,
 } from 'antd';
 import numeral from 'numeral';
+import _ from 'lodash';
 import {
   ChartCard,
   yuan,
@@ -35,20 +36,14 @@ import styles from './Analysis.less';
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 
-const rankingListData = [];
-for (let i = 0; i < 7; i += 1) {
-  rankingListData.push({
-    title: `工专路 ${i} 号店`,
-    total: 323234,
-  });
-}
-
-@connect(({ chart, loading }) => ({
+@connect(({ chart, operationData, loading }) => ({
   chart,
-  loading: loading.effects['chart/fetch'],
+  operationData,
+  loading: loading.effects['chart/fetch'] || loading.effects['operationData/fetchOperationData'],
 }))
 export default class Analysis extends Component {
   state = {
+    channelType: '0',
     salesType: 'all',
     currentTabKey: '',
     rangePickerValue: getTimeDistance('thisYear'),
@@ -58,6 +53,10 @@ export default class Analysis extends Component {
     this.props.dispatch({
       type: 'chart/fetch',
     });
+
+    this.props.dispatch({
+      type: 'operationData/fetchOperationData',
+    });
   }
 
   componentWillUnmount() {
@@ -65,6 +64,12 @@ export default class Analysis extends Component {
     dispatch({
       type: 'chart/clear',
     });
+
+    /*
+    dispatch({
+      type: 'operationData/clear',
+    });
+    */
   }
 
   handleChangeSalesType = (e) => {
@@ -119,41 +124,9 @@ export default class Analysis extends Component {
     }
   }
 
-  render() {
-    const { rangePickerValue, salesType, currentTabKey, channelType } = this.state;
-    const { chart, loading } = this.props;
-    const {
-      visitData,
-      visitData2,
-      salesData,
-      searchData,
-      offlineData,
-      salesTypeData,
-      salesTypeDataOnline,
-      salesTypeDataOffline,
-    } = chart;
-
-    const salesPieData =
-      salesType === 'all'
-        ? salesTypeData
-        : salesType === 'online' ? salesTypeDataOnline : salesTypeDataOffline;
-
-    const menu = (
-      <Menu>
-        <Menu.Item>操作一</Menu.Item>
-        <Menu.Item>操作二</Menu.Item>
-      </Menu>
-    );
-
-    const iconGroup = (
-      <span className={styles.iconGroup}>
-        <Dropdown overlay={menu} placement="bottomRight">
-          <Icon type="ellipsis" />
-        </Dropdown>
-      </span>
-    );
-
-    const salesExtra = (
+  renderDatePicker = () => {
+    const { rangePickerValue } = this.state;
+    return (
       <div className={styles.salesExtraWrap}>
         <div className={styles.salesExtra}>
           <a className={this.isActive('today')} onClick={() => this.selectDate('today')}>
@@ -175,6 +148,181 @@ export default class Analysis extends Component {
           style={{ width: 256 }}
         />
       </div>
+    );
+  };
+
+  renderTabPane = (tabProps, chartProps, top10Props) => {
+    return (
+      <TabPane {...tabProps}>
+        <Row>
+          <Col xl={18} lg={16} md={16} sm={36} xs={36}>
+            <div className={styles.salesBar}>
+              <Bar
+                height={380}
+                {...chartProps}
+              />
+            </div>
+          </Col>
+          <Col xl={6} lg={8} md={8} sm={12} xs={12}>
+            <div className={styles.salesRank}>
+              <h4 className={styles.rankingTitle}>{top10Props.title}</h4>
+              <ul className={styles.rankingList}>
+                {top10Props.data.map((item, i) => (
+                  <li key={item.title}>
+                    <span className={i < 3 ? styles.active : ''}>{i + 1}</span>
+                    <span>{item.title}</span>
+                    <span>{numeral(item.total).format('0,0')}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Col>
+        </Row>
+      </TabPane>
+
+    );
+  }
+
+  renderTrend = () => {
+    const { salesType, currentTabKey } = this.state;
+    const { operationData, loading } = this.props;
+    const {
+      newDeviceTrend, provinceNDTop10,
+      activeDeviceTrend, totalWatchTimeTrend, totalNumberOfWatchedMediaTrend,
+      provinceADTop10, provinceTWTTop10, provinceTNWMTop10,
+    } = operationData;
+
+    if (loading === undefined) return null;
+
+    return (
+      <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
+        <div className={styles.salesCard}>
+          <Tabs tabBarExtraContent={this.renderDatePicker()} size="large" tabBarStyle={{ marginBottom: 24 }}>
+            {
+              this.renderTabPane(
+                { tab: '活跃客户端', key: 'activeclients' },
+                { title: '活跃客户端趋势', data: activeDeviceTrend },
+                { title: '省份Top10', data: provinceADTop10 },
+              )
+            }
+
+            {
+              this.renderTabPane(
+                { tab: '新增客户端', key: 'newclients' },
+                { title: '新增客户端趋势', data: newDeviceTrend },
+                { title: '省份Top10', data: provinceNDTop10 },
+              )
+            }
+
+            {
+              this.renderTabPane(
+                { tab: '播放剧集数目', key: 'counts' },
+                { title: '播放剧集数目趋势', data: totalWatchTimeTrend },
+                { title: '省份Top10', data: provinceTWTTop10 },
+              )
+            }
+
+            {
+              this.renderTabPane(
+                { tab: '播放时长', key: 'totaltime' },
+                { title: '播放时长趋势', data: totalNumberOfWatchedMediaTrend },
+                { title: '省份Top10', data: provinceTNWMTop10 },
+              )
+            }
+
+          </Tabs>
+        </div>
+      </Card>
+    );
+  }
+
+  renderProvinceData = () => {
+    const { operationData, loading } = this.props;
+    const { provinceAggregratedData } = operationData;
+
+    if (loading === undefined) return null;
+
+    const provinceAggregratedDataByNewClient = provinceAggregratedData.newClients;
+    const provinceAggregratedDataByActiveClient = provinceAggregratedData.activeClients;
+    const provinceAggregratedDataByTWT = provinceAggregratedData.totalWatchedTime;
+    const provinceAggregratedDataByTNWM = provinceAggregratedData.countOfWhatedMedia;
+    const theData = provinceAggregratedDataByNewClient;
+
+    /*
+    if (this.state.channelType === 0) {
+      theData = _.map(provinceAggregratedDataByNewClient, (eachProvince) => {
+        return { id: eachProvince.provinceId, value: _.sumBy(eachProvince.appId, eachApp => _.sum(_.values(eachApp))) };
+      });
+    } else {
+      theData = _.map(provinceAggregratedDataByNewClient, (eachProvince) => {
+        return { id: eachProvince.provinceId, value: _.values(_.find(eachProvince.appId, eachApp => _.keys(eachApp)[0] === this.state.channelType))[0] };
+      });
+    }
+    */
+
+    return (
+      <Card
+        loading={loading}
+        className={styles.salesCard}
+        bordered={false}
+        bodyStyle={{ padding: 24 }}
+        style={{ marginTop: 24, minHeight: 500 }}
+        title="地域分布"
+        extra={
+          <div className={styles.salesCardExtra}>
+            { this.renderDatePicker() }
+            <div className={styles.salesTypeRadio}>
+              <Radio.Group value={this.state.channelType} onChange={this.handleAppChannelType}>
+                <Radio.Button value="0">全部App</Radio.Button>
+                <Radio.Button value="1000">1000</Radio.Button>
+                <Radio.Button value="1005">1005</Radio.Button>
+                <Radio.Button value="1008">1008</Radio.Button>
+                <Radio.Button value="1031">1031</Radio.Button>
+                <Radio.Button value="1012">1012</Radio.Button>
+              </Radio.Group>
+            </div>
+          </div>
+        }
+      >
+        <ChinaMapChart height={1200} data={theData} />
+      </Card>
+    );
+  };
+
+  render() {
+    const { salesType, currentTabKey } = this.state;
+    const { chart, loading } = this.props;
+    const {
+      visitData,
+      visitData2,
+      salesData,
+      searchData,
+      offlineData,
+      salesTypeData,
+      salesTypeDataOnline,
+      salesTypeDataOffline,
+    } = chart;
+
+    if (loading === undefined) return null;
+
+    const salesPieData =
+      salesType === 'all'
+        ? salesTypeData
+        : salesType === 'online' ? salesTypeDataOnline : salesTypeDataOffline;
+
+    const menu = (
+      <Menu>
+        <Menu.Item>操作一</Menu.Item>
+        <Menu.Item>操作二</Menu.Item>
+      </Menu>
+    );
+
+    const iconGroup = (
+      <span className={styles.iconGroup}>
+        <Dropdown overlay={menu} placement="bottomRight">
+          <Icon type="ellipsis" />
+        </Dropdown>
+      </span>
     );
 
     const columns = [
@@ -351,84 +499,10 @@ export default class Analysis extends Component {
           </Col>
         </Row>
 
-        <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
-          <div className={styles.salesCard}>
-            <Tabs tabBarExtraContent={salesExtra} size="large" tabBarStyle={{ marginBottom: 24 }}>
-              <TabPane tab="销售额" key="sales">
-                <Row>
-                  <Col xl={16} lg={12} md={12} sm={24} xs={24}>
-                    <div className={styles.salesBar}>
-                      <Bar height={295} title="销售额趋势" data={salesData} />
-                    </div>
-                  </Col>
-                  <Col xl={8} lg={12} md={12} sm={24} xs={24}>
-                    <div className={styles.salesRank}>
-                      <h4 className={styles.rankingTitle}>门店销售额排名</h4>
-                      <ul className={styles.rankingList}>
-                        {rankingListData.map((item, i) => (
-                          <li key={item.title}>
-                            <span className={i < 3 ? styles.active : ''}>{i + 1}</span>
-                            <span>{item.title}</span>
-                            <span>{numeral(item.total).format('0,0')}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </Col>
-                </Row>
-              </TabPane>
-              <TabPane tab="访问量" key="views">
-                <Row>
-                  <Col xl={16} lg={12} md={12} sm={24} xs={24}>
-                    <div className={styles.salesBar}>
-                      <Bar height={292} title="访问量趋势" data={salesData} />
-                    </div>
-                  </Col>
-                  <Col xl={8} lg={12} md={12} sm={24} xs={24}>
-                    <div className={styles.salesRank}>
-                      <h4 className={styles.rankingTitle}>门店访问量排名</h4>
-                      <ul className={styles.rankingList}>
-                        {rankingListData.map((item, i) => (
-                          <li key={item.title}>
-                            <span className={i < 3 ? styles.active : ''}>{i + 1}</span>
-                            <span>{item.title}</span>
-                            <span>{numeral(item.total).format('0,0')}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </Col>
-                </Row>
-              </TabPane>
-            </Tabs>
-          </div>
-        </Card>
 
-        <Card
-          loading={loading}
-          className={styles.salesCard}
-          bordered={false}
-          bodyStyle={{ padding: 24 }}
-          style={{ marginTop: 24, minHeight: 500 }}
-          title="地域分布"
-          extra={
-            <div className={styles.salesCardExtra}>
-              {salesExtra}
-              <div className={styles.salesTypeRadio}>
-                <Radio.Group value={salesType} onChange={this.handleAppChannelType}>
-                  <Radio.Button value="0">全部App</Radio.Button>
-                  <Radio.Button value="1005">1005</Radio.Button>
-                  <Radio.Button value="1008">1008</Radio.Button>
-                  <Radio.Button value="1031">1031</Radio.Button>
-                  <Radio.Button value="1000">1000</Radio.Button>
-                  <Radio.Button value="1012">1012</Radio.Button>
-                </Radio.Group>
-              </div>
-            </div>
-          }
-        >
-          <ChinaMapChart height={1200} />
-        </Card>
+        { this.renderTrend() }
+        { this.renderProvinceData() }
+
 
         <Row gutter={24}>
           <Col xl={12} lg={24} md={24} sm={24} xs={24}>
@@ -514,8 +588,6 @@ export default class Analysis extends Component {
             </Card>
           </Col>
         </Row>
-
-
       </div>
     );
   }

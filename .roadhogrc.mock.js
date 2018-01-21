@@ -5,6 +5,7 @@ import { getFakeChartData } from './mock/chart';
 import { imgMap } from './mock/utils';
 import { getProfileBasicData } from './mock/profile';
 import { getProfileAdvancedData } from './mock/profile';
+import * as CIBN from './mock/cibn';
 import { getNotices } from './mock/notices';
 import { format, delay } from 'roadhog-api-doc';
 
@@ -23,7 +24,7 @@ const proxy = {
       },
     },
     $body: {
-      name: 'Serati Ma',
+      name: 'Admin',
       avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
       userid: '00000001',
       notifyCount: 12,
@@ -132,6 +133,8 @@ const proxy = {
       "path": "/base/category/list"
     });
   },
+  'GET /api/cibn/operationdata': CIBN.getFakeOperationData,
+  'GET /pindou/(.*)': 'http://localhost:3030/',
 };
 
 export default noProxy ? {} : delay(proxy, 1000);

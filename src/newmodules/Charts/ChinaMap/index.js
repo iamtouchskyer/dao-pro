@@ -5,7 +5,145 @@ import autoHeight from '../../../components/Charts/autoHeight';
 import styles from '../../../components/Charts/index.less';
 import chinaMapData from '../../../assets/china-geo.json';
 
-
+const mappingTable =
+  [
+    {
+      ProvicenName: '安徽',
+      ProvinceId: 200,
+    },
+    {
+      ProvicenName: '澳门',
+      ProvinceId: 201,
+    },
+    {
+      ProvicenName: '北京',
+      ProvinceId: 202,
+    },
+    {
+      ProvicenName: '重庆',
+      ProvinceId: 203,
+    },
+    {
+      ProvicenName: '福建',
+      ProvinceId: 204,
+    },
+    {
+      ProvicenName: '甘肃',
+      ProvinceId: 205,
+    },
+    {
+      ProvicenName: '广东',
+      ProvinceId: 206,
+    },
+    {
+      ProvicenName: '广西',
+      ProvinceId: 207,
+    },
+    {
+      ProvicenName: '贵州',
+      ProvinceId: 208,
+    },
+    {
+      ProvicenName: '海南',
+      ProvinceId: 209,
+    },
+    {
+      ProvicenName: '河北',
+      ProvinceId: 210,
+    },
+    {
+      ProvicenName: '黑龙江',
+      ProvinceId: 211,
+    },
+    {
+      ProvicenName: '河南省',
+      ProvinceId: 212,
+    },
+    {
+      ProvicenName: '湖北省',
+      ProvinceId: 213,
+    },
+    {
+      ProvicenName: '湖南省',
+      ProvinceId: 214,
+    },
+    {
+      ProvicenName: '江苏',
+      ProvinceId: 215,
+    },
+    {
+      ProvicenName: '江西',
+      ProvinceId: 216,
+    },
+    {
+      ProvicenName: '吉林',
+      ProvinceId: 217,
+    },
+    {
+      ProvicenName: '辽宁',
+      ProvinceId: 218,
+    },
+    {
+      ProvicenName: '内蒙古',
+      ProvinceId: 219,
+    },
+    {
+      ProvicenName: '宁夏',
+      ProvinceId: 220,
+    },
+    {
+      ProvicenName: '青海',
+      ProvinceId: 221,
+    },
+    {
+      ProvicenName: '山东',
+      ProvinceId: 222,
+    },
+    {
+      ProvicenName: '上海',
+      ProvinceId: 223,
+    },
+    {
+      ProvicenName: ' 陕西',
+      ProvinceId: 224,
+    },
+    {
+      ProvicenName: '山西',
+      ProvinceId: 225,
+    },
+    {
+      ProvicenName: '四川',
+      ProvinceId: 226,
+    },
+    {
+      ProvicenName: '台湾',
+      ProvinceId: 227,
+    },
+    {
+      ProvicenName: '天津',
+      ProvinceId: 228,
+    },
+    {
+      ProvicenName: '香港',
+      ProvinceId: 229,
+    },
+    {
+      ProvicenName: '新疆 ',
+      ProvinceId: 230,
+    },
+    {
+      ProvicenName: '西藏',
+      ProvinceId: 231,
+    },
+    {
+      ProvicenName: '云南',
+      ProvinceId: 232,
+    },
+    {
+      ProvicenName: '浙江',
+      ProvinceId: 233,
+    },
+  ];
 
 @autoHeight()
 export default class ChinaMapChart extends React.Component {
@@ -58,7 +196,7 @@ export default class ChinaMapChart extends React.Component {
 
   render() {
     const userDv = this.ds.createView()
-      .source(this.userData)
+      .source(this.props.data)
       .transform({
         geoDataView: this.chinaMap,
         field: 'name',
@@ -116,4 +254,4 @@ export default class ChinaMapChart extends React.Component {
   }
 }
 
-/*' -#ed7d31-#a5a5a5-#ffc000-#5b9bd5-#70ad47 */
+/* ' -#ed7d31-#a5a5a5-#ffc000-#5b9bd5-#70ad47 */

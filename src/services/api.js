@@ -77,3 +77,7 @@ export async function fakeRegister(params) {
 export async function queryNotices() {
   return request('/api/notices');
 }
+
+export async function queryCIBNOperationData() {
+  return request('/api/cibn/operationdata');
+}

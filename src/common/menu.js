@@ -5,13 +5,13 @@ const menuData = [{
   icon: 'dashboard',
   path: 'dashboard',
   children: [{
-    name: '分析页',
+    name: '监控页',
     path: 'analysis',
   }, {
-    name: '监控页',
+    name: '分析页',
     path: 'monitor',
   }, {
-    name: '工作台',
+    name: '用户个性化推荐',
     path: 'workplace',
     // hideInMenu: true,
   }],
