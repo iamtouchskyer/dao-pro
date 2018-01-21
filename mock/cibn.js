@@ -111,6 +111,13 @@ const realGetFakeOperationData = () => {
 
 const getFakeOperationData = realGetFakeOperationData();
 
+const getFakePersonalRecommendation = (req, res) => {
+  const query = req.query;
+
+  res.send(query);
+};
+
 export default {
   getFakeOperationData,
+  getFakePersonalRecommendation,
 };

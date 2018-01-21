@@ -7,17 +7,18 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { Radar, TagCloud } from '../../components/Charts';
 import CardGroup from '../../newmodules/CardGroup';
 import Dropdowns from '../../newmodules/Dropdowns';
-import styles from './Workplace.less';
+import styles from './Recommendation.less';
 import _ from 'lodash';
 
-@connect(({ project, activities, chart, loading }) => ({
+@connect(({ project, activities, chart, recommendation, loading }) => ({
   project,
   activities,
   chart,
+  loading: loading.effects['project/fetchNotice'] || loading.effects['recommendation/fetchPersonalRecommendation'],
   projectLoading: loading.effects['project/fetchNotice'],
   activitiesLoading: loading.effects['activities/fetchList'],
 }))
-export default class Workplace extends PureComponent {
+export default class Recommendation extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
@@ -28,6 +29,9 @@ export default class Workplace extends PureComponent {
     });
     dispatch({
       type: 'chart/fetch',
+    });
+    this.props.dispatch({
+      type: 'recommendation/fetchPersonalRecommendation',
     });
   }
 

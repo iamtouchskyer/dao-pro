@@ -134,6 +134,7 @@ const proxy = {
     });
   },
   'GET /api/cibn/operationdata': CIBN.getFakeOperationData,
+  'GET /api/cibn/personalrecommendation': CIBN.getFakePersonalRecommendation,
   'GET /pindou/(.*)': 'http://localhost:3030/',
 };
 

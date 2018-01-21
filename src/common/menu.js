@@ -12,7 +12,7 @@ const menuData = [{
     path: 'monitor',
   }, {
     name: '用户个性化推荐',
-    path: 'workplace',
+    path: 'recommendation',
     // hideInMenu: true,
   }],
 }
