@@ -117,7 +117,36 @@ const getFakePersonalRecommendation = (req, res) => {
   res.send(query);
 };
 
+const personalTags = (() => {
+  const tags = [];
+  for (let i = 0; i < 30; i += 1) {
+    tags.push({
+      name: `TagClout-Title-${i}`,
+      value: Math.floor((Math.random() * 50)) + 20,
+    });
+  }
+  return tags;
+})();
+
+const getFakePersonalTags = (req, res) => {
+  const query = req.query;
+
+  res.send(personalTags);
+};
+
+const getFakePersonalTag = (req, res) => {
+  const index = parseInt(req.query.index, 10);
+
+  if (index >= 0 && index < _.size(personalTags)) {
+    res.send(personalTags[index]);
+  } else {
+    res.send({});
+  }
+};
+
 export default {
   getFakeOperationData,
   getFakePersonalRecommendation,
+  getFakePersonalTags,
+  getFakePersonalTag,
 };

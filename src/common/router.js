@@ -80,7 +80,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['monitor'], () => import('../routes/Dashboard/Monitor')),
     },
     '/dashboard/recommendation': {
-      component: dynamicWrapper(app, ['project', 'activities', 'chart', 'recommendation'], () => import('../routes/Dashboard/Recommendation')),
+      component: dynamicWrapper(app, ['project', 'chart', 'recommendation'], () => import('../routes/Dashboard/Recommendation')),
       // hideInBreadcrumb: true,
       // name: '工作台',
       // authority: 'admin',

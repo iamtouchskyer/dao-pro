@@ -85,3 +85,8 @@ export async function queryCIBNOperationData() {
 export async function queryCIBNPersonalRecommendation() {
   return request('/api/cibn/operationdata');
 }
+
+export async function queryCIBNPersonalTags() {
+  return request('/api/cibn/personal/tags');
+}
+

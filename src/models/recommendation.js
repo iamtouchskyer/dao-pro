@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { queryCIBNPersonalRecommendation } from '../services/api';
+import { queryCIBNPersonalRecommendation, queryCIBNPersonalTags } from '../services/api';
 
 const calculateProvinceTotal = (provinceData) => {
   return _.sumBy(provinceData.dimensions.application, eachApp => eachApp.total);
@@ -80,10 +80,21 @@ export default {
       totalWatchedTime: [],
       countOfWhatedMedia: [],
     },
+    tags: [],
     loading: false,
   },
 
   effects: {
+    *fetchPersonalTag(_, { call, put }) {
+      const personalTags = yield call(queryCIBNPersonalTags);
+      yield put({
+        type: 'save',
+        payload: {
+          tags: personalTags,
+        },
+      });
+    },
+  
     *fetchPersonalRecommendation(_, { call, put }) {
       const operationData = yield call(queryCIBNPersonalRecommendation);
       const operationDateForView = yield generateDataForView(operationData);
@@ -119,6 +130,7 @@ export default {
           totalWatchedTime: [],
           countOfWhatedMedia: [],
         },
+        tags: [],
       };
     },
   },

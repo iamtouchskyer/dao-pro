@@ -5,18 +5,24 @@ const menuData = [{
   icon: 'dashboard',
   path: 'dashboard',
   children: [{
-    name: '监控页',
+    name: '总体监控',
     path: 'analysis',
   }, {
-    name: '分析页',
+    name: '热点统计',
     path: 'monitor',
   }, {
-    name: '用户个性化推荐',
+    name: '聚类划分',
+    path: 'monitor',
+  }, {
+    name: '个性化用户',
+    path: 'recommendation',
+    // hideInMenu: true,
+  }, {
+    name: '特别考虑',
     path: 'recommendation',
     // hideInMenu: true,
   }],
-}
-];
+}];
 
 function formatter(data, parentPath = '', parentAuthority) {
   return data.map((item) => {

@@ -10,13 +10,11 @@ import Dropdowns from '../../newmodules/Dropdowns';
 import styles from './Recommendation.less';
 import _ from 'lodash';
 
-@connect(({ project, activities, chart, recommendation, loading }) => ({
+@connect(({ project, chart, recommendation, loading }) => ({
   project,
-  activities,
   chart,
   loading: loading.effects['project/fetchNotice'] || loading.effects['recommendation/fetchPersonalRecommendation'],
   projectLoading: loading.effects['project/fetchNotice'],
-  activitiesLoading: loading.effects['activities/fetchList'],
 }))
 export default class Recommendation extends PureComponent {
   componentDidMount() {
@@ -25,13 +23,13 @@ export default class Recommendation extends PureComponent {
       type: 'project/fetchNotice',
     });
     dispatch({
-      type: 'activities/fetchList',
-    });
-    dispatch({
       type: 'chart/fetch',
     });
-    this.props.dispatch({
+    dispatch({
       type: 'recommendation/fetchPersonalRecommendation',
+    });
+    dispatch({
+      type: 'recommendation/fetchPersonalTag',
     });
   }
 
@@ -42,46 +40,26 @@ export default class Recommendation extends PureComponent {
     });
   }
 
-  renderActivities() {
-    const {
-      activities: { list },
-    } = this.props;
-    return list.map((item) => {
-      const events = item.template.split(/@\{([^{}]*)\}/gi).map((key) => {
-        if (item[key]) {
-          return <a href={item[key].link} key={item[key].name}>{item[key].name}</a>;
-        }
-        return key;
-      });
-      return (
-        <List.Item key={item.id}>
-          <List.Item.Meta
-            avatar={<Avatar src={item.user.avatar} />}
-            title={
-              <span>
-                <a className={styles.username}>{item.user.name}</a>
-                &nbsp;
-                <span className={styles.event}>{events}</span>
-              </span>
-            }
-            description={
-              <span className={styles.datetime} title={item.updatedAt}>
-                {moment(item.updatedAt).fromNow()}
-              </span>
-            }
-          />
-        </List.Item>
-      );
-    });
-  }
-
   render() {
     const {
       project: { notice },
       projectLoading,
-      activitiesLoading,
       chart: { radarData },
+      recommendation,
     } = this.props;
+
+    /*
+    const {
+      tags
+    } = recommendation;
+    */
+    const tags = [];
+    for (let i = 0; i < 30; i += 1) {
+      tags.push({
+        name: `TagClout-Title-${i}`,
+        value: Math.floor((Math.random() * 50)) + 20,
+      });
+    }
 
     if (projectLoading === undefined) return null;
 
@@ -89,14 +67,6 @@ export default class Recommendation extends PureComponent {
     const aa = _.times(100, (n) => {return {key: n, 'Name': '肖申克的救赎', 'Date': (new Date()).toLocaleString()};});
     const bb = _.keys(aa[0]);
     const cc = _.map(bb, (b) => _.zipObject(['title', 'dataIndex', 'key'], [b, b, b]));
-
-    let tags = [];
-    for (let i = 0; i < 30; i += 1) {
-      tags.push({
-        name: `TagClout-Title-${i}`,
-        value: Math.floor((Math.random() * 50)) + 20,
-      });
-    }
 
     const paginationProps = {
       showSizeChanger: true,
