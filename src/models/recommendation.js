@@ -40,13 +40,13 @@ const generateDataForView = (operationData) => {
   const [newDeviceTrend, provinceND, provinceNDTop10] = generateTrendAndTop10(operationData, 'newClients');
   const [activeDeviceTrend, provinceAD, provinceADTop10] = generateTrendAndTop10(operationData, 'activeClients');
   const [totalWatchTimeTrend, provinceTWT, provinceTWTTop10] = generateTrendAndTop10(operationData, 'totalWatchedTime');
-  const [totalNumberOfWatchedMediaTrend, provinceTNWM, provinceTNWMTop10] = generateTrendAndTop10(operationData, 'countOfWhatedMedia');
+  const [totalNumberOfWatchedMediaTrend, provinceTNWM, provinceTNWMTop10] = generateTrendAndTop10(operationData, 'countOfWhatchedMedia');
 
   const provinceAggregratedData = {
     newClients: provinceND,
     activeClients: provinceAD,
     totalWatchedTime: provinceTWT,
-    countOfWhatedMedia: provinceTNWM,
+    countOfWhatchedMedia: provinceTNWM,
   };
 
   return {
@@ -78,7 +78,7 @@ export default {
       newClient: [],
       activeClient: [],
       totalWatchedTime: [],
-      countOfWhatedMedia: [],
+      countOfWhatchedMedia: [],
     },
     tags: [],
     loading: false,
@@ -128,7 +128,7 @@ export default {
           newClient: [],
           activeClient: [],
           totalWatchedTime: [],
-          countOfWhatedMedia: [],
+          countOfWhatchedMedia: [],
         },
         tags: [],
       };

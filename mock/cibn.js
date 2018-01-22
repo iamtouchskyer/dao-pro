@@ -14,7 +14,7 @@ everyDayData
     newClients: provincesDataList,
     activeClients: provincesDataList,
     totalWatchedTime: provincesDataList,
-    countOfWhatedMedia: provincesDataList,
+    countOfWhatchedMedia: provincesDataList,
   }
 }
 
@@ -102,7 +102,7 @@ const realGetFakeOperationData = () => {
           newClients: getFakeProvincesData(),
           activeClients: getFakeProvincesData(),
           totalWatchedTime: getFakeProvincesData(),
-          countOfWhatedMedia: getFakeProvincesData(),
+          countOfWhatchedMedia: getFakeProvincesData(),
         },
       };
     }),

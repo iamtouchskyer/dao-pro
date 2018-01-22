@@ -245,7 +245,7 @@ export default class Analysis extends Component {
     const provinceAggregratedDataByNewClient = provinceAggregratedData.newClients;
     const provinceAggregratedDataByActiveClient = provinceAggregratedData.activeClients;
     const provinceAggregratedDataByTWT = provinceAggregratedData.totalWatchedTime;
-    const provinceAggregratedDataByTNWM = provinceAggregratedData.countOfWhatedMedia;
+    const provinceAggregratedDataByTNWM = provinceAggregratedData.countOfWhatchedMedia;
     const theData = provinceAggregratedDataByNewClient;
 
     /*
