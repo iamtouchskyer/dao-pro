@@ -12,6 +12,7 @@ import {
   Tooltip,
   Menu,
   Dropdown,
+  Select,
 } from 'antd';
 import numeral from 'numeral';
 import _ from 'lodash';
@@ -72,15 +73,23 @@ export default class Analysis extends Component {
     */
   }
 
+  changeProvinceFilterFilterBy = (e) => {
+    this.props.dispatch({
+      type: 'operationData/changeProvinceFilterFilterBy',
+      value: e.target.value,
+    });
+  }
+
   handleChangeSalesType = (e) => {
     this.setState({
       salesType: e.target.value,
     });
   };
 
-  handleAppChannelType = (e) => {
-    this.setState({
-      channelType: e.target.value,
+  changeFilterValue = (value) => {
+    this.props.dispatch({
+      type: 'operationData/changeFilterValue',
+      value,
     });
   };
 
@@ -260,6 +269,8 @@ export default class Analysis extends Component {
     }
     */
 
+    const { provinceFilter } = operationData;
+
     return (
       <Card
         loading={loading}
@@ -272,14 +283,15 @@ export default class Analysis extends Component {
           <div className={styles.salesCardExtra}>
             { this.renderDatePicker() }
             <div className={styles.salesTypeRadio}>
-              <Radio.Group value={this.state.channelType} onChange={this.handleAppChannelType}>
-                <Radio.Button value="0">全部App</Radio.Button>
-                <Radio.Button value="1000">1000</Radio.Button>
-                <Radio.Button value="1005">1005</Radio.Button>
-                <Radio.Button value="1008">1008</Radio.Button>
-                <Radio.Button value="1031">1031</Radio.Button>
-                <Radio.Button value="1012">1012</Radio.Button>
+              <Radio.Group value={provinceFilter.filterBy} onChange={this.changeProvinceFilterFilterBy}>
+                <Radio.Button value="app">App</Radio.Button>
+                <Radio.Button value="channel">Channel</Radio.Button>
               </Radio.Group>
+              <Select value={provinceFilter.filterValue} style={{ width: 100 }} onChange={this.changeFilterValue}>
+                {provinceFilter[provinceFilter.filterBy === 'app' ? 'allAppIds' : 'allChannels'].map(i => (
+                  <Select.Option key={i} value={i}>{i}</Select.Option>
+                ))}
+              </Select>
             </div>
           </div>
         }

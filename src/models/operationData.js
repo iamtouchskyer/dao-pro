@@ -1,8 +1,93 @@
 import _ from 'lodash';
 import { queryCIBNOperationData } from '../services/api';
 
+const allChannels = [
+  '10000',
+  '10022',
+  '20000',
+  '20001',
+  '20002',
+  '20003',
+  '20004',
+  '20005',
+  '20006',
+  '20007',
+  '20011',
+  '20014',
+  '20015',
+  '20016',
+  '20017',
+  '20018',
+  '20019',
+  '20020',
+  '20021',
+  '20026',
+  '20028',
+  '20029',
+  '20032',
+  '20033',
+  '20037',
+  '20040',
+  '20041',
+  '20042',
+  '20043',
+  '20044',
+  '20045',
+  '20050',
+  '20052',
+  '20053',
+  '20054',
+  '20055',
+  '20056',
+  '20057',
+  '20058',
+  '20061',
+  '20063',
+  '20066',
+  '20067',
+  '20069',
+  '20071',
+  '20074',
+  '20076',
+  '20077',
+  '20079',
+  '20083',
+  '20084',
+  '20087',
+  '20088',
+  '20092',
+  '20093',
+  '20094',
+  '20095',
+  '20096',
+  '20110',
+  '20111',
+  '20112',
+  '20115',
+  '20116',
+  '20118',
+  '20121',
+  '20126',
+  '20128',
+  '20132',
+  '20133',
+  '20134',
+];
+
+const allAppIds = ['1000', '1008', '1012', '1015'];
+
 const calculateProvinceTotal = (provinceData) => {
-  return _.sumBy(provinceData.dimensions.application, eachApp => eachApp.total);
+  const { filterBy, filterValue } = this.default.state.provinceFilter;
+
+  return _.sumBy(provinceData.dimensions.application, (eachApp) => {
+    if (filterValue === '0' ||
+    (filterBy === 'app' && eachApp.appId === filterValue) ||
+    (filterBy === 'channel' && eachApp.channelId === filterValue)) {
+      return eachApp.total;
+    }
+
+    return 0;
+  });
 };
 
 const calculateCountryTotal = (provincesData) => {
@@ -81,16 +166,40 @@ export default {
       countOfWhatchedMedia: [],
     },
     loading: false,
+    provinceFilter: {
+      allAppIds,
+      allChannels,
+      filterBy: 'app',
+      filterValue: '0',
+    },
   },
 
   effects: {
     *fetchOperationData(_, { call, put }) {
       const operationData = yield call(queryCIBNOperationData);
-      const operationDateForView = yield generateDataForView(operationData);
+      const operationDateForView = yield generateDataForView.call(this, operationData);
+
       yield put({
         type: 'save',
         payload: {
+          rawData: operationData.data,
           ...operationDateForView,
+        },
+      });
+    },
+    *changeProvinceFilterFilterBy({ value }, { put }) {
+      yield put({
+        type: 'updateProvinceFilterFilterBy',
+        payload: {
+          filterBy: value,
+        },
+      });
+    },
+    *changeFilterValue({ value }, { put }) {
+      yield put({
+        type: 'updateFilterValue',
+        payload: {
+          filterValue: value,
         },
       });
     },
@@ -101,6 +210,26 @@ export default {
       return {
         ...state,
         ...payload,
+      };
+    },
+    updateProvinceFilterFilterBy(state, { payload }) {
+      return {
+        ...state,
+        provinceFilter: {
+          ...state.provinceFilter,
+          filterBy: payload.filterBy,
+          filterValue: '0',
+        },
+      };
+    },
+    updateFilterValue(state, { payload }) {
+      return {
+        ...state,
+        ...payload,
+        provinceFilter: {
+          ...state.provinceFilter,
+          filterValue: payload.filterValue,
+        },
       };
     },
     clear() {
@@ -118,6 +247,12 @@ export default {
           activeClient: [],
           totalWatchedTime: [],
           countOfWhatchedMedia: [],
+        },
+        provinceFilter: {
+          allAppIds,
+          allChannels,
+          filterBy: 'app',
+          filterValue: '0',
         },
       };
     },
