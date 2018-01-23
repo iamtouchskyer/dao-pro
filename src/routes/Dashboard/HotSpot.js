@@ -21,7 +21,7 @@ import styles from './Analysis.less';
 import { getTimeDistance } from '../../utils/utils';
 import kindMetadata from '../../../metadata/kind';
 import areaMetadata from '../../../metadata/area';
-import TopMovies from './Top/TopMovies';
+import TopWrapper from './Top/TopWrapper';
 
 const { Secured } = Authorized;
 const { TabPane } = Tabs;
@@ -175,7 +175,7 @@ export default class HotSpot extends PureComponent {
             );
           })}
           {
-            <TopMovies
+            <TopWrapper
               payload={{
                 kind: this.state.kind,
                 language: this.state.filter.language,
