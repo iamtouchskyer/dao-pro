@@ -133,27 +133,33 @@ export default class Analysis extends Component {
     }
   }
 
-  renderDatePicker = () => {
-    const { rangePickerValue } = this.state;
+  renderDatePicker = ({
+    value = this.state.rangePickerValue,
+    onChange = this.handleRangePickerChange,
+    onClickToday = () => this.selectDate('today'),
+    onClickWeek = () => this.selectDate('week'),
+    onClickMonth = () => this.selectDate('month'),
+    onClickThisYear = () => this.selectDate('thisYear'),
+  } = {}) => {
     return (
       <div className={styles.salesExtraWrap}>
         <div className={styles.salesExtra}>
-          <a className={this.isActive('today')} onClick={() => this.selectDate('today')}>
+          <a className={this.isActive('today')} onClick={onClickToday}>
             今日
           </a>
-          <a className={this.isActive('week')} onClick={() => this.selectDate('week')}>
+          <a className={this.isActive('week')} onClick={onClickWeek}>
             本周
           </a>
-          <a className={this.isActive('month')} onClick={() => this.selectDate('month')}>
+          <a className={this.isActive('month')} onClick={onClickMonth}>
             本月
           </a>
-          <a className={this.isActive('year')} onClick={() => this.selectDate('thisYear')}>
+          <a className={this.isActive('year')} onClick={onClickThisYear}>
             全年
           </a>
         </div>
         <RangePicker
-          value={rangePickerValue}
-          onChange={this.handleRangePickerChange}
+          value={value}
+          onChange={onChange}
           style={{ width: 256 }}
         />
       </div>
@@ -281,7 +287,49 @@ export default class Analysis extends Component {
         title="地域分布"
         extra={
           <div className={styles.salesCardExtra}>
-            { this.renderDatePicker() }
+            { this.renderDatePicker({
+              value: provinceFilter.dateRange,
+              onChange: (dateRange) => {
+                this.props.dispatch({
+                  type: 'operationData/updateProvinceFilter',
+                  payload: {
+                    dateRange,
+                  },
+                });
+              },
+              onClickToday: () => {
+                this.props.dispatch({
+                  type: 'operationData/updateProvinceFilter',
+                  payload: {
+                    dateRange: getTimeDistance('today'),
+                  },
+                });
+              },
+              onClickWeek: () => {
+                this.props.dispatch({
+                  type: 'operationData/updateProvinceFilter',
+                  payload: {
+                    dateRange: getTimeDistance('week'),
+                  },
+                });
+              },
+              onClickMonth: () => {
+                this.props.dispatch({
+                  type: 'operationData/updateProvinceFilter',
+                  payload: {
+                    dateRange: getTimeDistance('month'),
+                  },
+                });
+              },
+              onClickThisYear: () => {
+                this.props.dispatch({
+                  type: 'operationData/updateProvinceFilter',
+                  payload: {
+                    dateRange: getTimeDistance('thisYear'),
+                  },
+                });
+              },
+            }) }
             <div className={styles.salesTypeRadio}>
               <Radio.Group
                 value={provinceFilter.filterBy}

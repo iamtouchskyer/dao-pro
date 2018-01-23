@@ -189,6 +189,8 @@ export default {
       };
     },
     updateProvinceFilter(state, { payload }) {
+      window.console.log(state.rawData);
+
       return {
         ...state,
         provinceFilter: {
