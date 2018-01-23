@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import { connect } from 'dva';
 import {
   Tabs,
@@ -21,6 +21,7 @@ import styles from './Analysis.less';
 import { getTimeDistance } from '../../utils/utils';
 import kindMetadata from '../../../metadata/kind';
 import areaMetadata from '../../../metadata/area';
+import TopMovies from './Top/TopMovies';
 
 const { Secured } = Authorized;
 const { TabPane } = Tabs;
@@ -41,7 +42,7 @@ const havePermissionAsync = new Promise((resolve) => {
   cibnHot,
   loading: loading.effects['cibnHot/fetchFilter'],
 }))
-export default class HotSpot extends Component {
+export default class HotSpot extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -54,7 +55,7 @@ export default class HotSpot extends Component {
 
   componentDidMount() {
     this.onChangeKind('movie');
-    this.fetchPlayCount({});
+    // this.fetchPlayCount({});
   }
 
   fetchFilter(kind) {
@@ -66,25 +67,25 @@ export default class HotSpot extends Component {
     });
   }
 
-  fetchPlayCount(condition) {
-    const updatedState = _.defaults(condition, this.state);
+  // fetchPlayCount(condition) {
+  //   const updatedState = _.defaults(condition, this.state);
 
-    this.props.dispatch({
-      type: 'cibnHot/fetchPlayCount',
-      payload: {
-        kind: updatedState.kind,
-        language: updatedState.filter.language,
-        category: updatedState.filter.category,
-        musicstyle: updatedState.filter.musicstyle,
-        location: updatedState.filter.location,
-        areaId: updatedState.areaId,
-      },
-    });
-  }
+  //   this.props.dispatch({
+  //     type: 'cibnHot/fetchPlayCount',
+  //     payload: {
+  //       kind: updatedState.kind,
+  //       language: updatedState.filter.language,
+  //       category: updatedState.filter.category,
+  //       musicstyle: updatedState.filter.musicstyle,
+  //       location: updatedState.filter.location,
+  //       areaId: updatedState.areaId,
+  //     },
+  //   });
+  // }
 
   onChangeAreaId(areaId) {
     this.setState({ areaId });
-    this.fetchPlayCount({ areaId });
+    // this.fetchPlayCount({ areaId });
   }
 
   onChangeKind(kind) {
@@ -99,7 +100,7 @@ export default class HotSpot extends Component {
           [name]: value,
         }, this.state.filter);
     this.setState({ filter });
-    this.fetchPlayCount({ filter });
+    // this.fetchPlayCount({ filter });
   }
 
   selectDate = (type) => {
@@ -107,7 +108,7 @@ export default class HotSpot extends Component {
       rangePickerValue: getTimeDistance(type),
     });
 
-    this.fetchPlayCount();
+    // this.fetchPlayCount();
   };
 
   isActive(type) {
@@ -165,6 +166,15 @@ export default class HotSpot extends Component {
     const { cibnHot } = this.props;
     const { filter, playCount } = cibnHot;
 
+    // const Top = getTopMovies({
+    //   kind: this.state.kind,
+    //   language: this.state.filter.language,
+    //   category: this.state.filter.category,
+    //   musicstyle: this.state.filter.musicstyle,
+    //   location: this.state.filter.location,
+    //   areaId: this.state.areaId,
+    // });
+
     if (filter) {
       return (
         <Card
@@ -194,9 +204,17 @@ export default class HotSpot extends Component {
               </label>
             );
           })}
-          { playCount ?
-            <HotSpotInvervalChart data = {playCount}/> :
-            null
+          {
+            <TopMovies
+              payload={{
+                kind: this.state.kind,
+                language: this.state.filter.language,
+                category: this.state.filter.category,
+                musicstyle: this.state.filter.musicstyle,
+                location: this.state.filter.location,
+                areaId: this.state.areaId
+              }}
+            />
           }
         </Card>
       );

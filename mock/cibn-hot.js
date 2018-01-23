@@ -132,27 +132,27 @@ export const getPlayCount = (req, res) => {
       entity: {
         name: '2015年音悦V榜第8期内地 高清',
       },
-      count: 15444,
+      count: 144,
     }, {
       entity: {
         name: 'Emose超透气香水洗发套组',
       },
-      count: 11460,
+      count: 160,
     }, {
       entity: {
         name: '全亚音乐榜 第10期',
       },
-      count: 4333,
+      count: 43,
     }, {
       entity: {
         name: '【专访】徐浩、朱元冰做客',
       },
-      count: 255,
+      count: 5,
     }, {
       entity: {
         name: '【专访】小室哲哉做客乐人无数',
       },
-      count: 111,
+      count: 1,
     }]);
   }
 };
