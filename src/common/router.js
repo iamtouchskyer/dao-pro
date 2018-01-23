@@ -88,6 +88,12 @@ export const getRouterData = (app) => {
       // name: '工作台',
       // authority: 'admin',
     },
+    '/dashboard/special': {
+      component: dynamicWrapper(app, ['project', 'chart', 'recommendation'], () => import('../routes/Dashboard/Special')),
+      // hideInBreadcrumb: true,
+      // name: '工作台',
+      // authority: 'admin',
+    },
     '/form/step-form/info': {
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step1')),
     },

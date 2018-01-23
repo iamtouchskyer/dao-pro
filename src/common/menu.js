@@ -19,7 +19,7 @@ const menuData = [{
     // hideInMenu: true,
   }, {
     name: '特别考虑',
-    path: 'recommendation',
+    path: 'special',
     // hideInMenu: true,
   }],
 }];
