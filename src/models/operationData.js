@@ -91,6 +91,27 @@ const calculateCountryTotal = (provincesData) => {
   return _.sumBy(provincesData, eachProvince => calculateProvinceTotal(eachProvince));
 };
 
+const getProvinceMapData = (rawData, provinceFilter) => _.reduce(rawData, (memo, everyDayData) => {
+  const currentDataDate = new Date(everyDayData.date);
+
+  if (currentDataDate < provinceFilter.dateRange[0] || currentDataDate > provinceFilter.dateRange[1]) {
+    return memo;
+  }
+
+  _.each(everyDayData.categories.newClients, (eachProvince) => {
+    const memoItem = _.find(memo, provinceMemo => provinceMemo.title === eachProvince.provinceName);
+
+    if (memoItem) {
+      memoItem.total += calculateProvinceTotal(eachProvince, 'application', provinceFilter);
+    } else {
+      const theTotal = calculateProvinceTotal(eachProvince, 'application', provinceFilter);
+      memo.push({ title: eachProvince.provinceName, name: eachProvince.provinceName, total: theTotal, value: theTotal });
+    }
+  });
+
+  return memo;
+}, [])
+
 const generateTrendAndTop10 = (operationData, categoryName) => {
   const theTrend = _.map(operationData.data, (everyDayData) => {
     return {
@@ -116,6 +137,14 @@ const generateTrendAndTop10 = (operationData, categoryName) => {
   const theProvinceTop10 = _.chain(theProvince).sortBy(province => -province.total).slice(0, 10).value();
 
   return [theTrend, theProvince, theProvinceTop10];
+};
+
+const defaultProvinceFilter =  {
+  allAppIds,
+  allChannels,
+  filterBy: 'app',
+  filterValue: '0',
+  dateRange: getTimeDistance('thisYear'),
 };
 
 const generateDataForView = (operationData) => {
@@ -163,13 +192,8 @@ export default {
       countOfWhatchedMedia: [],
     },
     loading: false,
-    provinceFilter: {
-      allAppIds,
-      allChannels,
-      filterBy: 'app',
-      filterValue: '0',
-      dateRange: getTimeDistance('thisYear'),
-    },
+    provinceMapData: [],
+    provinceFilter: defaultProvinceFilter,
   },
 
   effects: {
@@ -181,6 +205,7 @@ export default {
         type: 'save',
         payload: {
           rawData: operationData.data,
+          provinceMapData: getProvinceMapData(operationData.data, defaultProvinceFilter),
           ...operationDateForView,
         },
       });
@@ -200,32 +225,12 @@ export default {
         ...payload,
       };
 
-      const theData = _.reduce(state.rawData, (memo, everyDayData) => {
-        const currentDataDate = new Date(everyDayData.date);
-
-        if (currentDataDate < provinceFilter.dateRange[0] || currentDataDate > provinceFilter.dateRange[1]) {
-          return memo;
-        }
-
-        _.each(everyDayData.categories.newClients, (eachProvince) => {
-          const memoItem = _.find(memo, provinceMemo => provinceMemo.title === eachProvince.provinceName);
-
-          if (memoItem) {
-            memoItem.total += calculateProvinceTotal(eachProvince, 'application', provinceFilter);
-          } else {
-            const theTotal = calculateProvinceTotal(eachProvince, 'application', provinceFilter);
-            memo.push({ title: eachProvince.provinceName, name: eachProvince.provinceName, total: theTotal, value: theTotal });
-          }
-        });
-
-        return memo;
-      }, []);
-
-      window.console.log(theData);
+      const provinceMapData = getProvinceMapData(state.rawData, provinceFilter);
 
       return {
         ...state,
         provinceFilter,
+        provinceMapData,
       };
     },
     clear() {
@@ -244,13 +249,8 @@ export default {
           totalWatchedTime: [],
           countOfWhatchedMedia: [],
         },
-        provinceFilter: {
-          allAppIds,
-          allChannels,
-          filterBy: 'app',
-          filterValue: '0',
-          dateRange: getTimeDistance('thisYear'),
-        },
+        provinceMapData: [],
+        provinceFilter: defaultProvinceFilter,
       };
     },
   },

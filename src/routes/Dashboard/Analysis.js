@@ -253,29 +253,7 @@ export default class Analysis extends Component {
 
   renderProvinceData = () => {
     const { operationData, loading } = this.props;
-    const { provinceAggregratedData } = operationData;
-
-    if (loading === undefined) return null;
-
-    const provinceAggregratedDataByNewClient = provinceAggregratedData.newClients;
-    const provinceAggregratedDataByActiveClient = provinceAggregratedData.activeClients;
-    const provinceAggregratedDataByTWT = provinceAggregratedData.totalWatchedTime;
-    const provinceAggregratedDataByTNWM = provinceAggregratedData.countOfWhatchedMedia;
-    const theData = provinceAggregratedDataByNewClient;
-
-    /*
-    if (this.state.channelType === 0) {
-      theData = _.map(provinceAggregratedDataByNewClient, (eachProvince) => {
-        return { id: eachProvince.provinceId, value: _.sumBy(eachProvince.appId, eachApp => _.sum(_.values(eachApp))) };
-      });
-    } else {
-      theData = _.map(provinceAggregratedDataByNewClient, (eachProvince) => {
-        return { id: eachProvince.provinceId, value: _.values(_.find(eachProvince.appId, eachApp => _.keys(eachApp)[0] === this.state.channelType))[0] };
-      });
-    }
-    */
-
-    const { provinceFilter } = operationData;
+    const { provinceFilter, provinceMapData } = operationData;
 
     return (
       <Card
@@ -350,6 +328,7 @@ export default class Analysis extends Component {
               <Select
                 value={provinceFilter.filterValue}
                 style={{ width: 100 }}
+                defaultValue="全部"
                 onChange={(value) => {
                   this.props.dispatch({
                     type: 'operationData/updateProvinceFilter',
@@ -368,7 +347,7 @@ export default class Analysis extends Component {
           </div>
         }
       >
-        <ChinaMapChart height={1200} data={theData} />
+        <ChinaMapChart height={1200} data={provinceMapData} />
       </Card>
     );
   };
