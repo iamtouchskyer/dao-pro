@@ -288,7 +288,7 @@ export default class Analysis extends Component {
       </Card>
     );
   };
-  
+
   renderPast7DayChartCard = (whichChart, loading, title, color, chartData, footer) => {
   /* {label: '周同比', percentage: }, */
     const _renderChartCardTrendGroup = (arr) => {
@@ -304,8 +304,8 @@ export default class Analysis extends Component {
       return (
         <div>
           {
-            _.map(arr, (element) => { 
-              return _renderTrend(element.label, element.percentage); 
+            _.map(arr, (element) => {
+              return _renderTrend(element.label, element.percentage);
             })
           }
         </div>

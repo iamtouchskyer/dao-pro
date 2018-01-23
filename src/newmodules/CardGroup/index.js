@@ -3,6 +3,7 @@ import moment from 'moment';
 import { Link } from 'dva/router';
 import { Card, Avatar } from 'antd';
 import styles from './index.less';
+import Ellipsis from '../../components/Ellipsis';
 
 export default class CardGroup extends PureComponent {
 
@@ -26,27 +27,17 @@ export default class CardGroup extends PureComponent {
         {
           cards.map(cardItem => (
             <Card.Grid className={styles.projectGrid} key={cardItem.id}>
-              <Card 
-                bodyStyle={{ padding: 0 }} 
+              <Card
+                bodyStyle={{ padding: 0 }}
                 bordered={false}
                 cover={<img alt={cardItem.title} src={cardItem.logo} />}
               >
                 <Card.Meta
-                  title={(
-                    <div className={styles.cardTitle}>
-                      <Link to=''>{cardItem.title}</Link>
-                    </div>
-                  )}
+                  title={<div className={styles.cardTitle}>{cardItem.title}</div>}
                   description={(
-                    <div>
-                    <div className={styles.projectItemContent}>
-                      {cardItem.description} 
-                    </div>
-                    </div>
+                    <Ellipsis tooltip lines={5}>{cardItem.description}</Ellipsis>
                   )}
                 />
-
-
               </Card>
             </Card.Grid>
           ))
@@ -77,4 +68,20 @@ description={cardItem.description}
 )}
 </div>
 </Card>
+
+
+
+                  title={(
+                    <div className={styles.cardTitle}>
+                      k to=''>{cardItem.title}</Link>
+                    </div>
+                  )}
+                  description={(
+                    <div>
+                      <div className={styles.projectItemContent}>
+                        {cardItem.description}
+                      </div>
+                    </div>
+                  )}
+
 */
