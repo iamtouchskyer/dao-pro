@@ -322,7 +322,7 @@ export default class Analysis extends Component {
                 }}
               >
                 <Radio.Button value="app">App</Radio.Button>
-                <Radio.Button value="channel">Channel</Radio.Button>
+                {/* <Radio.Button value="channel">Channel</Radio.Button> */}
               </Radio.Group>
               <span>  :  </span>
               <Select
