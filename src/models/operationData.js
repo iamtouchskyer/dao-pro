@@ -77,17 +77,7 @@ const allChannels = [
 const allAppIds = ['1000', '1008', '1012', '1015'];
 
 const calculateProvinceTotal = (provinceData) => {
-  const { filterBy, filterValue } = this.default.state.provinceFilter;
-
-  return _.sumBy(provinceData.dimensions.application, (eachApp) => {
-    if (filterValue === '0' ||
-    (filterBy === 'app' && eachApp.appId === filterValue) ||
-    (filterBy === 'channel' && eachApp.channelId === filterValue)) {
-      return eachApp.total;
-    }
-
-    return 0;
-  });
+  return _.sumBy(provinceData.dimensions.channel, eachApp => eachApp.total);
 };
 
 const calculateCountryTotal = (provincesData) => {
@@ -177,7 +167,7 @@ export default {
   effects: {
     *fetchOperationData(_, { call, put }) {
       const operationData = yield call(queryCIBNOperationData);
-      const operationDateForView = yield generateDataForView.call(this, operationData);
+      const operationDateForView = yield generateDataForView(operationData);
 
       yield put({
         type: 'save',

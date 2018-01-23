@@ -61,12 +61,12 @@ export default class Analysis extends Component {
   }
 
   componentWillUnmount() {
+    /*
     const { dispatch } = this.props;
     dispatch({
       type: 'chart/clear',
     });
 
-    /*
     dispatch({
       type: 'operationData/clear',
     });
@@ -301,6 +301,69 @@ export default class Analysis extends Component {
     );
   };
 
+  renderPast7DayChartCard = (whichChart, loading, title, color, chartData, footer) => {
+  /* {label: '周同比', percentage: }, */
+    const _renderChartCardTrendGroup = (arr) => {
+      const _renderTrend = (label, percentage) => {
+        return (
+          <Trend flag= {percentage > 0 ? 'up' : percentage === 0 ? '' : 'down'}
+                  style={{ marginRight: 16 }}>
+            {label}:<span className={styles.trendText}>{`${ percentage}%`}</span>
+          </Trend>
+        );
+      };
+
+      return (
+        <div>
+          {
+            _.map(arr, (element) => {
+              return _renderTrend(element.label, element.percentage);
+            })
+          }
+        </div>
+      );
+    };
+
+    const topColResponsiveProps = {
+      xs: 24,
+      sm: 12,
+      md: 12,
+      lg: 12,
+      xl: 6,
+      style: { marginBottom: 24 },
+    };
+
+    let footerElement = null;
+
+    if (footer.type === 'field') {
+      footerElement = <Field label={footer.label} value={numeral(footer.value).format('0')} />;
+    } else if (footer.type === 'trend') {
+      footerElement = _renderChartCardTrendGroup(footer.value);
+    }
+
+    let miniChartElement = null;
+    if (whichChart === 'miniBar') {
+      miniChartElement = (<MiniBar data={chartData} color={color} />);
+    } else {
+      miniChartElement = (<MiniArea data={chartData} color={color} />);
+    }
+
+    return (
+      <Col {...topColResponsiveProps}>
+        <ChartCard
+          loading={loading}
+          bordered={false}
+          title={title}
+          action={<Tooltip title="指标说明"> <Icon type="info-circle-o" /> </Tooltip>}
+          footer={footerElement}
+          contentHeight={90}
+        >
+          { miniChartElement }
+        </ChartCard>
+      </Col>
+    );
+  };
+
   render() {
     const { salesType, currentTabKey } = this.state;
     const { chart, loading } = this.props;
@@ -357,7 +420,14 @@ export default class Analysis extends Component {
         className: styles.alignRight,
       },
       {
-        title: '周涨幅',
+        title: '搜索次数',
+        dataIndex: 'count',
+        key: 'count',
+        sorter: (a, b) => a.count - b.count,
+        className: styles.alignRight,
+      },
+      {
+        title: '过去七天涨幅',
         dataIndex: 'range',
         key: 'range',
         sorter: (a, b) => a.range - b.range,
@@ -370,145 +440,35 @@ export default class Analysis extends Component {
       },
     ];
 
-    const activeKey = currentTabKey || (offlineData[0] && offlineData[0].name);
 
-    const CustomTab = ({ data, currentTabKey: currentKey }) => (
-      <Row gutter={8} style={{ width: 138, margin: '8px 0' }}>
-        <Col span={12}>
-          <NumberInfo
-            title={data.name}
-            subTitle="转化率"
-            gap={2}
-            total={`${data.cvr * 100}%`}
-            theme={currentKey !== data.name && 'light'}
-          />
-        </Col>
-        <Col span={12} style={{ paddingTop: 36 }}>
-          <Pie
-            animate={false}
-            color={currentKey !== data.name && '#BDE4FF'}
-            inner={0.55}
-            tooltip={false}
-            margin={[0, 0, 0, 0]}
-            percent={data.cvr * 100}
-            height={64}
-          />
-        </Col>
-      </Row>
-    );
-
-    const topColResponsiveProps = {
-      xs: 24,
-      sm: 12,
-      md: 12,
-      lg: 12,
-      xl: 6,
-      style: { marginBottom: 24 },
-    };
+    const { operationData } = this.props;
+    const {
+      newDeviceTrend, provinceNDTop10,
+      activeDeviceTrend, totalWatchTimeTrend, totalNumberOfWatchedMediaTrend,
+      provinceADTop10, provinceTWTTop10, provinceTNWMTop10,
+    } = operationData;
 
     return (
       <div>
         <Row gutter={24}>
-          <Col {...topColResponsiveProps}>
-            <ChartCard
-              bordered={false}
-              title="播放时长趋势"
-              action={
-                <Tooltip title="指标说明">
-                  <Icon type="info-circle-o" />
-                </Tooltip>
-              }
-              total={yuan(126560)}
-              footer={
-                <div>
-                  <Trend flag="up" style={{ marginRight: 16 }}>
-                    周同比<span className={styles.trendText}>12%</span>
-                  </Trend>
-                  <Trend flag="down">
-                    日环比<span className={styles.trendText}>11%</span>
-                  </Trend>
-                </div>
-              }
-              contentHeight={46}
-            >
-              <MiniArea color="#ed7d31" data={visitData} />
-            </ChartCard>
-          </Col>
-          <Col {...topColResponsiveProps}>
-            <ChartCard
-              bordered={false}
-              title="播放剧集量趋势"
-              action={
-                <Tooltip title="指标说明">
-                  <Icon type="info-circle-o" />
-                </Tooltip>
-              }
-              total={numeral(8846).format('0,0')}
-              footer={
-                <div>
-                  <Trend flag="up" style={{ marginRight: 16 }}>
-                    周同比<span className={styles.trendText}>12%</span>
-                  </Trend>
-                  <Trend flag="down">
-                    日环比<span className={styles.trendText}>11%</span>
-                  </Trend>
-                </div>
-              }
-              contentHeight={46}
-            >
-              <MiniArea color="#ffc000" data={visitData} />
-            </ChartCard>
-          </Col>
-          <Col {...topColResponsiveProps}>
-            <ChartCard
-              bordered={false}
-              title="客户端数量趋势"
-              action={
-                <Tooltip title="指标说明">
-                  <Icon type="info-circle-o" />
-                </Tooltip>
-              }
-              total={numeral(6560).format('0,0')}
-              footer={
-                <div>
-                  <Trend flag="up" style={{ marginRight: 16 }}>
-                    周同比<span className={styles.trendText}>12%</span>
-                  </Trend>
-                  <Trend flag="down">
-                    日环比<span className={styles.trendText}>11%</span>
-                  </Trend>
-                </div>
-              }
-              contentHeight={46}
-            >
-              <MiniBar color="#4472c4" data={visitData} />
-            </ChartCard>
-          </Col>
-          <Col {...topColResponsiveProps}>
-            <ChartCard
-              bordered={false}
-              title="运营活动效果"
-              action={
-                <Tooltip title="指标说明">
-                  <Icon type="info-circle-o" />
-                </Tooltip>
-              }
-              total="78%"
-              footer={
-                <div style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                  <Trend flag="up" style={{ marginRight: 16 }}>
-                    周同比<span className={styles.trendText}>12%</span>
-                  </Trend>
-                  <Trend flag="down">
-                    日环比<span className={styles.trendText}>11%</span>
-                  </Trend>
-                </div>
-              }
-              contentHeight={46}
-            >
-              <MiniProgress percent={78} strokeWidth={8} target={80} color="#13C2C2" />
-            </ChartCard>
-          </Col>
+          {this.renderPast7DayChartCard('miniBar', loading, '过去七天活跃用户', '#70ad47' , activeDeviceTrend, { type: 'field', label: '平均活跃用户', value:1234})}
+          {this.renderPast7DayChartCard('miniArea', loading, '过去七天新增用户', '#ffc000',
+                          activeDeviceTrend, {
+                            type: 'trend',
+                            value: [
+                              { label: '七日同比', percentage: 0 },
+                              { label: '七日环比', percentage: 0 },
+                            ],
+          })}
+          {this.renderPast7DayChartCard('miniBar', loading, '过去七天播放剧集数量', '#4472c4',
+                activeDeviceTrend, {
+                  type: 'trend',
+                  value: [
+                    { label: '七日同比', percentage: 0 },
+                    { label: '七日环比', percentage: 0 },
+                  ],
+          })}
+          {this.renderPast7DayChartCard('miniArea', loading, '过去七天播放时长', '#ed7d31', activeDeviceTrend, { type: 'field', label: '平均播放时长', value:1234})}
         </Row>
 
 
@@ -521,37 +481,30 @@ export default class Analysis extends Component {
             <Card
               loading={loading}
               bordered={false}
-              title="线上热门搜索"
+              title="热门搜索关键字"
               extra={iconGroup}
               style={{ marginTop: 24 }}
             >
               <Row gutter={68}>
                 <Col sm={12} xs={24} style={{ marginBottom: 24 }}>
                   <NumberInfo
-                    subTitle={
-                      <span>
-                        搜索用户数
-                        <Tooltip title="指标文案">
-                          <Icon style={{ marginLeft: 8 }} type="info-circle-o" />
-                        </Tooltip>
-                      </span>
-                    }
+                    subTitle="搜索用户数"
                     gap={8}
-                    total={numeral(12321).format('0,0')}
-                    status="up"
-                    subTotal={17.1}
+                    total="-"
+                    status=""
+                    subTotal="-"
                   />
-                  <MiniArea line height={45} data={visitData2} />
+                  <MiniArea line height={45} data={[]} />
                 </Col>
                 <Col sm={12} xs={24} style={{ marginBottom: 24 }}>
                   <NumberInfo
                     subTitle="人均搜索次数"
-                    total={2.7}
-                    status="down"
-                    subTotal={26.2}
+                    total="-"
+                    status=""
+                    subTotal="-"
                     gap={8}
                   />
-                  <MiniArea line height={45} data={visitData2} />
+                  <MiniArea line height={45} data={[]} />
                 </Col>
               </Row>
               <Table

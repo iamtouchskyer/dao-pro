@@ -9,8 +9,8 @@ export default {
   },
 
   effects: {
-    *fetchFilter(_, { call, put }) {
-      const filter = yield call(queryCIBNHotFilter);
+    *fetchFilter({ payload }, { call, put }) {
+      const filter = yield call(queryCIBNHotFilter, payload);
       yield put({
         type: 'save',
         payload: {
@@ -18,8 +18,8 @@ export default {
         },
       });
     },
-    *fetchPlayCount(_, { call, put }) {
-      const playCount = yield call(queryCIBNHotPlayCount);
+    *fetchPlayCount({ payload }, { call, put }) {
+      const playCount = yield call(queryCIBNHotPlayCount, payload);
       yield put({
         type: 'save',
         payload: {

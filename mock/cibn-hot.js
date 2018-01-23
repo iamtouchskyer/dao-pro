@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 export const getFilterForVideoKind = (req, res) => {
-  const videoKind = req.query.videoKind;
+  const videoKind = req.query.kind;
 
   if (videoKind === 'music') {
     res.send({
@@ -9,6 +9,54 @@ export const getFilterForVideoKind = (req, res) => {
       category: ['演唱会', 'MV'],
       area: ['香港', '大陆'],
       musicstyle: ['流行', '摇滚']
+    });
+  } else if (videoKind === 'dhyana') {
+    res.send({
+      "languages": [
+        "汉语"
+      ],
+      "areas": [
+        "中国大陆"
+      ],
+      "categories": [
+        "禅文化",
+        "讲座",
+        "佛学",
+        "纪实",
+        "文化",
+        "菩萨在线",
+        "最快资讯",
+        "寺观",
+        "禅艺",
+        "影视",
+        "动画",
+        "养生",
+        "人物",
+        "国学",
+        "汉学院",
+        "修身齐家",
+        "曲艺",
+        "音乐",
+        "饮食",
+        "中医养生",
+        "道教之音",
+        "道学",
+        "剧场",
+        "电影",
+        "科仪",
+        "资讯",
+        "原创沙画",
+        "经典解读",
+        "医疗",
+        "寺院风光",
+        "第六届非遗节执委办",
+        "电视剧",
+        "运动",
+        "德音",
+        "人物专访",
+        "雅乐",
+        "六步教育"
+      ]
     });
   } else {
     res.send({
@@ -20,7 +68,7 @@ export const getFilterForVideoKind = (req, res) => {
 };
 
 export const getPlayCount = (req, res) => {
-  const videoKind = req.query.videoKind;
+  const videoKind = req.query.kind;
   const areaId = Number(req.query.areaId);
 
   if (videoKind === 'music') {
