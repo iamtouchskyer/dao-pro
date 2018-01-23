@@ -154,16 +154,7 @@ export default class HotSpot extends Component {
         <Col xs={6}>
           <Cascader defaultValue={[1]} options={areaMetadata} onChange={(value) => { this.onChangeAreaId(value[value.length-1])}} showSearch />
         </Col>
-        <Col xs={6}>
-          <label>
-            <Select defaultValue="movie" style={{ width: 120 }} onChange={(value) => { this.onChangeKind(value) }}>
-              {_.map(kindMetadata, (meta, kind) => {
-                return <Option value={kind} key={kind}>{meta.name}</Option>
-              })}
-            </Select>
-          </label>
-        </Col>
-        <Col xs={12}>
+        <Col xs={18}>
           { this.renderDatePicker() }
         </Col>
       </Row>
@@ -183,6 +174,13 @@ export default class HotSpot extends Component {
           style={{ marginTop: 24 }}
           extra={this.renderCardExtra()}
         >
+          <label>
+            <Select defaultValue="movie" style={{ width: 120 }} onChange={(value) => { this.onChangeKind(value) }}>
+              {_.map(kindMetadata, (meta, kind) => {
+                return <Option value={kind} key={kind}>{meta.name}</Option>
+              })}
+            </Select>
+          </label>
           {_.map(filter, (options, name) => {
             return (
               <label key={name}>
