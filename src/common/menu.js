@@ -8,6 +8,9 @@ const menuData = [{
     name: '总体监控',
     path: 'analysis',
   }, {
+    name: 'TOP榜单',
+    path: 'top',
+  }, {
     name: '热点统计',
     path: 'hot',
   }, {

@@ -24,11 +24,9 @@ export default {
     *fetchPlayCount({ payload }, { call, put }) {
       const playCount = yield call(queryCIBNHotPlayCount, payload);
       yield put({
-        type: 'save',
-        payload: {
-          playCount: {
-            [stringify(payload)]: playCount,
-          },
+        type: 'savePlayCount',
+        playCount: {
+          [stringify(payload)]: playCount,
         },
       });
     },
@@ -39,6 +37,15 @@ export default {
       return {
         ...state,
         ...payload,
+      };
+    },
+    savePlayCount(state, { playCount }) {
+      return {
+        ...state,
+        playCount: {
+          ...state.playCount,
+          ...playCount
+        },
       };
     },
     clear() {

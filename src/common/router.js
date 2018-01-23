@@ -79,6 +79,9 @@ export const getRouterData = (app) => {
     '/dashboard/hot': {
       component: dynamicWrapper(app, ['monitor', 'cibnHot'], () => import('../routes/Dashboard/HotSpot')),
     },
+    '/dashboard/top': {
+      component: dynamicWrapper(app, ['monitor', 'cibnHot'], () => import('../routes/Dashboard/TopList')),
+    },
     '/dashboard/monitor': {
       component: dynamicWrapper(app, ['monitor', 'cibnHot'], () => import('../routes/Dashboard/Monitor')),
     },
