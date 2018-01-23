@@ -179,12 +179,6 @@ export default {
         },
       });
     },
-    *changeProvinceFilter(payload, { put }) {
-      yield put({
-        type: 'updateProvinceFilter',
-        payload,
-      });
-    },
   },
 
   reducers: {
@@ -200,27 +194,6 @@ export default {
         provinceFilter: {
           ...state.provinceFilter,
           ...payload,
-        },
-      };
-    },
-    updateFilterValue(state, { payload }) {
-      window.console.log('xxxxxxxxxxxxxxxx');
-      window.console.log(state.rawData);
-
-      // const proviceMapViewData = _.reduce(state.rawData.categories.categories, (memo, cur) => {
-      //   if () {
-
-      //   }
-
-      //   return memo;
-      // }, []);
-
-      return {
-        ...state,
-        ...payload,
-        provinceFilter: {
-          ...state.provinceFilter,
-          filterValue: payload.filterValue,
         },
       };
     },
