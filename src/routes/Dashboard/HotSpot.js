@@ -15,6 +15,7 @@ import { Pie, WaterWave, Gauge, TagCloud, Bar } from '../../components/Charts';
 import NumberInfo from '../../components/NumberInfo';
 import CountDown from '../../components/CountDown';
 import ActiveChart from '../../components/ActiveChart';
+import HotSpotInvervalChart from '../../components/Charts/HotSpotIntervalChart/index';
 import styles from './Monitor.less';
 import { getTimeDistance } from '../../utils/utils';
 import kindMetadata from '../../../metadata/kind';
@@ -150,7 +151,7 @@ export default class HotSpot extends Component {
 
   render() {
     const { cibnHot } = this.props;
-    const { filter } = cibnHot;
+    const { filter, playCount } = cibnHot;
 
     if (filter) {
       return (
@@ -181,6 +182,10 @@ export default class HotSpot extends Component {
             );
           })}
           { this.renderDatePicker() }
+          { playCount ?
+            <HotSpotInvervalChart data = {playCount}/> :
+            null
+          }}
         </div>
       );
     }
