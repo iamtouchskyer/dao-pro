@@ -1,5 +1,6 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
+import _ from 'lodash';
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');
@@ -95,6 +96,6 @@ export async function queryCIBNHotFilter(params) {
 }
 
 export async function queryCIBNHotPlayCount(params) {
-  return request(`/api/cibn/hot/playcount?${stringify(params)}`);
+  return request(`/api/cibn/hot/playcount?${stringify(_.omit(params, _.isNil))}`);
 }
 

@@ -43,16 +43,18 @@ export default class HotSpot extends Component {
     super(props);
     this.state = {
       kind: 'movie',
-      filter: {}
+      filter: {},
+      location: null,
+      rangePickerValue: getTimeDistance('thisYear'),
     };
   }
 
   componentDidMount() {
     this.onChangeKind('movie');
+    this.fetchPlayCount({});
   }
 
-  onChangeKind(kind) {
-    this.setState({ kind });
+  fetchFilter(kind) {
     this.props.dispatch({
       type: 'cibnHot/fetchFilter',
       payload: {
@@ -61,22 +63,90 @@ export default class HotSpot extends Component {
     });
   }
 
-  onChangeFilter(name, value) {
-    if (value === 'all') {
-      this.setState({
-        filter: _.omit(this.state.filter, name)
-      })
-    } else {
-      this.setState({
-        filter: _.defaults({
-          [name]: value,
-        }, this.state.filter)
-      })
-    }
+  fetchPlayCount(condition) {
+    const updatedState = _.defaults(condition, this.state);
+
     this.props.dispatch({
       type: 'cibnHot/fetchPlayCount',
+      payload: {
+        kind: updatedState.kind,
+        language: updatedState.filter.language,
+        category: updatedState.filter.category,
+        musicstyle: updatedState.filter.musicstyle,
+        location: updatedState.filter.location,
+        areaId: updatedState.areaId,
+      },
     });
   }
+
+  onChangeAreaId(areaId) {
+    this.setState({ areaId });
+    this.fetchPlayCount({ areaId });
+  }
+
+  onChangeKind(kind) {
+    this.setState({ kind });
+    this.fetchFilter(kind);
+  }
+
+  onChangeFilter(name, value) {
+    const filter = (value === 'all')
+      ? _.omit(this.state.filter, name)
+      : _.defaults({
+          [name]: value,
+        }, this.state.filter);
+    this.setState({ filter });
+    this.fetchPlayCount({ filter });
+  }
+
+  selectDate = (type) => {
+    this.setState({
+      rangePickerValue: getTimeDistance(type),
+    });
+
+    this.fetchPlayCount();
+  };
+
+  isActive(type) {
+    const { rangePickerValue } = this.state;
+    const value = getTimeDistance(type);
+    if (!rangePickerValue[0] || !rangePickerValue[1]) {
+      return;
+    }
+    if (
+      rangePickerValue[0].isSame(value[0], 'day') &&
+      rangePickerValue[1].isSame(value[1], 'day')
+    ) {
+      return styles.currentDate;
+    }
+  }
+
+  renderDatePicker = () => {
+    const { rangePickerValue } = this.state;
+    return (
+      <div className={styles.salesExtraWrap}>
+        <div className={styles.salesExtra}>
+          <a className={this.isActive('today')} onClick={() => this.selectDate('today')}>
+            今日
+          </a>
+          <a className={this.isActive('week')} onClick={() => this.selectDate('week')}>
+            本周
+          </a>
+          <a className={this.isActive('month')} onClick={() => this.selectDate('month')}>
+            本月
+          </a>
+          <a className={this.isActive('year')} onClick={() => this.selectDate('thisYear')}>
+            全年
+          </a>
+        </div>
+        <RangePicker
+          value={rangePickerValue}
+          onChange={this.handleRangePickerChange}
+          style={{ width: 256 }}
+        />
+      </div>
+    );
+  };
 
   render() {
     const { cibnHot } = this.props;
@@ -85,11 +155,18 @@ export default class HotSpot extends Component {
     if (filter) {
       return (
         <div>
-          <Select defaultValue="movie" style={{ width: 120 }} onChange={(value) => { this.onChangeKind(value) }}>
-            {_.map(kindMetadata, (meta, kind) => {
-              return <Option value={kind} key={kind}>{meta.name}</Option>
-            })}
+          <Select defaultValue={null} style={{ width: 120 }} onChange={(value) => { this.onChangeAreaId(value) }}>
+            <Option value={null}>全国</Option>
+            <Option value={223}>山西</Option>
           </Select>
+          <label>
+            类别：
+            <Select defaultValue="movie" style={{ width: 120 }} onChange={(value) => { this.onChangeKind(value) }}>
+              {_.map(kindMetadata, (meta, kind) => {
+                return <Option value={kind} key={kind}>{meta.name}</Option>
+              })}
+            </Select>
+          </label>
           {_.map(filter, (options, name) => {
             return (
               <label key={name}>
@@ -103,6 +180,7 @@ export default class HotSpot extends Component {
               </label>
             );
           })}
+          { this.renderDatePicker() }
         </div>
       );
     }

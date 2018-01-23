@@ -18,8 +18,8 @@ export default {
         },
       });
     },
-    *fetchPlayCount(_, { call, put }) {
-      const playCount = yield call(queryCIBNHotPlayCount);
+    *fetchPlayCount({ payload }, { call, put }) {
+      const playCount = yield call(queryCIBNHotPlayCount, payload);
       yield put({
         type: 'save',
         payload: {
