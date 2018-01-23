@@ -12,6 +12,7 @@ import {
   Tooltip,
   Menu,
   Dropdown,
+  Select,
 } from 'antd';
 import numeral from 'numeral';
 import _ from 'lodash';
@@ -72,15 +73,23 @@ export default class Analysis extends Component {
     */
   }
 
+  changeProvinceFilterFilterBy = (e) => {
+    this.props.dispatch({
+      type: 'operationData/changeProvinceFilterFilterBy',
+      value: e.target.value,
+    });
+  }
+
   handleChangeSalesType = (e) => {
     this.setState({
       salesType: e.target.value,
     });
   };
 
-  handleAppChannelType = (e) => {
-    this.setState({
-      channelType: e.target.value,
+  changeFilterValue = (value) => {
+    this.props.dispatch({
+      type: 'operationData/changeFilterValue',
+      value,
     });
   };
 
@@ -124,27 +133,33 @@ export default class Analysis extends Component {
     }
   }
 
-  renderDatePicker = () => {
-    const { rangePickerValue } = this.state;
+  renderDatePicker = ({
+    value = this.state.rangePickerValue,
+    onChange = this.handleRangePickerChange,
+    onClickToday = () => this.selectDate('today'),
+    onClickWeek = () => this.selectDate('week'),
+    onClickMonth = () => this.selectDate('month'),
+    onClickThisYear = () => this.selectDate('thisYear'),
+  } = {}) => {
     return (
       <div className={styles.salesExtraWrap}>
         <div className={styles.salesExtra}>
-          <a className={this.isActive('today')} onClick={() => this.selectDate('today')}>
+          <a className={this.isActive('today')} onClick={onClickToday}>
             今日
           </a>
-          <a className={this.isActive('week')} onClick={() => this.selectDate('week')}>
+          <a className={this.isActive('week')} onClick={onClickWeek}>
             本周
           </a>
-          <a className={this.isActive('month')} onClick={() => this.selectDate('month')}>
+          <a className={this.isActive('month')} onClick={onClickMonth}>
             本月
           </a>
-          <a className={this.isActive('year')} onClick={() => this.selectDate('thisYear')}>
+          <a className={this.isActive('year')} onClick={onClickThisYear}>
             全年
           </a>
         </div>
         <RangePicker
-          value={rangePickerValue}
-          onChange={this.handleRangePickerChange}
+          value={value}
+          onChange={onChange}
           style={{ width: 256 }}
         />
       </div>
@@ -238,27 +253,7 @@ export default class Analysis extends Component {
 
   renderProvinceData = () => {
     const { operationData, loading } = this.props;
-    const { provinceAggregratedData } = operationData;
-
-    if (loading === undefined) return null;
-
-    const provinceAggregratedDataByNewClient = provinceAggregratedData.newClients;
-    const provinceAggregratedDataByActiveClient = provinceAggregratedData.activeClients;
-    const provinceAggregratedDataByTWT = provinceAggregratedData.totalWatchedTime;
-    const provinceAggregratedDataByTNWM = provinceAggregratedData.countOfWhatchedMedia;
-    const theData = provinceAggregratedDataByNewClient;
-
-    /*
-    if (this.state.channelType === 0) {
-      theData = _.map(provinceAggregratedDataByNewClient, (eachProvince) => {
-        return { id: eachProvince.provinceId, value: _.sumBy(eachProvince.appId, eachApp => _.sum(_.values(eachApp))) };
-      });
-    } else {
-      theData = _.map(provinceAggregratedDataByNewClient, (eachProvince) => {
-        return { id: eachProvince.provinceId, value: _.values(_.find(eachProvince.appId, eachApp => _.keys(eachApp)[0] === this.state.channelType))[0] };
-      });
-    }
-    */
+    const { provinceFilter, provinceMapData } = operationData;
 
     return (
       <Card
@@ -270,21 +265,89 @@ export default class Analysis extends Component {
         title="地域分布"
         extra={
           <div className={styles.salesCardExtra}>
-            { this.renderDatePicker() }
+            { this.renderDatePicker({
+              value: provinceFilter.dateRange,
+              onChange: (dateRange) => {
+                this.props.dispatch({
+                  type: 'operationData/updateProvinceFilter',
+                  payload: {
+                    dateRange,
+                  },
+                });
+              },
+              onClickToday: () => {
+                this.props.dispatch({
+                  type: 'operationData/updateProvinceFilter',
+                  payload: {
+                    dateRange: getTimeDistance('today'),
+                  },
+                });
+              },
+              onClickWeek: () => {
+                this.props.dispatch({
+                  type: 'operationData/updateProvinceFilter',
+                  payload: {
+                    dateRange: getTimeDistance('week'),
+                  },
+                });
+              },
+              onClickMonth: () => {
+                this.props.dispatch({
+                  type: 'operationData/updateProvinceFilter',
+                  payload: {
+                    dateRange: getTimeDistance('month'),
+                  },
+                });
+              },
+              onClickThisYear: () => {
+                this.props.dispatch({
+                  type: 'operationData/updateProvinceFilter',
+                  payload: {
+                    dateRange: getTimeDistance('thisYear'),
+                  },
+                });
+              },
+            }) }
             <div className={styles.salesTypeRadio}>
-              <Radio.Group value={this.state.channelType} onChange={this.handleAppChannelType}>
-                <Radio.Button value="0">全部App</Radio.Button>
-                <Radio.Button value="1000">1000</Radio.Button>
-                <Radio.Button value="1005">1005</Radio.Button>
-                <Radio.Button value="1008">1008</Radio.Button>
-                <Radio.Button value="1031">1031</Radio.Button>
-                <Radio.Button value="1012">1012</Radio.Button>
+              <Radio.Group
+                value={provinceFilter.filterBy}
+                onChange={(e) => {
+                  this.props.dispatch({
+                    type: 'operationData/updateProvinceFilter',
+                    payload: {
+                      filterBy: e.target.value,
+                      filterValue: '0',
+                    },
+                  });
+                }}
+              >
+                <Radio.Button value="app">App</Radio.Button>
+                {/* <Radio.Button value="channel">Channel</Radio.Button> */}
               </Radio.Group>
+              <span>  :  </span>
+              <Select
+                value={provinceFilter.filterValue}
+                style={{ width: 100 }}
+                defaultValue="全部"
+                onChange={(value) => {
+                  this.props.dispatch({
+                    type: 'operationData/updateProvinceFilter',
+                    payload: {
+                      filterValue: value,
+                    },
+                  });
+                }}
+              >
+                <Select.Option key={0} value={0}>全部</Select.Option>
+                {provinceFilter[provinceFilter.filterBy === 'app' ? 'allAppIds' : 'allChannels'].map(i => (
+                  <Select.Option key={i} value={i}>{i}</Select.Option>
+                ))}
+              </Select>
             </div>
           </div>
         }
       >
-        <ChinaMapChart height={1200} data={theData} />
+        <ChinaMapChart height={1200} data={provinceMapData} />
       </Card>
     );
   };
