@@ -42,36 +42,32 @@ export default class HotSpotInvervalChart extends React.Component {
       });
 
     return (
-      <Card
-        {...cardProps}
-      >
-        <Chart
-          height={400}
-          data={dv}
-          scale={{
-            count: { type: 'linear' },
-            name: { type: 'cat' }
-          }}
-          padding={[ 80, 100, 80, 80 ]}
-          forceFit>
-          {/* <Coord type='theta' radius={0.75} /> */}
-          <Axis name="name" />
-          <Axis name="count" />
-          <Tooltip
-            showTitle={false}
-            itemTpl='<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
-            />
-          <Geom
-            type="interval"
-            position="name*count"
-            color='name'
-            style={{lineWidth: 1,stroke: '#fff'}}
-            >
-            <Label content='count' formatter={(val, item) => {
-                return item.point.name + ': ' + val; }} />
-          </Geom>
-        </Chart>
-      </Card>
+      <Chart
+        height={400}
+        data={dv}
+        scale={{
+          count: { type: 'linear' },
+          name: { type: 'cat' }
+        }}
+        padding={[ 80, 100, 80, 80 ]}
+        forceFit>
+        {/* <Coord type='theta' radius={0.75} /> */}
+        <Axis name="name" />
+        <Axis name="count" />
+        <Tooltip
+          showTitle={false}
+          itemTpl='<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
+          />
+        <Geom
+          type="interval"
+          position="name*count"
+          color='name'
+          style={{lineWidth: 1,stroke: '#fff'}}
+          >
+          <Label content='count' formatter={(val, item) => {
+              return item.point.name + ': ' + val; }} />
+        </Geom>
+      </Chart>
     );
   }
 }

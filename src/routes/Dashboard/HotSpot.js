@@ -17,7 +17,7 @@ import NumberInfo from '../../components/NumberInfo';
 import CountDown from '../../components/CountDown';
 import ActiveChart from '../../components/ActiveChart';
 import HotSpotInvervalChart from '../../components/Charts/HotSpotIntervalChart/index';
-import styles from './Monitor.less';
+import styles from './Analysis.less';
 import { getTimeDistance } from '../../utils/utils';
 import kindMetadata from '../../../metadata/kind';
 import areaMetadata from '../../../metadata/area';
@@ -151,22 +151,41 @@ export default class HotSpot extends Component {
     );
   };
 
-  render() {
-    const { cibnHot } = this.props;
-    const { filter, playCount } = cibnHot;
-
-    if (filter) {
-      return (
-        <div>
+  renderCardExtra() {
+    return (
+      <Row>
+        <Col xs={6}>
           <Cascader defaultValue={[1]} options={areaMetadata} onChange={(value) => { this.onChangeAreaId(value[value.length-1])}} showSearch />
+        </Col>
+        <Col xs={6}>
           <label>
-            类别：
             <Select defaultValue="movie" style={{ width: 120 }} onChange={(value) => { this.onChangeKind(value) }}>
               {_.map(kindMetadata, (meta, kind) => {
                 return <Option value={kind} key={kind}>{meta.name}</Option>
               })}
             </Select>
           </label>
+        </Col>
+        <Col xs={12}>
+          { this.renderDatePicker() }
+        </Col>
+      </Row>
+    );
+  }
+
+  render() {
+    const { cibnHot } = this.props;
+    const { filter, playCount } = cibnHot;
+
+    if (filter) {
+      return (
+        <Card
+          title="热门榜单"
+          bordered={false}
+          bodyStyle={{ padding: 0 }}
+          style={{ marginTop: 24 }}
+          extra={this.renderCardExtra()}
+        >
           {_.map(filter, (options, name) => {
             return (
               <label key={name}>
@@ -180,12 +199,11 @@ export default class HotSpot extends Component {
               </label>
             );
           })}
-          { this.renderDatePicker() }
           { playCount ?
             <HotSpotInvervalChart data = {playCount}/> :
             null
-          }}
-        </div>
+          }
+        </Card>
       );
     }
     return null;
