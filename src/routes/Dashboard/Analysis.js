@@ -346,6 +346,7 @@ export default class Analysis extends Component {
                 <Radio.Button value="app">App</Radio.Button>
                 <Radio.Button value="channel">Channel</Radio.Button>
               </Radio.Group>
+              <span>  :  </span>
               <Select
                 value={provinceFilter.filterValue}
                 style={{ width: 100 }}
@@ -358,6 +359,7 @@ export default class Analysis extends Component {
                   });
                 }}
               >
+                <Select.Option key={0} value={0}>全部</Select.Option>
                 {provinceFilter[provinceFilter.filterBy === 'app' ? 'allAppIds' : 'allChannels'].map(i => (
                   <Select.Option key={i} value={i}>{i}</Select.Option>
                 ))}

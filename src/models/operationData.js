@@ -77,8 +77,14 @@ const allChannels = [
 
 const allAppIds = ['1000', '1008', '1012', '1015'];
 
-const calculateProvinceTotal = (provinceData) => {
-  return _.sumBy(provinceData.dimensions.channel, eachApp => eachApp.total);
+const calculateProvinceTotal = (provinceData, filterBy = 'channel', filter = null) => {
+  return _.sumBy(provinceData.dimensions[filterBy], (eachApp) => {
+    if (!_.isNull(filter) && filter.filterBy === 'app' && (filter.filterValue > 0 && filter.filterValue !== eachApp.appId)) {
+      return 0;
+    }
+
+    return eachApp.total;
+  });
 };
 
 const calculateCountryTotal = (provincesData) => {
@@ -189,12 +195,37 @@ export default {
       };
     },
     updateProvinceFilter(state, { payload }) {
+      const provinceFilter = {
+        ...state.provinceFilter,
+        ...payload,
+      };
+
+      const theData = _.reduce(state.rawData, (memo, everyDayData) => {
+        const currentDataDate = new Date(everyDayData.date);
+
+        if (currentDataDate < provinceFilter.dateRange[0] || currentDataDate > provinceFilter.dateRange[1]) {
+          return memo;
+        }
+
+        _.each(everyDayData.categories.newClients, (eachProvince) => {
+          const memoItem = _.find(memo, provinceMemo => provinceMemo.title === eachProvince.provinceName);
+
+          if (memoItem) {
+            memoItem.total += calculateProvinceTotal(eachProvince, 'application', provinceFilter);
+          } else {
+            const theTotal = calculateProvinceTotal(eachProvince, 'application', provinceFilter);
+            memo.push({ title: eachProvince.provinceName, name: eachProvince.provinceName, total: theTotal, value: theTotal });
+          }
+        });
+
+        return memo;
+      }, []);
+
+      window.console.log(theData);
+
       return {
         ...state,
-        provinceFilter: {
-          ...state.provinceFilter,
-          ...payload,
-        },
+        provinceFilter,
       };
     },
     clear() {
