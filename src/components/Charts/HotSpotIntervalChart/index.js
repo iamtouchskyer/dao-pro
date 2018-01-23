@@ -64,8 +64,7 @@ export default class HotSpotInvervalChart extends React.Component {
           color='name'
           style={{lineWidth: 1,stroke: '#fff'}}
           >
-          <Label content='count' formatter={(val, item) => {
-              return item.point.name + ': ' + val; }} />
+          <Label content='count' />
         </Geom>
       </Chart>
     );
