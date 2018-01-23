@@ -216,7 +216,7 @@ export default class Analysis extends Component {
             {
               this.renderTabPane(
                 { tab: '活跃客户端', key: 'activeclients' },
-                { title: '活跃客户端趋势', data: activeDeviceTrend },
+                { title: '活跃客户端趋势', data: activeDeviceTrend, color: '#4472c4' },
                 { title: '省份Top10', data: provinceADTop10 },
               )
             }
@@ -224,7 +224,7 @@ export default class Analysis extends Component {
             {
               this.renderTabPane(
                 { tab: '新增客户端', key: 'newclients' },
-                { title: '新增客户端趋势', data: newDeviceTrend },
+                { title: '新增客户端趋势', data: newDeviceTrend, color: '#ffc000' },
                 { title: '省份Top10', data: provinceNDTop10 },
               )
             }
@@ -232,7 +232,7 @@ export default class Analysis extends Component {
             {
               this.renderTabPane(
                 { tab: '播放剧集数目', key: 'counts' },
-                { title: '播放剧集数目趋势', data: totalWatchTimeTrend },
+                { title: '播放剧集数目趋势', data: totalWatchTimeTrend, color: '#70ad47' },
                 { title: '省份Top10', data: provinceTWTTop10 },
               )
             }
@@ -240,7 +240,7 @@ export default class Analysis extends Component {
             {
               this.renderTabPane(
                 { tab: '播放时长', key: 'totaltime' },
-                { title: '播放时长趋势', data: totalNumberOfWatchedMediaTrend },
+                { title: '播放时长趋势', data: totalNumberOfWatchedMediaTrend, color: '#ed7d31' },
                 { title: '省份Top10', data: provinceTNWMTop10 },
               )
             }
@@ -351,6 +351,50 @@ export default class Analysis extends Component {
       </Card>
     );
   };
+
+  renderPast7DayChartCardGroup = () => {
+    const { operationData, loading } = this.props;
+    const {
+      newDeviceTrend,
+      activeDeviceTrend,
+      totalWatchTimeTrend,
+      totalNumberOfWatchedMediaTrend,
+    } = operationData;
+
+    const last7DayActiveDeviceTrend = _.takeRight(activeDeviceTrend, 7);
+    const last7DayTotalWatchTimeTrend = _.takeRight(totalWatchTimeTrend, 7);
+    const last7DayNewDeviceTrend = _.takeRight(newDeviceTrend, 7);
+    const last7DayTotalNumberOfWatchedMediaTrend = _.takeRight(totalNumberOfWatchedMediaTrend, 7);
+
+    return (
+      <Row gutter={24}>
+        {this.renderPast7DayChartCard('miniBar', loading, '过去七天活跃客户端', '#4472c4', last7DayActiveDeviceTrend, { type: 'field', label: '平均活跃用户', value: _.sumBy(last7DayActiveDeviceTrend, dayData => dayData.y) / 7 })}
+        {this.renderPast7DayChartCard('miniArea', loading, '过去七天新增客户端', '#ffc000',
+            last7DayNewDeviceTrend, {
+            type: 'field', label: '平均活跃用户', value: _.sumBy(last7DayNewDeviceTrend, dayData => dayData.y) / 7,
+            /*
+            type: 'trend',
+            value: [
+              { label: '七日同比', percentage: 0 },
+              { label: '七日环比', percentage: 0 },
+            ],
+            */
+          })}
+        {this.renderPast7DayChartCard('miniBar', loading, '过去七天播放剧集数量', '#70ad47',
+            last7DayTotalNumberOfWatchedMediaTrend, {
+            type: 'field', label: '平均活跃用户', value: _.sumBy(last7DayTotalNumberOfWatchedMediaTrend, dayData => dayData.y) / 7,
+              /*
+            type: 'trend',
+            value: [
+              { label: '七日同比', percentage: 0 },
+              { label: '七日环比', percentage: 0 },
+            ],
+            */
+          })}
+        {this.renderPast7DayChartCard('miniArea', loading, '过去七天播放时长', '#ed7d31', last7DayTotalWatchTimeTrend, { type: 'field', label: '平均播放时长', value: _.sumBy(last7DayTotalWatchTimeTrend, dayData => dayData.y) / 7 })}
+      </Row>
+    );
+  }
 
   renderPast7DayChartCard = (whichChart, loading, title, color, chartData, footer) => {
   /* {label: '周同比', percentage: }, */
@@ -492,40 +536,11 @@ export default class Analysis extends Component {
     ];
 
 
-    const { operationData } = this.props;
-    const {
-      newDeviceTrend, provinceNDTop10,
-      activeDeviceTrend, totalWatchTimeTrend, totalNumberOfWatchedMediaTrend,
-      provinceADTop10, provinceTWTTop10, provinceTNWMTop10,
-    } = operationData;
-
     return (
       <div>
-        <Row gutter={24}>
-          {this.renderPast7DayChartCard('miniBar', loading, '过去七天活跃用户', '#70ad47' , activeDeviceTrend, { type: 'field', label: '平均活跃用户', value:1234})}
-          {this.renderPast7DayChartCard('miniArea', loading, '过去七天新增用户', '#ffc000',
-                          activeDeviceTrend, {
-                            type: 'trend',
-                            value: [
-                              { label: '七日同比', percentage: 0 },
-                              { label: '七日环比', percentage: 0 },
-                            ],
-          })}
-          {this.renderPast7DayChartCard('miniBar', loading, '过去七天播放剧集数量', '#4472c4',
-                activeDeviceTrend, {
-                  type: 'trend',
-                  value: [
-                    { label: '七日同比', percentage: 0 },
-                    { label: '七日环比', percentage: 0 },
-                  ],
-          })}
-          {this.renderPast7DayChartCard('miniArea', loading, '过去七天播放时长', '#ed7d31', activeDeviceTrend, { type: 'field', label: '平均播放时长', value:1234})}
-        </Row>
-
-
+        { this.renderPast7DayChartCardGroup() }
         { this.renderTrend() }
         { this.renderProvinceData() }
-
 
         <Row gutter={24}>
           <Col xl={12} lg={24} md={24} sm={24} xs={24}>
