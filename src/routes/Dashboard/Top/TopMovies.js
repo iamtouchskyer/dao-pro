@@ -41,7 +41,7 @@ export default class TopWrapper extends Component {
     @Secured(havePermissionAsync)
     @connect(({ cibnHot, loading }) => ({
       cibnHot,
-      loading: loading.effects['cibnHot/fetchPlayCount'],
+      loading: loading.effects['cibnHot/fetchPlayCount'] || loading.models.cibnHot,
     }))
     class TopMovies extends PureComponent {
       componentDidMount() {
@@ -52,10 +52,10 @@ export default class TopWrapper extends Component {
       }
 
       render() {
-        const { cibnHot } = this.props;
+        const { cibnHot, loading } = this.props;
         const { filter, playCount } = cibnHot;
 
-        return playCount ?
+        return playCount && !loading ?
           <HotSpotInvervalChart data = {playCount}/> :
           null;
       }
