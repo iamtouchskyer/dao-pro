@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { queryCIBNOperationData } from '../services/api';
 
 const calculateProvinceTotal = (provinceData) => {
-  return _.sumBy(provinceData.dimensions.application, eachApp => eachApp.total);
+  return _.sumBy(provinceData.dimensions.channel, eachApp => eachApp.total);
 };
 
 const calculateCountryTotal = (provincesData) => {
