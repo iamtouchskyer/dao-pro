@@ -9,8 +9,8 @@ export default {
   },
 
   effects: {
-    *fetchFilter(_, { call, put }) {
-      const filter = yield call(queryCIBNHotFilter);
+    *fetchFilter({ payload }, { call, put }) {
+      const filter = yield call(queryCIBNHotFilter, payload);
       yield put({
         type: 'save',
         payload: {

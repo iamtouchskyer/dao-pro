@@ -90,11 +90,11 @@ export async function queryCIBNPersonalTags() {
   return request('/api/cibn/personal/tags');
 }
 
-export async function queryCIBNHotFilter() {
-  return request('/api/cibn/hot/filter');
+export async function queryCIBNHotFilter(params) {
+  return request(`/api/cibn/hot/filter?${stringify(params)}`);
 }
 
-export async function queryCIBNHotPlayCount() {
-  return request('/api/cibn/hot/playcount');
+export async function queryCIBNHotPlayCount(params) {
+  return request(`/api/cibn/hot/playcount?${stringify(params)}`);
 }
 

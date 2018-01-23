@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 export const getFilterForVideoKind = (req, res) => {
-  const videoKind = req.query.videoKind;
+  const videoKind = req.query.kind;
 
   if (videoKind === 'music') {
     res.send({
@@ -20,7 +20,7 @@ export const getFilterForVideoKind = (req, res) => {
 };
 
 export const getPlayCount = (req, res) => {
-  const videoKind = req.query.videoKind;
+  const videoKind = req.query.kind;
   const areaId = Number(req.query.areaId);
 
   if (videoKind === 'music') {
