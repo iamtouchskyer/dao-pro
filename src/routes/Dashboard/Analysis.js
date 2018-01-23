@@ -283,11 +283,33 @@ export default class Analysis extends Component {
           <div className={styles.salesCardExtra}>
             { this.renderDatePicker() }
             <div className={styles.salesTypeRadio}>
-              <Radio.Group value={provinceFilter.filterBy} onChange={this.changeProvinceFilterFilterBy}>
+              <Radio.Group
+                value={provinceFilter.filterBy}
+                onChange={(e) => {
+                  this.props.dispatch({
+                    type: 'operationData/updateProvinceFilter',
+                    payload: {
+                      filterBy: e.target.value,
+                      filterValue: '0',
+                    },
+                  });
+                }}
+              >
                 <Radio.Button value="app">App</Radio.Button>
                 <Radio.Button value="channel">Channel</Radio.Button>
               </Radio.Group>
-              <Select value={provinceFilter.filterValue} style={{ width: 100 }} onChange={this.changeFilterValue}>
+              <Select
+                value={provinceFilter.filterValue}
+                style={{ width: 100 }}
+                onChange={(value) => {
+                  this.props.dispatch({
+                    type: 'operationData/updateProvinceFilter',
+                    payload: {
+                      filterValue: value,
+                    },
+                  });
+                }}
+              >
                 {provinceFilter[provinceFilter.filterBy === 'app' ? 'allAppIds' : 'allChannels'].map(i => (
                   <Select.Option key={i} value={i}>{i}</Select.Option>
                 ))}

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { queryCIBNOperationData } from '../services/api';
+import { getTimeDistance } from '../utils/utils';
 
 const allChannels = [
   '10000',
@@ -161,6 +162,7 @@ export default {
       allChannels,
       filterBy: 'app',
       filterValue: '0',
+      dateRange: getTimeDistance('thisYear'),
     },
   },
 
@@ -177,20 +179,10 @@ export default {
         },
       });
     },
-    *changeProvinceFilterFilterBy({ value }, { put }) {
+    *changeProvinceFilter(payload, { put }) {
       yield put({
-        type: 'updateProvinceFilterFilterBy',
-        payload: {
-          filterBy: value,
-        },
-      });
-    },
-    *changeFilterValue({ value }, { put }) {
-      yield put({
-        type: 'updateFilterValue',
-        payload: {
-          filterValue: value,
-        },
+        type: 'updateProvinceFilter',
+        payload,
       });
     },
   },
@@ -202,17 +194,27 @@ export default {
         ...payload,
       };
     },
-    updateProvinceFilterFilterBy(state, { payload }) {
+    updateProvinceFilter(state, { payload }) {
       return {
         ...state,
         provinceFilter: {
           ...state.provinceFilter,
-          filterBy: payload.filterBy,
-          filterValue: '0',
+          ...payload,
         },
       };
     },
     updateFilterValue(state, { payload }) {
+      window.console.log('xxxxxxxxxxxxxxxx');
+      window.console.log(state.rawData);
+
+      // const proviceMapViewData = _.reduce(state.rawData.categories.categories, (memo, cur) => {
+      //   if () {
+
+      //   }
+
+      //   return memo;
+      // }, []);
+
       return {
         ...state,
         ...payload,
@@ -243,6 +245,7 @@ export default {
           allChannels,
           filterBy: 'app',
           filterValue: '0',
+          dateRange: getTimeDistance('thisYear'),
         },
       };
     },
