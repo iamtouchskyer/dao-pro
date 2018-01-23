@@ -60,12 +60,12 @@ export default class Analysis extends Component {
   }
 
   componentWillUnmount() {
+    /*
     const { dispatch } = this.props;
     dispatch({
       type: 'chart/clear',
     });
 
-    /*
     dispatch({
       type: 'operationData/clear',
     });
@@ -289,30 +289,66 @@ export default class Analysis extends Component {
     );
   };
   
-/*
-  {label: '周同比', percentage: },
-  {label: '周环比', percentage: },
-  {label: '日同比', percentage: },
-  {label: '日环比', percentage: }
-*/
-  renderTrendGroup = (arr) => {
-    const _renderTrend = (label, percentage) => {
+  renderPast7DayChartCard = (whichChart, loading, title, color, chartData, footer) => {
+  /* {label: '周同比', percentage: }, */
+    const _renderChartCardTrendGroup = (arr) => {
+      const _renderTrend = (label, percentage) => {
+        return (
+          <Trend flag= {percentage > 0 ? 'up' : percentage === 0 ? '' : 'down'}
+                  style={{ marginRight: 16 }}>
+            {label}:<span className={styles.trendText}>{`${ percentage}%`}</span>
+          </Trend>
+        );
+      };
+
       return (
-        <Trend flag= {percentage > 0 ? 'up' : percentage === 0 ? '' : 'down'}
-                style={{ marginRight: 16 }}>
-          {label}:<span className={styles.trendText}>{`${ percentage}%`}</span>
-        </Trend>
+        <div>
+          {
+            _.map(arr, (element) => { 
+              return _renderTrend(element.label, element.percentage); 
+            })
+          }
+        </div>
       );
     };
 
+    const topColResponsiveProps = {
+      xs: 24,
+      sm: 12,
+      md: 12,
+      lg: 12,
+      xl: 6,
+      style: { marginBottom: 24 },
+    };
+
+    let footerElement = null;
+
+    if (footer.type === 'field') {
+      footerElement = <Field label={footer.label} value={numeral(footer.value).format('0')} />;
+    } else if (footer.type === 'trend') {
+      footerElement = _renderChartCardTrendGroup(footer.value);
+    }
+
+    let miniChartElement = null;
+    if (whichChart === 'miniBar') {
+      miniChartElement = (<MiniBar data={chartData} color={color} />);
+    } else {
+      miniChartElement = (<MiniArea data={chartData} color={color} />);
+    }
+
     return (
-      <div>
-        {
-          _.map(arr, (element) => { 
-            return _renderTrend(element.label, element.percentage); 
-          })
-        }
-      </div>
+      <Col {...topColResponsiveProps}>
+        <ChartCard
+          loading={loading}
+          bordered={false}
+          title={title}
+          action={<Tooltip title="指标说明"> <Icon type="info-circle-o" /> </Tooltip>}
+          footer={footerElement}
+          contentHeight={90}
+        >
+          { miniChartElement }
+        </ChartCard>
+      </Col>
     );
   };
 
@@ -392,41 +428,6 @@ export default class Analysis extends Component {
       },
     ];
 
-    const activeKey = currentTabKey || (offlineData[0] && offlineData[0].name);
-
-    const CustomTab = ({ data, currentTabKey: currentKey }) => (
-      <Row gutter={8} style={{ width: 138, margin: '8px 0' }}>
-        <Col span={12}>
-          <NumberInfo
-            title={data.name}
-            subTitle="转化率"
-            gap={2}
-            total={`${data.cvr * 100}%`}
-            theme={currentKey !== data.name && 'light'}
-          />
-        </Col>
-        <Col span={12} style={{ paddingTop: 36 }}>
-          <Pie
-            animate={false}
-            color={currentKey !== data.name && '#BDE4FF'}
-            inner={0.55}
-            tooltip={false}
-            margin={[0, 0, 0, 0]}
-            percent={data.cvr * 100}
-            height={64}
-          />
-        </Col>
-      </Row>
-    );
-
-    const topColResponsiveProps = {
-      xs: 24,
-      sm: 12,
-      md: 12,
-      lg: 12,
-      xl: 6,
-      style: { marginBottom: 24 },
-    };
 
     const { operationData } = this.props;
     const {
@@ -435,44 +436,11 @@ export default class Analysis extends Component {
       provinceADTop10, provinceTWTTop10, provinceTNWMTop10,
     } = operationData;
 
-    const renderPast7DayChartCard = (whichChart, loading, title, color, chartData, footer) => {
-      let footerElement = null;
-
-      if (footer.type === 'field') {
-        footerElement = <Field label={footer.label} value={numeral(footer.value).format('0')} />;
-      } else if (footer.type === 'trend') {
-        footerElement = this.renderTrendGroup(footer.value);
-      }
-
-      let miniChartElement = null;
-      if (whichChart === 'miniBar') {
-        miniChartElement = (<MiniBar data={chartData} color={color} />);
-      } else {
-        miniChartElement = (<MiniArea data={chartData} color={color} />);
-      }
-
-      return (
-        <Col {...topColResponsiveProps}>
-          <ChartCard
-            loading={loading}
-            bordered={false}
-            title={title}
-            action={<Tooltip title="指标说明"> <Icon type="info-circle-o" /> </Tooltip>}
-            footer={footerElement}
-            contentHeight={90}
-          >
-            { miniChartElement }
-          </ChartCard>
-        </Col>
-      );
-    };
-
-
     return (
       <div>
         <Row gutter={24}>
-          {renderPast7DayChartCard('miniBar', loading, '过去七天活跃用户', '#70ad47' , activeDeviceTrend, { type: 'field', label: '平均活跃用户', value:1234})}
-          {renderPast7DayChartCard('miniArea', loading, '过去七天新增用户', '#ffc000',
+          {this.renderPast7DayChartCard('miniBar', loading, '过去七天活跃用户', '#70ad47' , activeDeviceTrend, { type: 'field', label: '平均活跃用户', value:1234})}
+          {this.renderPast7DayChartCard('miniArea', loading, '过去七天新增用户', '#ffc000',
                           activeDeviceTrend, {
                             type: 'trend',
                             value: [
@@ -480,7 +448,7 @@ export default class Analysis extends Component {
                               { label: '七日环比', percentage: 0 },
                             ],
           })}
-          {renderPast7DayChartCard('miniBar', loading, '过去七天播放剧集数量', '#4472c4',
+          {this.renderPast7DayChartCard('miniBar', loading, '过去七天播放剧集数量', '#4472c4',
                 activeDeviceTrend, {
                   type: 'trend',
                   value: [
@@ -488,7 +456,7 @@ export default class Analysis extends Component {
                     { label: '七日环比', percentage: 0 },
                   ],
           })}
-          {renderPast7DayChartCard('miniArea', loading, '过去七天播放时常', '#ed7d31', activeDeviceTrend, { type: 'field', label: '平均播放时长', value:1234})}
+          {this.renderPast7DayChartCard('miniArea', loading, '过去七天播放时长', '#ed7d31', activeDeviceTrend, { type: 'field', label: '平均播放时长', value:1234})}
         </Row>
 
 
