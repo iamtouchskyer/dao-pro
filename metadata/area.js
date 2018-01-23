@@ -1,107 +1,110 @@
 export default [{
-  name: '中国',
-  id: 1,
-  sub: [{
-    name: '安徽',
-    id: 200
+  label: '中国',
+  value: 1,
+  children: [{
+    label: '安徽',
+    value: 200
   }, {
-    name: '澳门',
-    id: 201
+    label: '澳门',
+    value: 201
   }, {
-    name: '北京',
-    id: 202
+    label: '北京',
+    value: 202
   }, {
-    name: '重庆',
-    id: 203
+    label: '重庆',
+    value: 203
   }, {
-    name: '福建',
-    id: 204
+    label: '福建',
+    value: 204
   }, {
-    name: '甘肃',
-    id: 205
+    label: '甘肃',
+    value: 205
   }, {
-    name: '广东',
-    id: 206
+    label: '广东',
+    value: 206
   }, {
-    name: '广西',
-    id: 207
+    label: '广西',
+    value: 207
   }, {
-    name: '贵州',
-    id: 208
+    label: '贵州',
+    value: 208
   }, {
-    name: '海南',
-    id: 209
+    label: '海南',
+    value: 209
   }, {
-    name: '河北',
-    id: 210
+    label: '河北',
+    value: 210
   }, {
-    name: '河南',
-    id: 211
+    label: '河南',
+    value: 211
   }, {
-    name: '黑龙江',
-    id: 212
+    label: '黑龙江',
+    value: 212
   }, {
-    name: '湖北',
-    id: 213
+    label: '湖北',
+    value: 213
   }, {
-    name: '湖南',
-    id: 214
+    label: '湖南',
+    value: 214
   }, {
-    name: '吉林',
-    id: 215
+    label: '吉林',
+    value: 215
   }, {
-    name: '江苏',
-    id: 216
+    label: '江苏',
+    value: 216
   }, {
-    name: '江西',
-    id: 217
+    label: '江西',
+    value: 217
   }, {
-    name: '辽宁',
-    id: 218
+    label: '辽宁',
+    value: 218
   }, {
-    name: '内蒙古',
-    id: 219
+    label: '内蒙古',
+    value: 219
   }, {
-    name: '宁夏',
-    id: 220
+    label: '宁夏',
+    value: 220
   }, {
-    name: '青海',
-    id: 221
+    label: '青海',
+    value: 221
   }, {
-    name: '山东',
-    id: 222
+    label: '山东',
+    value: 222
   }, {
-    name: '山西',
-    id: 223
+    label: '山西',
+    value: 223
   }, {
-    name: '陕西',
-    id: 224
+    label: '陕西',
+    value: 224
   }, {
-    name: '上海',
-    id: 225
+    label: '上海',
+    value: 225
   }, {
-    name: '四川',
-    id: 226
+    label: '四川',
+    value: 226
   }, {
-    name: '台湾',
-    id: 227
+    label: '台湾',
+    value: 227
   }, {
-    name: '天津',
-    id: 228
+    label: '天津',
+    value: 228
   }, {
-    name: '西藏',
-    id: 229
+    label: '西藏',
+    value: 229
   }, {
-    name: '香港',
-    id: 230
+    label: '香港',
+    value: 230
   }, {
-    name: '新疆',
-    id: 231
+    label: '新疆',
+    value: 231
   }, {
-    name: '云南',
-    id: 232
+    label: '云南',
+    value: 232
   }, {
-    name: '浙江',
-    id: 233
+    label: '浙江',
+    value: 233
   }]
+}, {
+  label: '海外',
+  value: 2
 }]

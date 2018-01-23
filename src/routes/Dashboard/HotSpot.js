@@ -7,7 +7,8 @@ import {
   Card,
   Tooltip,
   DatePicker,
-  Select
+  Select,
+  Cascader
 } from 'antd';
 import numeral from 'numeral';
 import Authorized from '../../utils/Authorized';
@@ -19,6 +20,7 @@ import HotSpotInvervalChart from '../../components/Charts/HotSpotIntervalChart/i
 import styles from './Monitor.less';
 import { getTimeDistance } from '../../utils/utils';
 import kindMetadata from '../../../metadata/kind';
+import areaMetadata from '../../../metadata/area';
 
 const { Secured } = Authorized;
 const { TabPane } = Tabs;
@@ -156,10 +158,7 @@ export default class HotSpot extends Component {
     if (filter) {
       return (
         <div>
-          <Select defaultValue={null} style={{ width: 120 }} onChange={(value) => { this.onChangeAreaId(value) }}>
-            <Option value={null}>全国</Option>
-            <Option value={223}>山西</Option>
-          </Select>
+          <Cascader defaultValue={[1]} options={areaMetadata} onChange={(value) => { this.onChangeAreaId(value[value.length-1])}} showSearch />
           <label>
             类别：
             <Select defaultValue="movie" style={{ width: 120 }} onChange={(value) => { this.onChangeKind(value) }}>
