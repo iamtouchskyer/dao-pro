@@ -14,7 +14,7 @@ export default {
       yield put({
         type: 'save',
         payload: {
-          ...filter,
+          filter,
         },
       });
     },
@@ -23,7 +23,7 @@ export default {
       yield put({
         type: 'save',
         payload: {
-          ...playCount,
+          playCount,
         },
       });
     },

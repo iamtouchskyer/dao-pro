@@ -9,7 +9,7 @@ const menuData = [{
     path: 'analysis',
   }, {
     name: '热点统计',
-    path: 'monitor',
+    path: 'hot',
   }, {
     name: '聚类划分',
     path: 'monitor',
