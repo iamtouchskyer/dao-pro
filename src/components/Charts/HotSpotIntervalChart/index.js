@@ -9,16 +9,9 @@ import autoHeight from '../autoHeight';
 export default class HotSpotInvervalChart extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      scope: '过去一年',
-    };
-
-    this.handleScopeChange = this.handleScopeChange.bind(this);
   }
-
-  handleScopeChange(e) {
-    this.setState({ scope: e.target.value });
+  shouldComponentUpdate(nextProps) {
+    return !_.isEqual(this.props.data, nextProps.data);
   }
 
   render() {

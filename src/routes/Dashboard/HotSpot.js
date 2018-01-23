@@ -55,7 +55,6 @@ export default class HotSpot extends PureComponent {
 
   componentDidMount() {
     this.onChangeKind('movie');
-    // this.fetchPlayCount({});
   }
 
   fetchFilter(kind) {
@@ -67,25 +66,8 @@ export default class HotSpot extends PureComponent {
     });
   }
 
-  // fetchPlayCount(condition) {
-  //   const updatedState = _.defaults(condition, this.state);
-
-  //   this.props.dispatch({
-  //     type: 'cibnHot/fetchPlayCount',
-  //     payload: {
-  //       kind: updatedState.kind,
-  //       language: updatedState.filter.language,
-  //       category: updatedState.filter.category,
-  //       musicstyle: updatedState.filter.musicstyle,
-  //       location: updatedState.filter.location,
-  //       areaId: updatedState.areaId,
-  //     },
-  //   });
-  // }
-
   onChangeAreaId(areaId) {
     this.setState({ areaId });
-    // this.fetchPlayCount({ areaId });
   }
 
   onChangeKind(kind) {
@@ -100,15 +82,12 @@ export default class HotSpot extends PureComponent {
           [name]: value,
         }, this.state.filter);
     this.setState({ filter });
-    // this.fetchPlayCount({ filter });
   }
 
   selectDate = (type) => {
     this.setState({
       rangePickerValue: getTimeDistance(type),
     });
-
-    // this.fetchPlayCount();
   };
 
   isActive(type) {
@@ -163,17 +142,8 @@ export default class HotSpot extends PureComponent {
   }
 
   render() {
-    const { cibnHot } = this.props;
+    const { cibnHot, loading } = this.props;
     const { filter, playCount } = cibnHot;
-
-    // const Top = getTopMovies({
-    //   kind: this.state.kind,
-    //   language: this.state.filter.language,
-    //   category: this.state.filter.category,
-    //   musicstyle: this.state.filter.musicstyle,
-    //   location: this.state.filter.location,
-    //   areaId: this.state.areaId,
-    // });
 
     if (filter) {
       return (
@@ -219,6 +189,6 @@ export default class HotSpot extends PureComponent {
         </Card>
       );
     }
-    return null;
+    return <Card loading={true} />;
   }
 }

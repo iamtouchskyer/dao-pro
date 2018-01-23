@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import stringify from 'json-stable-stringify';
 import { queryCIBNHotFilter, queryCIBNHotPlayCount } from '../services/api';
 
 export default {
@@ -6,6 +7,8 @@ export default {
 
   state: {
     loading: false,
+    filter: {},
+    playCount: {}
   },
 
   effects: {
@@ -23,7 +26,9 @@ export default {
       yield put({
         type: 'save',
         payload: {
-          playCount,
+          playCount: {
+            [stringify(payload)]: playCount,
+          },
         },
       });
     },

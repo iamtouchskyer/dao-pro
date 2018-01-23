@@ -14,6 +14,7 @@ import {
 import numeral from 'numeral';
 import Authorized from '../../../utils/Authorized';
 import HotSpotInvervalChart from '../../../components/Charts/HotSpotIntervalChart/index';
+import stringify from 'json-stable-stringify';
 
 const { Secured } = Authorized;
 const { TabPane } = Tabs;
@@ -53,11 +54,9 @@ export default class TopWrapper extends Component {
 
       render() {
         const { cibnHot, loading } = this.props;
-        const { filter, playCount } = cibnHot;
+        const { playCount } = cibnHot;
 
-        return playCount && !loading ?
-          <HotSpotInvervalChart data = {playCount}/> :
-          null;
+        return <HotSpotInvervalChart data = {playCount[stringify(payload)]}/>;
       }
     }
 
