@@ -1,6 +1,6 @@
 import _ from 'lodash';
+import moment from 'moment';
 import { queryCIBNOperationData } from '../services/api';
-import { getTimeDistance } from '../utils/utils';
 
 const allChannels = [
   '10000',
@@ -98,6 +98,10 @@ const getProvinceMapData = (rawData, provinceFilter) => _.reduce(rawData, (memo,
   //   return memo;
   // }
 
+  if (!provinceFilter.date.isSame(everyDayData.date, 'day')) {
+    return memo;
+  }
+
   _.each(everyDayData.categories.newClients, (eachProvince) => {
     const memoItem = _.find(memo, provinceMemo => provinceMemo.title === eachProvince.provinceName);
 
@@ -144,7 +148,8 @@ const defaultProvinceFilter =  {
   allChannels,
   filterBy: 'app',
   filterValue: '0',
-  dateRange: getTimeDistance('thisYear'),
+  date: moment(),
+  disabledDate: () => true,
 };
 
 const generateDataForView = (operationData) => {
@@ -217,6 +222,14 @@ export default {
       return {
         ...state,
         ...payload,
+        provinceFilter: {
+          ...state.provinceFilter,
+          disabledDate: (currentDate) => {
+            return _.findIndex(payload.rawData, (data) => {
+              return currentDate.isSame(data.date, 'day');
+            }) === -1;
+          },
+        },
       };
     },
     updateProvinceFilter(state, { payload }) {
