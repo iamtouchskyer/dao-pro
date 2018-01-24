@@ -198,7 +198,8 @@ export default class ChinaMapChart extends React.Component {
             <View data={this.chinaMap} >
               <Geom type="polygon" tooltip={false} position="longitude*latitude" style={{ fill: '#fff', stroke: '#ccc', lineWidth: 1 }} />
             </View>
-            <View data={userDv}
+            <View
+              data={userDv}
               scale={{
                 trend: {
                   alias: '数量',

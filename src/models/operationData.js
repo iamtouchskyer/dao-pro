@@ -143,7 +143,7 @@ const generateTrendAndTop10 = (operationData, categoryName) => {
   return [theTrend, theProvince, theProvinceTop10];
 };
 
-const defaultProvinceFilter =  {
+const defaultProvinceFilter = {
   allAppIds,
   allChannels,
   filterBy: 'app',
@@ -202,16 +202,26 @@ export default {
   },
 
   effects: {
-    *fetchOperationData(_, { call, put }) {
+    *fetchOperationData(args, { call, put }) {
       const operationData = yield call(queryCIBNOperationData);
-      const operationDateForView = yield generateDataForView(operationData);
+      const operationDataForView = yield generateDataForView(operationData);
+
+      const provinceFilter = _.defaults({}, {
+        date: moment(_.last(operationData.data).date),
+        disabledDate: (currentDate) => {
+          return _.findIndex(operationData.data, (data) => {
+            return currentDate.isSame(data.date, 'day');
+          }) === -1;
+        },
+      }, defaultProvinceFilter);
 
       yield put({
         type: 'save',
         payload: {
+          provinceFilter,
           rawData: operationData.data,
-          provinceMapData: getProvinceMapData(operationData.data, defaultProvinceFilter),
-          ...operationDateForView,
+          provinceMapData: getProvinceMapData(operationData.data, provinceFilter),
+          ...operationDataForView,
         },
       });
     },
@@ -219,17 +229,11 @@ export default {
 
   reducers: {
     save(state, { payload }) {
+      window.console.log(payload);
+
       return {
         ...state,
         ...payload,
-        provinceFilter: {
-          ...state.provinceFilter,
-          disabledDate: (currentDate) => {
-            return _.findIndex(payload.rawData, (data) => {
-              return currentDate.isSame(data.date, 'day');
-            }) === -1;
-          },
-        },
       };
     },
     updateProvinceFilter(state, { payload }) {
