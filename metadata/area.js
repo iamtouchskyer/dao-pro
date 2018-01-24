@@ -233,7 +233,7 @@ const areaMetadata = [{
 }];
 
 _.each(areaMetadata[0].children, (chinaZone) => {
-  chinaZone.value = _.map(chinaZone.children, (province) => province.value);
+  chinaZone.value = _.map(chinaZone.children, (province) => province.value).join(',');
 });
 
-export default areaMetadata;
+export default areaMetadata[0].children;

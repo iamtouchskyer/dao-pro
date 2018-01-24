@@ -125,7 +125,7 @@ export async function queryCIBNHotPlayCount(params) {
     params.language ? `language: \"${params.language}\"` : 'language: "汉语"',
     params.category ? `category: \"${params.category}\"` : `category: "${defaultCategory(params.kind)}"`,
     params.area ? `area: \"${params.area}\"` : null,
-    params.provinceID ? `provinceID: \"${params.areaId}\"` : null,
+    params.areaId ? `provinceID: ${params.areaId}` : null,
     params.startDate ? `startDate: \"${format(params.startDate)}\"` : 'startDate: "2018-01-01"',
     params.endDate ? `endDate: \"${format(params.endDate)}\"` : null,
     params.hourOfDay ? `hourOfDay: \"${params.hourOfDay}\"` : null,

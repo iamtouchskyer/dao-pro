@@ -21,6 +21,7 @@ import styles from './Analysis.less';
 import { getTimeDistance } from '../../utils/utils';
 import kindMetadata from '../../../metadata/kind';
 import areaMetadata from '../../../metadata/area';
+import filterMetadata from '../../../metadata/filter';
 import TopWrapper from './Top/TopWrapper';
 
 const { Secured } = Authorized;
@@ -40,7 +41,7 @@ const havePermissionAsync = new Promise((resolve) => {
 @Secured(havePermissionAsync)
 @connect(({ cibnHot, loading }) => ({
   cibnHot,
-  loading: loading.effects['cibnHot/fetchFilter'],
+  loading: loading.effects['cibnHot/fetchFilter'] || loading.effects['cibnHot/fetchPlayCount'],
 }))
 export default class HotSpot extends PureComponent {
   constructor(props) {
@@ -104,6 +105,12 @@ export default class HotSpot extends PureComponent {
     }
   }
 
+  handleRangePickerChange = (rangePickerValue) => {
+    this.setState({
+      rangePickerValue,
+    });
+  };
+
   renderDatePicker = () => {
     const { rangePickerValue } = this.state;
     return (
@@ -122,7 +129,7 @@ export default class HotSpot extends PureComponent {
         <RangePicker
           value={rangePickerValue}
           onChange={this.handleRangePickerChange}
-          style={{ width: 256 }}
+          style={{ width: 256, textAlign: 'left' }}
         />
       </div>
     );
@@ -132,7 +139,13 @@ export default class HotSpot extends PureComponent {
     return (
       <Row>
         <Col xs={6}>
-          <Cascader defaultValue={[1]} options={areaMetadata} onChange={(value) => { this.onChangeAreaId(value[value.length-1])}} showSearch />
+          <Cascader
+            defaultValue={this.state.areaId}
+            options={areaMetadata}
+            onChange={(value) => { this.onChangeAreaId(value)}}
+            showSearch
+            placeholder="客户端省份"
+          />
         </Col>
         <Col xs={18}>
           { this.renderDatePicker() }
@@ -154,35 +167,44 @@ export default class HotSpot extends PureComponent {
           style={{ marginTop: 24 }}
           extra={this.renderCardExtra()}
         >
-          <label>
-            <Select defaultValue="movie" style={{ width: 120 }} onChange={(value) => { this.onChangeKind(value) }}>
-              {_.map(kindMetadata, (meta, kind) => {
-                return <Option value={kind} key={kind}>{meta.name}</Option>
+          <div style={{ marginTop: 20, marginLeft: 50, marginRight: 50 }}>
+            <Row gutter={12}>
+              <Col span={6}>
+                <label>
+                  <Select defaultValue="movie" style={{ width: 120 }} onChange={(value) => { this.onChangeKind(value) }}>
+                    {_.map(kindMetadata, (meta, kind) => {
+                      return <Option value={kind} key={kind}>{meta.name}</Option>
+                    })}
+                  </Select>
+                </label>
+              </Col>
+              {_.map(filter, (options, name) => {
+                return (
+                  <Col span={6} key={name}>
+                    <label>
+                      {filterMetadata[name].name}:
+                      <Select defaultValue="all" style={{ width: 120 }} onChange={(value) => { this.onChangeFilter(name, value) }}>
+                        <Option value="all">全部</Option>
+                        {_.map(options, (option, index) => {
+                          return <Option value={option} key={option}>{option}</Option>
+                        })}
+                      </Select>
+                    </label>
+                  </Col>
+                );
               })}
-            </Select>
-          </label>
-          {_.map(filter, (options, name) => {
-            return (
-              <label key={name}>
-                {name}:
-                <Select defaultValue="all" style={{ width: 120 }} onChange={(value) => { this.onChangeFilter(name, value) }}>
-                  <Option value="all">全部</Option>
-                  {_.map(options, (option, index) => {
-                    return <Option value={option} key={option}>{option}</Option>
-                  })}
-                </Select>
-              </label>
-            );
-          })}
+            </Row>
+          </div>
           {
             <TopWrapper
               payload={{
                 kind: this.state.kind,
-                language: this.state.filter.language,
-                category: this.state.filter.category,
-                musicstyle: this.state.filter.musicstyle,
-                location: this.state.filter.location,
-                areaId: this.state.areaId
+                language: this.state.filter.languages,
+                category: this.state.filter.categories,
+                area: this.state.filter.areas,
+                areaId: _.last(this.state.areaId),
+                startDate: this.state.rangePickerValue[0],
+                endDate: this.state.rangePickerValue[1]
               }}
             />
           }

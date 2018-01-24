@@ -20,7 +20,11 @@ export default class HotSpotInvervalChart extends React.Component {
       cardProps,
     } = this.props;
 
-    if (!data) return null;
+    if (!data) {
+      return (
+        <div style={{ height: 400 }} />
+      );
+    }
 
     const dv = new DataSet.DataView();
     dv.source(data)
@@ -39,14 +43,13 @@ export default class HotSpotInvervalChart extends React.Component {
         height={400}
         data={dv}
         scale={{
-          count: { type: 'linear' },
-          name: { type: 'cat' }
+          count: { type: 'linear', alias: '观看数量' },
+          name: { type: 'cat', alias: '影片名称' }
         }}
         padding={[ 80, 100, 80, 80 ]}
         forceFit>
-        {/* <Coord type='theta' radius={0.75} /> */}
-        <Axis name="name" />
-        <Axis name="count" />
+        <Axis name="name" label={{ offset: 20 }} />
+        <Axis name="count" label={{ offset: 20 }} />
         <Tooltip
           showTitle={false}
           itemTpl='<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
