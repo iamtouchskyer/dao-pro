@@ -79,7 +79,7 @@ const allAppIds = ['1000', '1008', '1012', '1015'];
 
 const calculateProvinceTotal = (provinceData, filterBy = 'channel', filter = null) => {
   return _.sumBy(provinceData.dimensions[filterBy], (eachApp) => {
-    if (!_.isNull(filter) && filter.filterBy === 'app' && (Number(filter.filterValue) > 0 && Number(filter.filterValue) !== Number(eachApp.appId))) {
+    if (!_.isNull(filter) && (Number(filter.filterValue) > 0 && Number(filter.filterValue) !== Number(filterBy === 'application' ? eachApp.appId : eachApp.channelId))) {
       return 0;
     }
 
@@ -106,15 +106,15 @@ const getProvinceMapData = (rawData, provinceFilter) => _.reduce(rawData, (memo,
     const memoItem = _.find(memo, provinceMemo => provinceMemo.title === eachProvince.provinceName);
 
     if (memoItem) {
-      memoItem.total += calculateProvinceTotal(eachProvince, 'application', provinceFilter);
+      memoItem.total += calculateProvinceTotal(eachProvince, provinceFilter.filterBy === 'app' ? 'application' : 'channel', provinceFilter);
     } else {
-      const theTotal = calculateProvinceTotal(eachProvince, 'application', provinceFilter);
+      const theTotal = calculateProvinceTotal(eachProvince, provinceFilter.filterBy === 'app' ? 'application' : 'channel', provinceFilter);
       memo.push({ title: eachProvince.provinceName, name: eachProvince.provinceName, total: theTotal, value: theTotal });
     }
   });
 
   return memo;
-}, [])
+}, []);
 
 const generateTrendAndTop10 = (operationData, categoryName) => {
   const theTrend = _.map(operationData.data, (everyDayData) => {
