@@ -79,7 +79,7 @@ const allAppIds = ['1000', '1008', '1012', '1015'];
 
 const calculateProvinceTotal = (provinceData, filterBy = 'channel', filter = null) => {
   return _.sumBy(provinceData.dimensions[filterBy], (eachApp) => {
-    if (!_.isNull(filter) && filter.filterBy === 'app' && (filter.filterValue > 0 && filter.filterValue !== eachApp.appId)) {
+    if (!_.isNull(filter) && filter.filterBy === 'app' && (Number(filter.filterValue) > 0 && Number(filter.filterValue) !== Number(eachApp.appId))) {
       return 0;
     }
 
@@ -92,11 +92,11 @@ const calculateCountryTotal = (provincesData) => {
 };
 
 const getProvinceMapData = (rawData, provinceFilter) => _.reduce(rawData, (memo, everyDayData) => {
-  const currentDataDate = new Date(everyDayData.date);
+  // const currentDataDate = new Date(everyDayData.date);
 
-  if (currentDataDate < provinceFilter.dateRange[0] || currentDataDate > provinceFilter.dateRange[1]) {
-    return memo;
-  }
+  // if (currentDataDate < provinceFilter.dateRange[0] || currentDataDate > provinceFilter.dateRange[1]) {
+  //   return memo;
+  // }
 
   _.each(everyDayData.categories.newClients, (eachProvince) => {
     const memoItem = _.find(memo, provinceMemo => provinceMemo.title === eachProvince.provinceName);

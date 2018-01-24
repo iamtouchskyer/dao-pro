@@ -265,7 +265,7 @@ export default class Analysis extends Component {
         title="地域分布"
         extra={
           <div className={styles.salesCardExtra}>
-            { this.renderDatePicker({
+            {/* { this.renderDatePicker({
               value: provinceFilter.dateRange,
               onChange: (dateRange) => {
                 this.props.dispatch({
@@ -307,42 +307,45 @@ export default class Analysis extends Component {
                   },
                 });
               },
-            }) }
+            }) } */}
             <div className={styles.salesTypeRadio}>
               <Radio.Group
-                value={provinceFilter.filterBy}
+                value={provinceFilter.filterValue}
                 onChange={(e) => {
+                  window.console.log('fdasfasdf');
+
                   this.props.dispatch({
                     type: 'operationData/updateProvinceFilter',
                     payload: {
-                      filterBy: e.target.value,
-                      filterValue: '0',
+                      filterBy: 'app',
+                      filterValue: e.target.value,
                     },
                   });
                 }}
               >
-                <Radio.Button value="app">App</Radio.Button>
+                <Radio.Button value="0">全部App</Radio.Button>
+                {provinceFilter.allAppIds.map(i => (
+                  <Radio.Button value={i}>{i}</Radio.Button>
+                ))}
+                {/* <Select
+                  value={provinceFilter.filterValue}
+                  style={{ width: 100 }}
+                  defaultValue="全部"
+                  onChange={(value) => {
+                    this.props.dispatch({
+                      type: 'operationData/updateProvinceFilter',
+                      payload: {
+                        filterValue: value,
+                      },
+                    });
+                  }}
+                >
+                  {provinceFilter[provinceFilter.filterBy === 'app' ? 'allAppIds' : 'allChannels'].map(i => (
+                    <Select.Option key={i} value={i}>{i}</Select.Option>
+                  ))}
+                </Select> */}
                 {/* <Radio.Button value="channel">Channel</Radio.Button> */}
               </Radio.Group>
-              <span>  :  </span>
-              <Select
-                value={provinceFilter.filterValue}
-                style={{ width: 100 }}
-                defaultValue="全部"
-                onChange={(value) => {
-                  this.props.dispatch({
-                    type: 'operationData/updateProvinceFilter',
-                    payload: {
-                      filterValue: value,
-                    },
-                  });
-                }}
-              >
-                <Select.Option key={0} value={0}>全部</Select.Option>
-                {provinceFilter[provinceFilter.filterBy === 'app' ? 'allAppIds' : 'allChannels'].map(i => (
-                  <Select.Option key={i} value={i}>{i}</Select.Option>
-                ))}
-              </Select>
             </div>
           </div>
         }
