@@ -136,8 +136,8 @@ const proxy = {
   'GET /api/cibn/personalrecommendation': CIBN.getFakePersonalRecommendation,
   'GET /api/cibn/personal/tags': CIBN.getFakePersonalTags,
   'GET /api/cibn/personal/tag': CIBN.getFakePersonalTag,
-  'GET /api/cibn/operationdata': CIBN.getFakeOperationData,
-  //'GET /api/cibn/operationdata': 'http://localhost:3030/',
+  // 'GET /api/cibn/operationdata': CIBN.getFakeOperationData,
+  'GET /api/cibn/operationdata': 'http://localhost:3030/',
 
   'GET /api/cibn/hot/filter': CIBNHot.getFilterForVideoKind,
   'GET /api/cibn/hot/playcount': CIBNHot.getPlayCount
