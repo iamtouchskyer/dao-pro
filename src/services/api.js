@@ -89,10 +89,13 @@ export async function queryCIBNPersonalTags() {
   return request('/api/cibn/personal/tags');
 }
 
+// const serviceUrl = "http://zlike-mac0.guest.corp.microsoft.com:4000/graphql";
+const serviceUrl = "http://localhost:3030/popular";
+
 export async function queryCIBNHotFilter(params) {
   // return graphqlRequest(`/api/cibn/hot/filter?${stringify(params)}`);
   return graphqlRequest(
-    'http://zlike-mac0.guest.corp.microsoft.com:4000/graphql',
+    serviceUrl,
     `{\n  filters(videotype: \"${params.kind}\") {\n    languages\n    areas\n    categories\n  }\n  \n}`
   ).then((d) => { return d.filters })
 }
@@ -128,7 +131,7 @@ export async function queryCIBNHotPlayCount(params) {
     params.hourOfDay ? `hourOfDay: \"${params.hourOfDay}\"` : null,
   ].filter(i => i !== null).join(',');
   return graphqlRequest(
-    'http://zlike-mac0.guest.corp.microsoft.com:4000/graphql',
+    serviceUrl,
     `{\n  playCount(${requestParams}) {\n      count(top: ${params.top || 10}) {\n        videoname,\n        play_count,\n        vid\n      }\n    }\n}`
   ).then((d) => { console.log('aaaaaaaaaa', d);  return d.playCount.count })
 }
