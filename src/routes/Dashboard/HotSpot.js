@@ -41,7 +41,7 @@ const havePermissionAsync = new Promise((resolve) => {
 @Secured(havePermissionAsync)
 @connect(({ cibnHot, loading }) => ({
   cibnHot,
-  loading: loading.effects['cibnHot/fetchFilter'] || loading.effects['cibnHot/fetchPlayCount'],
+  loading: loading.effects['cibnHot/fetchFilter'],
 }))
 export default class HotSpot extends PureComponent {
   constructor(props) {
@@ -162,6 +162,7 @@ export default class HotSpot extends PureComponent {
       return (
         <Card
           title="热门榜单"
+          loading={loading}
           bordered={false}
           bodyStyle={{ padding: 0 }}
           style={{ marginTop: 24 }}
@@ -171,7 +172,7 @@ export default class HotSpot extends PureComponent {
             <Row gutter={12}>
               <Col span={6}>
                 <label>
-                  <Select defaultValue="movie" style={{ width: 120 }} onChange={(value) => { this.onChangeKind(value) }}>
+                  <Select defaultValue={this.state.kind} style={{ width: 120 }} onChange={(value) => { this.onChangeKind(value) }}>
                     {_.map(kindMetadata, (meta, kind) => {
                       return <Option value={kind} key={kind}>{meta.name}</Option>
                     })}

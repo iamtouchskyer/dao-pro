@@ -13,6 +13,10 @@ export default {
 
   effects: {
     *fetchFilter({ payload }, { call, put }) {
+      yield put({
+        type: 'load',
+        loading: true,
+      });
       const filter = yield call(queryCIBNHotFilter, payload);
       yield put({
         type: 'save',
@@ -33,10 +37,17 @@ export default {
   },
 
   reducers: {
+    load(state, { loading }) {
+      return {
+        ...state,
+        loading,
+      }
+    },
     save(state, { payload }) {
       return {
         ...state,
         ...payload,
+        loading: false,
       };
     },
     savePlayCount(state, { playCount }) {
@@ -46,6 +57,7 @@ export default {
           ...state.playCount,
           ...playCount
         },
+        loading: false,
       };
     },
     clear() {

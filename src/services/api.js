@@ -114,6 +114,8 @@ function defaultCategory(kind) {
     return 'MV';
   case 'children':
     return '益智';
+  case 'dhyana':
+    return '讲座';
   }
   return '都市';
 }
@@ -123,7 +125,7 @@ export async function queryCIBNHotPlayCount(params) {
   const requestParams = [
     params.kind ? `videotype: \"${params.kind}\"` : 'videotype: "tv"',
     params.language ? `language: \"${params.language}\"` : 'language: "汉语"',
-    params.category ? `category: \"${params.category}\"` : `category: "${defaultCategory(params.kind)}"`,
+    params.category ? `category: \"${params.category}\"` : null, //`category: "${defaultCategory(params.kind)}"`,
     params.area ? `area: \"${params.area}\"` : null,
     params.areaId ? `provinceID: ${params.areaId}` : null,
     params.startDate ? `startDate: \"${format(params.startDate)}\"` : 'startDate: "2018-01-01"',
