@@ -2,6 +2,7 @@ import { stringify } from 'qs';
 import request from '../utils/request';
 import _ from 'lodash';
 import { request as graphqlRequest } from 'graphql-request';
+import moment from 'moment';
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');
@@ -96,21 +97,39 @@ export async function queryCIBNHotFilter(params) {
   ).then((d) => { return d.filters })
 }
 
+function format(date) {
+  return moment(date).format('YYYY-MM-DD');
+}
+
+function defaultCategory(kind) {
+  switch (kind) {
+  case 'movie':
+    return '喜剧';
+  case 'tv':
+    return '都市';
+  case 'music':
+    return 'MV';
+  case 'children':
+    return '益智';
+  }
+  return '都市';
+}
 export async function queryCIBNHotPlayCount(params) {
   // return request(`/api/cibn/hot/playcount?${stringify(_.omit(params, _.isNil))}`);
+  // Too slow, use default filter to mock for now
   const requestParams = [
     params.kind ? `videotype: \"${params.kind}\"` : 'videotype: "tv"',
     params.language ? `language: \"${params.language}\"` : 'language: "汉语"',
-    params.category ? `category: \"${params.category}\"` : 'category: "家庭"',
+    params.category ? `category: \"${params.category}\"` : `category: "${defaultCategory(params.kind)}"`,
     params.area ? `area: \"${params.area}\"` : null,
     params.provinceID ? `provinceID: \"${params.areaId}\"` : null,
-    params.startDate ? `startDate: \"${params.startDate.toISOString()}\"` : 'startDate: "2018-01-01"',
-    params.endDate ? `endDate: \"${params.endDate.toISOString()}\"` : null,
+    params.startDate ? `startDate: \"${format(params.startDate)}\"` : 'startDate: "2018-01-01"',
+    params.endDate ? `endDate: \"${format(params.endDate)}\"` : null,
     params.hourOfDay ? `hourOfDay: \"${params.hourOfDay}\"` : null,
   ].filter(i => i !== null).join(',');
   return graphqlRequest(
     'http://zlike-mac0.guest.corp.microsoft.com:4000/graphql',
-    `{\n  playCount(${requestParams}) {\n      count(top: ${params.top || 20}) {\n        videoname,\n        play_count,\n        vid\n      }\n    }\n}`
+    `{\n  playCount(${requestParams}) {\n      count(top: ${params.top || 10}) {\n        videoname,\n        play_count,\n        vid\n      }\n    }\n}`
   ).then((d) => { console.log('aaaaaaaaaa', d);  return d.playCount.count })
 }
 

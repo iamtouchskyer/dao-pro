@@ -22,6 +22,7 @@ import { getTimeDistance } from '../../utils/utils';
 import kindMetadata from '../../../metadata/kind';
 import areaMetadata from '../../../metadata/area';
 import TopWrapper from './Top/TopWrapper';
+import moment from 'moment';
 
 const { Secured } = Authorized;
 const { TabPane } = Tabs;
@@ -70,41 +71,76 @@ export default class HotSpot extends PureComponent {
       style: { marginBottom: 24 },
     };
 
+    const now = moment(new Date(2018, 0, 3)).startOf('day');
+    const previous7days = {
+      startDate: now.clone().subtract(7, 'day').toDate(),
+      endDate: now.toDate()
+    };
+
+    const previous15days = {
+      startDate: now.clone().subtract(15, 'day'),
+      endDate: now
+    };
+
     return (
       <div>
         <Row gutter={24}>
           <Col {...topColResponsiveProps}>
-            { this.renderTopCard('七日热门电影', { kind: 'movie', areaId: 1 }) }
+            { this.renderTopCard('七日热门电影', {
+              kind: 'movie',
+              ...previous7days
+            }) }
           </Col>
           <Col {...topColResponsiveProps}>
-            { this.renderTopCard('十五日热门电影', { kind: 'movie', areaId: 1 }) }
-          </Col>
-        </Row>
-
-        <Row gutter={24}>
-          <Col {...topColResponsiveProps}>
-            { this.renderTopCard('七日热门电视剧', { kind: 'tv', areaId: 1 }) }
-          </Col>
-          <Col {...topColResponsiveProps}>
-            { this.renderTopCard('十五日热门电视剧', { kind: 'tv', areaId: 1 }) }
+            { this.renderTopCard('十五日热门电影', {
+              kind: 'movie',
+              ...previous15days
+            }) }
           </Col>
         </Row>
 
         <Row gutter={24}>
           <Col {...topColResponsiveProps}>
-            {this.renderTopCard('七日热门少儿节目', { kind: 'children', areaId: 1 })}
+            { this.renderTopCard('七日热门电视剧', {
+              kind: 'tv',
+              ...previous7days
+            }) }
           </Col>
           <Col {...topColResponsiveProps}>
-            {this.renderTopCard('十五日热门少儿节目', { kind: 'children', areaId: 1 })}
+            { this.renderTopCard('十五日热门电视剧', {
+              kind: 'tv',
+              ...previous15days
+            }) }
           </Col>
         </Row>
 
         <Row gutter={24}>
           <Col {...topColResponsiveProps}>
-            {this.renderTopCard('七日热门音乐', { kind: 'music', areaId: 1 })}
+            {this.renderTopCard('七日热门少儿节目', {
+              kind: 'children',
+              ...previous7days
+            })}
           </Col>
           <Col {...topColResponsiveProps}>
-            {this.renderTopCard('十五日热门音乐', { kind: 'music', areaId: 1 })}
+            {this.renderTopCard('十五日热门少儿节目', {
+              kind: 'children',
+              ...previous15days
+            })}
+          </Col>
+        </Row>
+
+        <Row gutter={24}>
+          <Col {...topColResponsiveProps}>
+            {this.renderTopCard('七日热门音乐', {
+              kind: 'music',
+              ...previous7days
+            })}
+          </Col>
+          <Col {...topColResponsiveProps}>
+            {this.renderTopCard('十五日热门音乐', {
+              kind: 'music',
+              ...previous15days
+            })}
           </Col>
         </Row>
       </div>
