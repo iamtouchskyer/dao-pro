@@ -8,7 +8,7 @@ import {
   Tooltip,
   DatePicker,
   Select,
-  Cascader
+  Cascader,
 } from 'antd';
 import numeral from 'numeral';
 import Authorized from '../../utils/Authorized';
@@ -47,48 +47,66 @@ export default class HotSpot extends PureComponent {
     super(props);
   }
 
+  renderTopCard = (title, payload) => {
+    return (
+      <Card
+        title={title}
+        bordered={false}
+        bodyStyle={{ padding: 0 }}
+      >
+        <TopWrapper payload={payload} />
+      </Card>
+    );
+  }
+
   render() {
+
+    const topColResponsiveProps = {
+      xs: 24,
+      sm: 24,
+      md: 24,
+      lg: 24,
+      xl: 12,
+      style: { marginBottom: 24 },
+    };
+
     return (
       <div>
-        <Card
-          title="热门电影"
-          bordered={false}
-          bodyStyle={{ padding: 0 }}
-          style={{ marginTop: 24 }}
-        >
-          <TopWrapper
-            payload={{
-              kind: 'movie',
-              areaId: 1
-            }}
-          />
-        </Card>
-        <Card
-          title="热门电视剧"
-          bordered={false}
-          bodyStyle={{ padding: 0 }}
-          style={{ marginTop: 24 }}
-        >
-          <TopWrapper
-            payload={{
-              kind: 'tv',
-              areaId: 1
-            }}
-          />
-        </Card>
-        <Card
-          title="热门音乐"
-          bordered={false}
-          bodyStyle={{ padding: 0 }}
-          style={{ marginTop: 24 }}
-        >
-          <TopWrapper
-            payload={{
-              kind: 'music',
-              areaId: 1
-            }}
-          />
-        </Card>
+        <Row gutter={24}>
+          <Col {...topColResponsiveProps}>
+            { this.renderTopCard('七日热门电影', { kind: 'movie', areaId: 1 }) }
+          </Col>
+          <Col {...topColResponsiveProps}>
+            { this.renderTopCard('十五日热门电影', { kind: 'movie', areaId: 1 }) }
+          </Col>
+        </Row>
+
+        <Row gutter={24}>
+          <Col {...topColResponsiveProps}>
+            { this.renderTopCard('七日热门电视剧', { kind: 'tv', areaId: 1 }) }
+          </Col>
+          <Col {...topColResponsiveProps}>
+            { this.renderTopCard('十五日热门电视剧', { kind: 'tv', areaId: 1 }) }
+          </Col>
+        </Row>
+
+        <Row gutter={24}>
+          <Col {...topColResponsiveProps}>
+            {this.renderTopCard('七日热门少儿节目', { kind: 'children', areaId: 1 })}
+          </Col>
+          <Col {...topColResponsiveProps}>
+            {this.renderTopCard('十五日热门少儿节目', { kind: 'children', areaId: 1 })}
+          </Col>
+        </Row>
+
+        <Row gutter={24}>
+          <Col {...topColResponsiveProps}>
+            {this.renderTopCard('七日热门音乐', { kind: 'music', areaId: 1 })}
+          </Col>
+          <Col {...topColResponsiveProps}>
+            {this.renderTopCard('十五日热门音乐', { kind: 'music', areaId: 1 })}
+          </Col>
+        </Row>
       </div>
     );
   }
