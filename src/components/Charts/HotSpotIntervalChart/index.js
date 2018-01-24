@@ -26,10 +26,10 @@ export default class HotSpotInvervalChart extends React.Component {
     dv.source(data)
       .transform({
         type: 'map',
-        callback({ entity: { name }, count }) {
+        callback({ videoname, play_count }) {
           return {
-            name,
-            count,
+            name: videoname,
+            count: play_count,
           }
         }
       });
