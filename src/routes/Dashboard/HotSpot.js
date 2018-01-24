@@ -137,7 +137,7 @@ export default class HotSpot extends PureComponent {
 
   renderCardExtra() {
     return (
-      <Row>
+      <Row style={{ textAlign: 'left' }}>
         <Col xs={6}>
           <Cascader
             defaultValue={this.state.areaId}
@@ -168,8 +168,8 @@ export default class HotSpot extends PureComponent {
           style={{ marginTop: 24 }}
           extra={this.renderCardExtra()}
         >
-          <div style={{ marginTop: 20, marginLeft: 50, marginRight: 50 }}>
-            <Row gutter={12}>
+          <div style={{ marginTop: 20, marginLeft: 30 }}>
+            <Row gutter={12} type='flex' justify='space-between'>
               <Col span={6}>
                 <label>
                   <Select defaultValue={this.state.kind} style={{ width: 120 }} onChange={(value) => { this.onChangeKind(value) }}>
@@ -179,21 +179,25 @@ export default class HotSpot extends PureComponent {
                   </Select>
                 </label>
               </Col>
-              {_.map(filter, (options, name) => {
-                return (
-                  <Col span={6} key={name}>
-                    <label>
-                      {filterMetadata[name].name}:
-                      <Select defaultValue="all" style={{ width: 120 }} onChange={(value) => { this.onChangeFilter(name, value) }}>
-                        <Option value="all">全部</Option>
-                        {_.map(options, (option, index) => {
-                          return <Option value={option} key={option}>{option}</Option>
-                        })}
-                      </Select>
-                    </label>
-                  </Col>
-                );
-              })}
+              <Col span={15}>
+                <Row gutter={12}>
+                  {_.map(filter, (options, name) => {
+                    return (
+                      <Col span={8}>
+                        <label key={name}>
+                          {filterMetadata[name].name}
+                          <Select defaultValue="all" style={{ width: 120, marginLeft: 10 }} onChange={(value) => { this.onChangeFilter(name, value) }}>
+                            <Option value="all">全部</Option>
+                            {_.map(options, (option, index) => {
+                              return <Option value={option} key={option}>{option}</Option>
+                            })}
+                          </Select>
+                        </label>
+                      </Col>
+                    );
+                  })}
+                </Row>
+              </Col>
             </Row>
           </div>
           {
