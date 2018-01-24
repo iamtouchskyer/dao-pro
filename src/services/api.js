@@ -3,6 +3,7 @@ import request from '../utils/request';
 import _ from 'lodash';
 import { request as graphqlRequest } from 'graphql-request';
 import moment from 'moment';
+import { message } from 'antd';
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');
@@ -98,6 +99,7 @@ export async function queryCIBNHotFilter(params) {
     serviceUrl,
     `{\n  filters(videotype: \"${params.kind}\") {\n    languages\n    areas\n    categories\n  }\n  \n}`
   ).then((d) => { return d.filters })
+  .catch(() => { message.error('请求失败') })
 }
 
 function format(date) {
@@ -136,5 +138,6 @@ export async function queryCIBNHotPlayCount(params) {
     serviceUrl,
     `{\n  playCount(${requestParams}) {\n      count(top: ${params.top || 10}) {\n        videoname,\n        play_count,\n        vid\n      }\n    }\n}`
   ).then((d) => { console.log('aaaaaaaaaa', d);  return d.playCount.count })
+  .catch(() => { message.error('请求失败') })
 }
 
