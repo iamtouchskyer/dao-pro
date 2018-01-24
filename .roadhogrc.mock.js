@@ -28,7 +28,7 @@ const proxy = {
       name: 'Admin',
       avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
       userid: '00000001',
-      notifyCount: 12,
+      notifyCount: 0,
     },
   },
   // GET POST 可省略
@@ -136,8 +136,8 @@ const proxy = {
   'GET /api/cibn/personalrecommendation': CIBN.getFakePersonalRecommendation,
   'GET /api/cibn/personal/tags': CIBN.getFakePersonalTags,
   'GET /api/cibn/personal/tag': CIBN.getFakePersonalTag,
-  //'GET /api/cibn/operationdata': CIBN.getFakeOperationData,
-  'GET /api/cibn/operationdata': 'http://localhost:3030/',
+  'GET /api/cibn/operationdata': CIBN.getFakeOperationData,
+  //'GET /api/cibn/operationdata': 'http://localhost:3030/',
 
   'GET /api/cibn/hot/filter': CIBNHot.getFilterForVideoKind,
   'GET /api/cibn/hot/playcount': CIBNHot.getPlayCount
