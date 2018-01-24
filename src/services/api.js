@@ -2,6 +2,7 @@ import { stringify } from 'qs';
 import request from '../utils/request';
 import _ from 'lodash';
 import { request as graphqlRequest } from 'graphql-request';
+import moment from 'moment';
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');
@@ -96,6 +97,10 @@ export async function queryCIBNHotFilter(params) {
   ).then((d) => { return d.filters })
 }
 
+function format(date) {
+  return moment(date).format('YYYY-MM-DD');
+}
+
 export async function queryCIBNHotPlayCount(params) {
   // return request(`/api/cibn/hot/playcount?${stringify(_.omit(params, _.isNil))}`);
   const requestParams = [
@@ -104,8 +109,8 @@ export async function queryCIBNHotPlayCount(params) {
     params.category ? `category: \"${params.category}\"` : 'category: "家庭"',
     params.area ? `area: \"${params.area}\"` : null,
     params.provinceID ? `provinceID: \"${params.areaId}\"` : null,
-    params.startDate ? `startDate: \"${params.startDate.toISOString()}\"` : 'startDate: "2018-01-01"',
-    params.endDate ? `endDate: \"${params.endDate.toISOString()}\"` : null,
+    params.startDate ? `startDate: \"${format(params.startDate)}\"` : 'startDate: "2018-01-01"',
+    params.endDate ? `endDate: \"${format(params.endDate)}\"` : null,
     params.hourOfDay ? `hourOfDay: \"${params.hourOfDay}\"` : null,
   ].filter(i => i !== null).join(',');
   return graphqlRequest(
