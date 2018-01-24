@@ -312,8 +312,6 @@ export default class Analysis extends Component {
               <Radio.Group
                 value={provinceFilter.filterValue}
                 onChange={(e) => {
-                  window.console.log('fdasfasdf');
-
                   this.props.dispatch({
                     type: 'operationData/updateProvinceFilter',
                     payload: {
@@ -325,7 +323,7 @@ export default class Analysis extends Component {
               >
                 <Radio.Button value="0">全部App</Radio.Button>
                 {provinceFilter.allAppIds.map(i => (
-                  <Radio.Button value={i}>{i}</Radio.Button>
+                  <Radio.Button key={i} value={i}>{i}</Radio.Button>
                 ))}
                 {/* <Select
                   value={provinceFilter.filterValue}
@@ -513,14 +511,14 @@ export default class Analysis extends Component {
       {
         title: '用户数',
         dataIndex: 'count',
-        key: 'count',
+        key: 'userCount',
         sorter: (a, b) => a.count - b.count,
         className: styles.alignRight,
       },
       {
         title: '搜索次数',
         dataIndex: 'count',
-        key: 'count',
+        key: 'searchCount',
         sorter: (a, b) => a.count - b.count,
         className: styles.alignRight,
       },
@@ -600,9 +598,9 @@ export default class Analysis extends Component {
                   {iconGroup}
                   <div className={styles.salesTypeRadio}>
                     <Radio.Group value={salesType} onChange={this.handleChangeSalesType}>
-                      <Radio.Button value="all">全部渠道</Radio.Button>
-                      <Radio.Button value="online">线上</Radio.Button>
-                      <Radio.Button value="offline">门店</Radio.Button>
+                      <Radio.Button key="all" value="all">全部渠道</Radio.Button>
+                      <Radio.Button key="online" value="online">线上</Radio.Button>
+                      <Radio.Button key="offline" value="offline">门店</Radio.Button>
                     </Radio.Group>
                   </div>
                 </div>
