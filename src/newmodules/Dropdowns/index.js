@@ -9,12 +9,12 @@ export default class DaoDropdown extends Component {
     this.menu = this.generateMenu(props.menu);
 
     this.state = {
-      dropdownTitle: 'Dropdown'
+      dropdownTitle: props.title ? props.title : 'Dropdown',
     };
   }
 
   generateMenu = (menuData) => {
-    const menuItems = _.map(menuData, (menuItemData) => (<Menu.Item key={_.uniqueId()}> {menuItemData} </Menu.Item>));
+    const menuItems = _.map(menuData, (menuItemData, index) => (<Menu.Item key={index} value={index}> {menuItemData} </Menu.Item>));
 
     // 必须分行，Don't ask me why
     return (
@@ -25,10 +25,12 @@ export default class DaoDropdown extends Component {
   };
 
   handleMenuClick = (e) => {
-    const index = parseInt(e.key, 10) - 1;
-    this.setState({dropdownTitle: this.props.menu[index]});
+    const index = parseInt(e.key, 10);
+    this.setState({
+      dropdownTitle: this.props.menu[index],
+    });
 
-    this.props.handleMenuClick && this.props.handleMenuClick(e);
+    this.props.handleMenuClick && this.props.handleMenuClick({ index:index, title:  this.props.menu[index] });
   };
 
   render() {

@@ -30,12 +30,15 @@ export default class CardGroup extends PureComponent {
               <Card
                 bodyStyle={{ padding: 0 }}
                 bordered={false}
-                cover={<img alt={cardItem.title} src={cardItem.logo} />}
               >
                 <Card.Meta
-                  title={<div className={styles.cardTitle}>{cardItem.title}</div>}
+                  title={<div className={styles.cardTitle}>{cardItem.vname}</div>}
                   description={(
-                    <Ellipsis tooltip lines={5}>{cardItem.description}</Ellipsis>
+                    <Ellipsis tooltip lines={5}>
+                      {
+                      `${cardItem.area};${cardItem.videotype};${cardItem.category};${cardItem.taginfo}`
+                      }
+                    </Ellipsis>
                   )}
                 />
               </Card>
@@ -50,38 +53,17 @@ export default class CardGroup extends PureComponent {
 // <Rate allowHalf disabled defaultValue={2.5} />
 
 /*
-<Card.Meta
-title={(
-  <div className={styles.cardTitle}>
-    <Avatar size="small" src={cardItem.logo} />
-    <Link to={cardItem.href}>{cardItem.title}</Link>
-  </div>
-)}
-description={cardItem.description}
-/>
-<div className={styles.projectItemContent}>
-<Link to={cardItem.memberLink}>{cardItem.member || ''}</Link>
-{cardItem.updatedAt && (
-  <span className={styles.datetime} title={cardItem.updatedAt}>
-    {moment(cardItem.updatedAt).fromNow()}
-  </span>
-)}
-</div>
-</Card>
-
-
-
-                  title={(
-                    <div className={styles.cardTitle}>
-                      k to=''>{cardItem.title}</Link>
-                    </div>
-                  )}
+              <Card
+                bodyStyle={{ padding: 0 }}
+                bordered={false}
+                cover={<img alt={cardItem.title} src={cardItem.logo} />}
+              >
+                <Card.Meta
+                  title={<div className={styles.cardTitle}>{cardItem.title}</div>}
                   description={(
-                    <div>
-                      <div className={styles.projectItemContent}>
-                        {cardItem.description}
-                      </div>
-                    </div>
+                    <Ellipsis tooltip lines={5}>{cardItem.description}</Ellipsis>
                   )}
+                />
+              </Card>
 
 */

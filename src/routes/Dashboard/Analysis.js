@@ -384,7 +384,7 @@ export default class Analysis extends Component {
         {this.renderPast7DayChartCard('miniBar', loading, '过去七天活跃客户端', '#4472c4', last7DayActiveDeviceTrend, { type: 'field', label: '平均活跃用户', value: _.sumBy(last7DayActiveDeviceTrend, dayData => dayData.y) / 7 })}
         {this.renderPast7DayChartCard('miniArea', loading, '过去七天新增客户端', '#ffc000',
             last7DayNewDeviceTrend, {
-            type: 'field', label: '平均活跃用户', value: _.sumBy(last7DayNewDeviceTrend, dayData => dayData.y) / 7,
+            type: 'field', label: '平均新增客户端', value: _.sumBy(last7DayNewDeviceTrend, dayData => dayData.y) / 7,
             /*
             type: 'trend',
             value: [
@@ -395,7 +395,7 @@ export default class Analysis extends Component {
           })}
         {this.renderPast7DayChartCard('miniBar', loading, '过去七天播放剧集数量', '#70ad47',
             last7DayTotalNumberOfWatchedMediaTrend, {
-            type: 'field', label: '平均活跃用户', value: _.sumBy(last7DayTotalNumberOfWatchedMediaTrend, dayData => dayData.y) / 7,
+            type: 'field', label: '平均播放剧集数量', value: _.sumBy(last7DayTotalNumberOfWatchedMediaTrend, dayData => dayData.y) / 7,
               /*
             type: 'trend',
             value: [
@@ -404,7 +404,8 @@ export default class Analysis extends Component {
             ],
             */
           })}
-        {this.renderPast7DayChartCard('miniArea', loading, '过去七天播放时长', '#ed7d31', last7DayTotalWatchTimeTrend, { type: 'field', label: '平均播放时长', value: _.sumBy(last7DayTotalWatchTimeTrend, dayData => dayData.y) / 7 })}
+        {this.renderPast7DayChartCard('miniArea', loading, '过去七天播放时长', '#ed7d31', 
+            last7DayTotalWatchTimeTrend, { type: 'field', label: '平均播放时长', value: _.sumBy(last7DayTotalWatchTimeTrend, dayData => dayData.y) / 7 })}
       </Row>
     );
   }

@@ -1,5 +1,10 @@
 import _ from 'lodash';
-import { queryCIBNPersonalRecommendation, queryCIBNPersonalTags } from '../services/api';
+import { 
+  queryCIBNPersonalRecommendation,
+  queryCIBNPersonalViewHistory,
+  queryCIBNPersonalTags,
+  queryCIBNPersonalRecommendationUserList,
+} from '../services/api';
 
 const calculateProvinceTotal = (provinceData) => {
   return _.sumBy(provinceData.dimensions.application, eachApp => eachApp.total);
@@ -66,43 +71,43 @@ export default {
   namespace: 'recommendation',
 
   state: {
-    newDeviceTrend: [],
-    provinceNDTop10: [],
-    activeDeviceTrend: [],
-    provinceADTop10: [],
-    totalWatchTimeTrend: [],
-    provinceTWTTop10: [],
-    totalNumberOfWatchedMediaTrend: [],
-    provinceTNWMTop10: [],
-    provinceAggregratedData: {
-      newClient: [],
-      activeClient: [],
-      totalWatchedTime: [],
-      countOfWhatchedMedia: [],
-    },
-    tags: [],
+    users: [],
+    tags: { data: []},
+    history: { data: []},
+    recommendation: { data: []},
     loading: false,
   },
 
   effects: {
-    *fetchPersonalTag(_, { call, put }) {
-      const personalTags = yield call(queryCIBNPersonalTags);
+    *fetchPersonalTag({ payload }, { call, put }) {
+      const tags = yield call(queryCIBNPersonalTags, payload.hid);
       yield put({
         type: 'save',
-        payload: {
-          tags: personalTags,
-        },
+        payload: { tags },
+      });
+    },
+
+    *fetchPersonalViewHistory({ payload }, { call, put }) {
+      const history = yield call(queryCIBNPersonalViewHistory, payload.hid);
+      yield put({
+        type: 'save',
+        payload: { history },
+      });
+    },
+
+    *fetchUsers(_, { call, put }) {
+      const users = yield call(queryCIBNPersonalRecommendationUserList);
+      yield put({
+        type: 'save',
+        payload: { users },
       });
     },
   
-    *fetchPersonalRecommendation(_, { call, put }) {
-      const operationData = yield call(queryCIBNPersonalRecommendation);
-      const operationDateForView = yield generateDataForView(operationData);
+    *fetchPersonalRecommendation({ payload }, { call, put }) {
+      const recommendation = yield call(queryCIBNPersonalRecommendation, payload.hid);
       yield put({
         type: 'save',
-        payload: {
-          ...operationDateForView,
-        },
+        payload: { recommendation },
       });
     },
   },
@@ -116,21 +121,7 @@ export default {
     },
     clear() {
       return {
-        newDeviceTrend: [],
-        provinceNDTop10: [],
-        activeDeviceTrend: [],
-        provinceADTop10: [],
-        totalWatchTimeTrend: [],
-        provinceTWTTop10: [],
-        totalNumberOfWatchedMediaTrend: [],
-        provinceTNWMTop10: [],
-        provinceAggregratedData: {
-          newClient: [],
-          activeClient: [],
-          totalWatchedTime: [],
-          countOfWhatchedMedia: [],
-        },
-        tags: [],
+        user: [],
       };
     },
   },

@@ -82,12 +82,20 @@ export async function queryCIBNOperationData() {
   return request('/api/cibn/operationdata');
 }
 
-export async function queryCIBNPersonalRecommendation() {
-  return request('/api/cibn/operationdata');
+export async function queryCIBNPersonalRecommendation(hid) {
+  return request(`/api/cibn/users/${hid}?action=recommendation`);
 }
 
-export async function queryCIBNPersonalTags() {
-  return request('/api/cibn/personal/tags');
+export async function queryCIBNPersonalRecommendationUserList() {
+  return request('/api/cibn/users');
+}
+
+export async function queryCIBNPersonalViewHistory(hid) {
+  return request(`/api/cibn/users/${hid}?action=history`);
+}
+
+export async function queryCIBNPersonalTags(hid) {
+  return request(`/api/cibn/users/${hid}?action=tag`);
 }
 
 // const serviceUrl = "http://zlike-mac0.guest.corp.microsoft.com:4000/graphql";
