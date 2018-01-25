@@ -15,17 +15,16 @@ import {
   Select,
 } from 'antd';
 import numeral from 'numeral';
+import moment from 'moment';
 import _ from 'lodash';
 import {
   ChartCard,
   yuan,
   MiniArea,
   MiniBar,
-  MiniProgress,
   Field,
   Bar,
   Pie,
-  TimelineChart,
 } from '../../components/Charts';
 import Trend from '../../components/Trend';
 import NumberInfo from '../../components/NumberInfo';
@@ -210,9 +209,9 @@ export default class Analysis extends Component {
     if (loading === undefined) return null;
 
     return (
-      <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
+      <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }} style={{ marginTop: 12, minHeight: 500 }}>
         <div className={styles.salesCard}>
-          <Tabs tabBarExtraContent={this.renderDatePicker()} size="large" tabBarStyle={{ marginBottom: 24 }}>
+          <Tabs tabBarExtraContent={this.renderDatePicker()}>
             {
               this.renderTabPane(
                 { tab: '活跃客户端', key: 'activeclients' },
@@ -329,10 +328,11 @@ export default class Analysis extends Component {
     return (
       <Card
         loading={loading}
+        title="地域分布"
         className={styles.salesCard}
         bordered={false}
-        bodyStyle={{ padding: 24 }}
-        style={{ marginTop: 24, minHeight: 500 }}
+        bodyStyle={{ padding: 12 }}
+        style={{ marginTop: 12, minHeight: 500 }}
       >
         <Tabs
           onChange={(key) => {
@@ -344,19 +344,19 @@ export default class Analysis extends Component {
             });
           }}
         >
-          <TabPane tab="活跃客户端地域分布" key="activeClients" >
+          <TabPane tab="活跃客户端" key="activeClients" >
             {filterBar}
             <ChinaMapChart height={1200} data={provinceMapData} />
           </TabPane>
-          <TabPane tab="新增客户端地域分布" key="newClients">
+          <TabPane tab="新增客户端" key="newClients">
             {filterBar}
             <ChinaMapChart height={1200} data={provinceMapData} />
           </TabPane>
-          <TabPane tab="播放剧集数量地域分布" key="countOfWhatchedMedia">
+          <TabPane tab="播放剧集数量" key="countOfWhatchedMedia">
             {filterBar}
             <ChinaMapChart height={1200} data={provinceMapData} />
           </TabPane>
-          <TabPane tab="播放时长地域分布" key="totalWatchedTime">
+          <TabPane tab="播放时长" key="totalWatchedTime">
             {filterBar}
             <ChinaMapChart height={1200} data={provinceMapData} />
           </TabPane>
@@ -416,7 +416,8 @@ export default class Analysis extends Component {
       const _renderTrend = (label, percentage) => {
         return (
           <Trend flag= {percentage > 0 ? 'up' : percentage === 0 ? '' : 'down'}
-                  style={{ marginRight: 16 }}>
+            style={{ marginRight: 16 }}
+          >
             {label}:<span className={styles.trendText}>{`${ percentage}%`}</span>
           </Trend>
         );
@@ -439,7 +440,7 @@ export default class Analysis extends Component {
       md: 12,
       lg: 12,
       xl: 6,
-      style: { marginBottom: 24 },
+      style: { marginBottom: 12 },
     };
 
     let footerElement = null;
@@ -475,13 +476,13 @@ export default class Analysis extends Component {
 
   render() {
     const { salesType, currentTabKey } = this.state;
-    const { chart, loading } = this.props;
+    const { chart, loading, operationData } = this.props;
     const {
-      visitData,
-      visitData2,
-      salesData,
+      provinceFilter,
+    } = operationData;
+
+    const {
       searchData,
-      offlineData,
       salesTypeData,
       salesTypeDataOnline,
       salesTypeDataOffline,
@@ -557,16 +558,16 @@ export default class Analysis extends Component {
         { this.renderProvinceData() }
 
         <Row gutter={24}>
-          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+          <Col xl={8} lg={24} md={24} sm={24} xs={24}>
             <Card
               loading={loading}
               bordered={false}
               title="热门搜索关键字"
               extra={iconGroup}
-              style={{ marginTop: 24 }}
+              style={{ marginTop: 12, minHeight: 500 }}
             >
               <Row gutter={68}>
-                <Col sm={12} xs={24} style={{ marginBottom: 24 }}>
+                <Col sm={12} xs={24} style={{ marginBottom: 12 }}>
                   <NumberInfo
                     subTitle="搜索用户数"
                     gap={8}
@@ -576,7 +577,7 @@ export default class Analysis extends Component {
                   />
                   <MiniArea line height={45} data={[]} />
                 </Col>
-                <Col sm={12} xs={24} style={{ marginBottom: 24 }}>
+                <Col sm={12} xs={24} style={{ marginBottom: 12 }}>
                   <NumberInfo
                     subTitle="人均搜索次数"
                     total="-"
@@ -599,26 +600,47 @@ export default class Analysis extends Component {
               />
             </Card>
           </Col>
-          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+          <Col xl={8} lg={24} md={24} sm={24} xs={24}>
             <Card
               loading={loading}
               className={styles.salesCard}
               bordered={false}
-              title="销售额类别占比"
-              bodyStyle={{ padding: 24 }}
+              title="渠道占比"
               extra={
-                <div className={styles.salesCardExtra}>
-                  {iconGroup}
-                  <div className={styles.salesTypeRadio}>
-                    <Radio.Group value={salesType} onChange={this.handleChangeSalesType}>
-                      <Radio.Button key="all" value="all">全部渠道</Radio.Button>
-                      <Radio.Button key="online" value="online">线上</Radio.Button>
-                      <Radio.Button key="offline" value="offline">门店</Radio.Button>
-                    </Radio.Group>
-                  </div>
-                </div>
+                <DatePicker
+                  defaultValue={moment()}
+                  disabledDate={provinceFilter.disabledDate}
+                  style={{ marginLeft: 20 }}
+                />
               }
-              style={{ marginTop: 24, minHeight: 509 }}
+              style={{ marginTop: 12, minHeight: 500 }}
+            >
+              <h4 style={{ marginTop: 8, marginBottom: 32 }}>销售额</h4>
+              <Pie
+                hasLegend
+                subTitle="销售额"
+                total={yuan(salesPieData.reduce((pre, now) => now.y + pre, 0))}
+                data={salesPieData}
+                valueFormat={val => yuan(val)}
+                height={248}
+                lineWidth={4}
+              />
+            </Card>
+          </Col>
+          <Col xl={8} lg={24} md={24} sm={24} xs={24}>
+            <Card
+              loading={loading}
+              className={styles.salesCard}
+              bordered={false}
+              title="App占比"
+              extra={
+                <DatePicker
+                  defaultValue={moment()}
+                  disabledDate={provinceFilter.disabledDate}
+                  style={{ marginLeft: 20 }}
+                />
+              }
+              style={{ marginTop: 12, minHeight: 500 }}
             >
               <h4 style={{ marginTop: 8, marginBottom: 32 }}>销售额</h4>
               <Pie
