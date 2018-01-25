@@ -10,6 +10,15 @@ import Dropdowns from '../../newmodules/Dropdowns';
 import styles from './Recommendation.less';
 import _ from 'lodash';
 
+_.mixin({
+  countUnique: (arr) => {
+    const a = {};
+    _.each(arr, (element) => { a[element] = a[element] ? a[element] + 1 : 1; });
+
+    return a;
+  },
+});
+
 @connect(({ project, chart, recommendation, loading }) => ({
   project,
   chart,
@@ -80,7 +89,7 @@ export default class Recommendation extends PureComponent {
       recommendation,
     } = this.props;
 
-    if (projectLoading === undefined ) return null;
+    if (projectLoading === undefined) return null;
     /*
     const {
       tags
@@ -89,10 +98,9 @@ export default class Recommendation extends PureComponent {
     const tags = _.chain(recommendation.history.data)
       .map(historyItem => `${historyItem.taginfo}|${historyItem.category}`.split('|'))
       .flatten()
-      .uniq()
-      .map((item) => { return { name:item, value: Math.floor((Math.random() * 50)) + 20 }; })
+      .countUnique()
+      .map((value, key) => { return { name: key, value: value + 20 }; })
       .value();
-
 
     const loading=false;
 
@@ -120,11 +128,11 @@ export default class Recommendation extends PureComponent {
         { this.renderDropdownMenu() }
          
         <Tabs size="large" tabBarStyle={{ marginBottom: 24 }}>
-          { _.map(recommendation.recommendation.data.listByTimeCategory, (cards, title) => 
+          { _.map(recommendation.recommendation.data.listByTimeCategory, (cards, title) =>
               (
-              <Tabs.TabPane tab= {title} key= {title}>
-                <CardGroup loading={false} cardTitle="猜你喜欢" cards={cards} />
-              </Tabs.TabPane>
+                <Tabs.TabPane tab={title} key={title}>
+                  <CardGroup loading={false} cardTitle="猜你喜欢" cards={cards} />
+                </Tabs.TabPane>
               )
             )
           }
@@ -148,7 +156,7 @@ export default class Recommendation extends PureComponent {
             <Card title="观影标签" loading={loading} bordered={false} bodyStyle={{ overflow: 'hidden' }}>
               <TagCloud
                 data={tags}
-                height={161}
+                height={150}
               />
             </Card>
             <Card
