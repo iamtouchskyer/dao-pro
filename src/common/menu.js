@@ -14,9 +14,6 @@ const menuData = [{
     name: '热点统计',
     path: 'hot',
   }, {
-    name: '聚类划分',
-    path: 'monitor',
-  }, {
     name: '个性化用户',
     path: 'recommendation',
     // hideInMenu: true,

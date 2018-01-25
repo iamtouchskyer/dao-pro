@@ -44,10 +44,6 @@ export async function fakeChartData() {
   return request('/api/fake_chart_data');
 }
 
-export async function queryTags() {
-  return request('/api/tags');
-}
-
 export async function queryBasicProfile() {
   return request('/api/profile/basic');
 }
