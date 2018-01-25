@@ -255,6 +255,77 @@ export default class Analysis extends Component {
     const { operationData, loading } = this.props;
     const { provinceFilter, provinceMapData } = operationData;
 
+    const filterBar=(
+      <div>
+        <Radio.Group
+          value={provinceFilter.filterValue}
+          onChange={(e) => {
+            this.props.dispatch({
+              type: 'operationData/updateProvinceFilter',
+              payload: {
+                filterBy: 'app',
+                filterValue: e.target.value,
+              },
+            });
+          }}
+        >
+          <Radio.Button value="0">全部App</Radio.Button>
+          {provinceFilter.allAppIds.map(i => (
+            <Radio.Button key={i} value={i}>{i}</Radio.Button>
+          ))}
+        </Radio.Group>
+        <Radio.Group
+          value={provinceFilter.filterValue}
+          onChange={(e) => {
+            this.props.dispatch({
+              type: 'operationData/updateProvinceFilter',
+              payload: {
+                filterBy: 'channel',
+                filterValue: e.target.value,
+              },
+            });
+          }}
+          style={{ marginLeft: 20 }}
+        >
+          <Radio.Button value="-1">全部Channel</Radio.Button>
+          {provinceFilter.allChannels.slice(0, 4).map(i => (
+            <Radio.Button key={i} value={i}>{i}</Radio.Button>
+          ))}
+          <Select
+            value={provinceFilter.allChannels.indexOf(provinceFilter.filterValue) > 4 ? provinceFilter.filterValue : '更多'}
+            defaultValue="更多"
+            style={{ width: 100 }}
+            onChange={(value) => {
+              this.props.dispatch({
+                type: 'operationData/updateProvinceFilter',
+                payload: {
+                  filterBy: 'channel',
+                  filterValue: value,
+                },
+              });
+            }}
+          >
+            {provinceFilter.allChannels.slice(4).map(i => (
+              <Select.Option key={i}>{i}</Select.Option>
+            ))}
+          </Select>
+          <DatePicker
+            value={provinceFilter.date}
+            disabledDate={provinceFilter.disabledDate}
+            onChange={(date) => {
+              this.props.dispatch({
+                type: 'operationData/updateProvinceFilter',
+                payload: {
+                  date,
+                },
+              });
+            }}
+            style={{ marginLeft: 20 }}
+          />
+        </Radio.Group>
+      </div>
+    );
+
     return (
       <Card
         loading={loading}
@@ -262,124 +333,147 @@ export default class Analysis extends Component {
         bordered={false}
         bodyStyle={{ padding: 24 }}
         style={{ marginTop: 24, minHeight: 500 }}
-        title="地域分布"
-        extra={
-          <div className={styles.salesCardExtra}>
-            {/* { this.renderDatePicker({
-              value: provinceFilter.dateRange,
-              onChange: (dateRange) => {
-                this.props.dispatch({
-                  type: 'operationData/updateProvinceFilter',
-                  payload: {
-                    dateRange,
-                  },
-                });
-              },
-              onClickToday: () => {
-                this.props.dispatch({
-                  type: 'operationData/updateProvinceFilter',
-                  payload: {
-                    dateRange: getTimeDistance('today'),
-                  },
-                });
-              },
-              onClickWeek: () => {
-                this.props.dispatch({
-                  type: 'operationData/updateProvinceFilter',
-                  payload: {
-                    dateRange: getTimeDistance('week'),
-                  },
-                });
-              },
-              onClickMonth: () => {
-                this.props.dispatch({
-                  type: 'operationData/updateProvinceFilter',
-                  payload: {
-                    dateRange: getTimeDistance('month'),
-                  },
-                });
-              },
-              onClickThisYear: () => {
-                this.props.dispatch({
-                  type: 'operationData/updateProvinceFilter',
-                  payload: {
-                    dateRange: getTimeDistance('thisYear'),
-                  },
-                });
-              },
-            }) } */}
-            <div>
-              <Radio.Group
-                value={provinceFilter.filterValue}
-                onChange={(e) => {
-                  this.props.dispatch({
-                    type: 'operationData/updateProvinceFilter',
-                    payload: {
-                      filterBy: 'app',
-                      filterValue: e.target.value,
-                    },
-                  });
-                }}
-              >
-                <Radio.Button value="0">全部App</Radio.Button>
-                {provinceFilter.allAppIds.map(i => (
-                  <Radio.Button key={i} value={i}>{i}</Radio.Button>
-                ))}
-              </Radio.Group>
-              <Radio.Group
-                value={provinceFilter.filterValue}
-                onChange={(e) => {
-                  this.props.dispatch({
-                    type: 'operationData/updateProvinceFilter',
-                    payload: {
-                      filterBy: 'channel',
-                      filterValue: e.target.value,
-                    },
-                  });
-                }}
-                style={{ marginLeft: 20 }}
-              >
-                <Radio.Button value="-1">全部Channel</Radio.Button>
-                {provinceFilter.allChannels.slice(0, 4).map(i => (
-                  <Radio.Button key={i} value={i}>{i}</Radio.Button>
-                ))}
-                <Select
-                  value={provinceFilter.allChannels.indexOf(provinceFilter.filterValue) > 4 ? provinceFilter.filterValue : '更多'}
-                  defaultValue="更多"
-                  style={{ width: 100 }}
-                  onChange={(value) => {
-                    this.props.dispatch({
-                      type: 'operationData/updateProvinceFilter',
-                      payload: {
-                        filterBy: 'channel',
-                        filterValue: value,
-                      },
-                    });
-                  }}
-                >
-                  {provinceFilter.allChannels.slice(4).map(i => (
-                    <Select.Option key={i}>{i}</Select.Option>
-                  ))}
-                </Select>
-                <DatePicker
-                  value={provinceFilter.date}
-                  disabledDate={provinceFilter.disabledDate}
-                  onChange={(date) => {
-                    this.props.dispatch({
-                      type: 'operationData/updateProvinceFilter',
-                      payload: {
-                        date,
-                      },
-                    });
-                  }}
-                  style={{ marginLeft: 20 }}
-                />
-              </Radio.Group>
-            </div>
-          </div>
-        }
+        // title="地域分布"
+        // extra={
+        //   <div className={styles.salesCardExtra}>
+        //     {/* { this.renderDatePicker({
+        //       value: provinceFilter.dateRange,
+        //       onChange: (dateRange) => {
+        //         this.props.dispatch({
+        //           type: 'operationData/updateProvinceFilter',
+        //           payload: {
+        //             dateRange,
+        //           },
+        //         });
+        //       },
+        //       onClickToday: () => {
+        //         this.props.dispatch({
+        //           type: 'operationData/updateProvinceFilter',
+        //           payload: {
+        //             dateRange: getTimeDistance('today'),
+        //           },
+        //         });
+        //       },
+        //       onClickWeek: () => {
+        //         this.props.dispatch({
+        //           type: 'operationData/updateProvinceFilter',
+        //           payload: {
+        //             dateRange: getTimeDistance('week'),
+        //           },
+        //         });
+        //       },
+        //       onClickMonth: () => {
+        //         this.props.dispatch({
+        //           type: 'operationData/updateProvinceFilter',
+        //           payload: {
+        //             dateRange: getTimeDistance('month'),
+        //           },
+        //         });
+        //       },
+        //       onClickThisYear: () => {
+        //         this.props.dispatch({
+        //           type: 'operationData/updateProvinceFilter',
+        //           payload: {
+        //             dateRange: getTimeDistance('thisYear'),
+        //           },
+        //         });
+        //       },
+        //     }) } */}
+        //     <div>
+        //       <Radio.Group
+        //         value={provinceFilter.filterValue}
+        //         onChange={(e) => {
+        //           this.props.dispatch({
+        //             type: 'operationData/updateProvinceFilter',
+        //             payload: {
+        //               filterBy: 'app',
+        //               filterValue: e.target.value,
+        //             },
+        //           });
+        //         }}
+        //       >
+        //         <Radio.Button value="0">全部App</Radio.Button>
+        //         {provinceFilter.allAppIds.map(i => (
+        //           <Radio.Button key={i} value={i}>{i}</Radio.Button>
+        //         ))}
+        //       </Radio.Group>
+        //       <Radio.Group
+        //         value={provinceFilter.filterValue}
+        //         onChange={(e) => {
+        //           this.props.dispatch({
+        //             type: 'operationData/updateProvinceFilter',
+        //             payload: {
+        //               filterBy: 'channel',
+        //               filterValue: e.target.value,
+        //             },
+        //           });
+        //         }}
+        //         style={{ marginLeft: 20 }}
+        //       >
+        //         <Radio.Button value="-1">全部Channel</Radio.Button>
+        //         {provinceFilter.allChannels.slice(0, 4).map(i => (
+        //           <Radio.Button key={i} value={i}>{i}</Radio.Button>
+        //         ))}
+        //         <Select
+        //           value={provinceFilter.allChannels.indexOf(provinceFilter.filterValue) > 4 ? provinceFilter.filterValue : '更多'}
+        //           defaultValue="更多"
+        //           style={{ width: 100 }}
+        //           onChange={(value) => {
+        //             this.props.dispatch({
+        //               type: 'operationData/updateProvinceFilter',
+        //               payload: {
+        //                 filterBy: 'channel',
+        //                 filterValue: value,
+        //               },
+        //             });
+        //           }}
+        //         >
+        //           {provinceFilter.allChannels.slice(4).map(i => (
+        //             <Select.Option key={i}>{i}</Select.Option>
+        //           ))}
+        //         </Select>
+        //         <DatePicker
+        //           value={provinceFilter.date}
+        //           disabledDate={provinceFilter.disabledDate}
+        //           onChange={(date) => {
+        //             this.props.dispatch({
+        //               type: 'operationData/updateProvinceFilter',
+        //               payload: {
+        //                 date,
+        //               },
+        //             });
+        //           }}
+        //           style={{ marginLeft: 20 }}
+        //         />
+        //       </Radio.Group>
+        //     </div>
+        //   </div>
+        // }
       >
-        <ChinaMapChart height={1200} data={provinceMapData} />
+        <Tabs
+          onChange={(key) => {
+            this.props.dispatch({
+              type: 'operationData/updateProvinceFilter',
+              payload: {
+                categoryName: key,
+              },
+            });
+          }}
+          tabBarExtraContent={filterBar}
+        >
+          <TabPane tab="活跃客户端地域分布" key="activeClients" >
+            <ChinaMapChart height={1200} data={provinceMapData} />
+          </TabPane>
+          <TabPane tab="新增客户端地域分布" key="newClients">
+            <ChinaMapChart height={1200} data={provinceMapData} />
+          </TabPane>
+          <TabPane tab="播放剧集数量地域分布" key="countOfWhatchedMedia">
+            <ChinaMapChart height={1200} data={provinceMapData} />
+          </TabPane>
+          <TabPane tab="播放时长地域分布" key="totalWatchedTime">
+            <ChinaMapChart height={1200} data={provinceMapData} />
+          </TabPane>
+        </Tabs>
       </Card>
     );
   };

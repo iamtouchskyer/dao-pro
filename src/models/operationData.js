@@ -102,7 +102,7 @@ const getProvinceMapData = (rawData, provinceFilter) => _.reduce(rawData, (memo,
     return memo;
   }
 
-  _.each(everyDayData.categories.newClients, (eachProvince) => {
+  _.each(everyDayData.categories[provinceFilter.categoryName || 'activeClients'], (eachProvince) => {
     const memoItem = _.find(memo, provinceMemo => provinceMemo.title === eachProvince.provinceName);
 
     if (memoItem) {
@@ -149,6 +149,7 @@ const defaultProvinceFilter = {
   filterBy: 'app',
   filterValue: '0',
   date: moment(),
+  categoryName: 'activeClients',
   disabledDate: () => true,
 };
 
