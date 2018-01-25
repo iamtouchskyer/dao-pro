@@ -72,9 +72,14 @@ export default {
 
   state: {
     users: [],
-    tags: { data: []},
-    history: { data: []},
-    recommendation: { data: []},
+    tags: { data: [] },
+    history: { data: [] },
+    recommendation: {
+      data: {
+        fullList: [],
+        listByTimeCategory: [],
+      },
+    },
     loading: false,
   },
 
@@ -121,7 +126,15 @@ export default {
     },
     clear() {
       return {
-        user: [],
+        users: [],
+        tags: { data: [] },
+        history: { data: [] },
+        recommendation: { 
+          data: {
+            fullList: [],
+            listByTimeCategory: [],
+          },
+        },
       };
     },
   },
