@@ -99,7 +99,7 @@ export async function queryCIBNPersonalTags(hid) {
 }
 
 // const serviceUrl = "http://zlike-mac0.guest.corp.microsoft.com:4000/graphql";
-const serviceUrl = "http://localhost:3030/popular";
+const serviceUrl = "http://168.63.139.190:3030/popular";
 
 export async function queryCIBNHotFilter(params) {
   // return graphqlRequest(`/api/cibn/hot/filter?${stringify(params)}`);
