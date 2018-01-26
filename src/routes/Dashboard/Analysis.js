@@ -594,17 +594,18 @@ export default class Analysis extends Component {
             </Card>
           </Col>
           <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-            <PercentageChart
-              data={salesPieData}
-              disabledDate={provinceFilter.disabledDate}
-              cardProps={{
-                loading,
-                className: styles.salesCard,
-                bordered: false,
-                title: '百分比分布',
-                style: { marginTop: 12 },
-              }}
-            />
+            {_.isEmpty(operationData.rawData) ? null : (
+              <PercentageChart
+                data={operationData.rawData || []}
+                cardProps={{
+                  loading,
+                  className: styles.salesCard,
+                  bordered: false,
+                  title: '百分比分布',
+                  style: { marginTop: 12 },
+                }}
+              />
+            )}
           </Col>
         </Row>
       </div>
