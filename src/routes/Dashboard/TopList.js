@@ -71,7 +71,7 @@ export default class HotSpot extends PureComponent {
       style: { marginBottom: 24 },
     };
 
-    const now = moment(new Date(2018, 0, 3)).startOf('day');
+    const now = moment(new Date(2018, 0, 17)).startOf('day');
     const previous7days = {
       startDate: now.clone().subtract(7, 'day').toDate(),
       endDate: now.toDate()
