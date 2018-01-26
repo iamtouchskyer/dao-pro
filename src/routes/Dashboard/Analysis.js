@@ -191,7 +191,6 @@ export default class Analysis extends Component {
   }
 
   renderTrend = () => {
-    const { salesType, currentTabKey } = this.state;
     const { operationData, loading } = this.props;
     const {
       newDeviceTrend, provinceNDTop10,
@@ -224,16 +223,16 @@ export default class Analysis extends Component {
             {
               this.renderTabPane(
                 { tab: '播放剧集数目', key: 'counts' },
-                { title: '播放剧集数目趋势', data: totalWatchTimeTrend, color: '#70ad47' },
-                { title: '省份Top10', data: provinceTWTTop10 },
+                { title: '播放剧集数目趋势', data: totalNumberOfWatchedMediaTrend, color: '#70ad47' },
+                { title: '省份Top10', data: provinceTNWMTop10 },
               )
             }
 
             {
               this.renderTabPane(
                 { tab: '播放时长', key: 'totaltime' },
-                { title: '播放时长趋势', data: totalNumberOfWatchedMediaTrend, color: '#ed7d31' },
-                { title: '省份Top10', data: provinceTNWMTop10 },
+                { title: '播放时长趋势', data: totalWatchTimeTrend, color: '#ed7d31' },
+                { title: '省份Top10', data: provinceTWTTop10 },
               )
             }
 
@@ -368,8 +367,8 @@ export default class Analysis extends Component {
     } = operationData;
 
     const last7DayActiveDeviceTrend = _.takeRight(activeDeviceTrend, 7);
-    const last7DayTotalWatchTimeTrend = _.takeRight(totalWatchTimeTrend, 7);
     const last7DayNewDeviceTrend = _.takeRight(newDeviceTrend, 7);
+    const last7DayTotalWatchTimeTrend = _.takeRight(totalWatchTimeTrend, 7);
     const last7DayTotalNumberOfWatchedMediaTrend = _.takeRight(totalNumberOfWatchedMediaTrend, 7);
 
     return (
@@ -468,25 +467,13 @@ export default class Analysis extends Component {
   };
 
   render() {
-    const { salesType, currentTabKey } = this.state;
     const { chart, loading, operationData } = this.props;
-    const {
-      provinceFilter,
-    } = operationData;
 
     const {
       searchData,
-      salesTypeData,
-      salesTypeDataOnline,
-      salesTypeDataOffline,
     } = chart;
 
     if (loading === undefined) return null;
-
-    const salesPieData =
-      salesType === 'all'
-        ? salesTypeData
-        : salesType === 'online' ? salesTypeDataOnline : salesTypeDataOffline;
 
     const menu = (
       <Menu>

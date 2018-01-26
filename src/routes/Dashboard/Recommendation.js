@@ -74,7 +74,7 @@ export default class Recommendation extends PureComponent {
 
     const users = (recommendation && _.isArray(recommendation.users)) ? recommendation.users : [];
 
-    return (<Dropdowns title="选择用户" menu={users} handleMenuClick={this.onMenuItemClick} />);
+    return (<Dropdowns style={{ marginBottom: 20 }} title="选择用户" menu={users} handleMenuClick={this.onMenuItemClick} />);
   };
 
   render() {
