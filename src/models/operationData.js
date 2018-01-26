@@ -230,8 +230,6 @@ export default {
 
   reducers: {
     save(state, { payload }) {
-      window.console.log(payload);
-
       return {
         ...state,
         ...payload,
