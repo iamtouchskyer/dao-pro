@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { Link } from 'dva/router';
-import { Card, Row, Col, Avatar } from 'antd';
+import { Card, Row, Col, Avatar, Icon } from 'antd';
 import styles from './index.less';
 import Ellipsis from '../../components/Ellipsis';
 
@@ -39,17 +39,18 @@ export default class CardGroup extends PureComponent {
       >
         {
           cards.map(cardItem => (
-            <Card.Grid className={styles.projectGrid} key={cardItem.id}>
+            <Card.Grid className={styles.projectGrid} key={cardItem.id} style={{ padding: 4 }}>
               <Card
                 bodyStyle={{ padding: 0 }}
                 bordered={false}
                 key={cardItem.vid}
-
+                actions={[<Icon type="like" />, <Icon type="dislike" />, <Icon type="ellipsis" />]}
               >
                 <Card.Meta
+                  style={{ minHeight: 180 }}
                   title={<div className={styles.cardTitle}>{cardItem.vname}</div>}
                   description={(
-                    <div style={{ minHeight: 150 }}>
+                    <div style={{ minHeight: 180 }}>
                       <Ellipsis tooltip lines={8}>
                         { this.renderOneLineOfDesc('地区', cardItem.area) }
                         { this.renderOneLineOfDesc('年份', cardItem.issueyear) }
@@ -67,9 +68,9 @@ export default class CardGroup extends PureComponent {
       </Card>
     );
   }
-};
+}
 
-                      //`${cardItem.area};${cardItem.videotype};${cardItem.category};${cardItem.taginfo}`
+//`${cardItem.area};${cardItem.videotype};${cardItem.category};${cardItem.taginfo}`
 
 // <Rate allowHalf disabled defaultValue={2.5} />
 
