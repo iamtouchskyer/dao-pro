@@ -593,15 +593,33 @@ export default class Analysis extends Component {
               />
             </Card>
           </Col>
+        </Row>
+        <Row gutter={24}>
           <Col xl={12} lg={24} md={24} sm={24} xs={24}>
             {_.isEmpty(operationData.rawData) ? null : (
               <PercentageChart
                 data={operationData.rawData || []}
+                dimension="app"
                 cardProps={{
                   loading,
                   className: styles.salesCard,
                   bordered: false,
-                  title: '百分比分布',
+                  title: 'App占比',
+                  style: { marginTop: 12 },
+                }}
+              />
+            )}
+          </Col>
+          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+            {_.isEmpty(operationData.rawData) ? null : (
+              <PercentageChart
+                data={operationData.rawData || []}
+                dimension="channel"
+                cardProps={{
+                  loading,
+                  className: styles.salesCard,
+                  bordered: false,
+                  title: '渠道占比',
                   style: { marginTop: 12 },
                 }}
               />

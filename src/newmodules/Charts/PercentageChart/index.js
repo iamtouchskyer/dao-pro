@@ -18,7 +18,6 @@ export default class PercentageChart extends React.Component {
     this.state = {
       category: 'activeClients',
       date: moment(moment(_.last(props.data).date)),
-      dimension: 'app',
     };
   }
 
@@ -34,10 +33,10 @@ export default class PercentageChart extends React.Component {
       .result('categories')
       .result(this.state.category)
       .map('dimensions')
-      .map(this.state.dimension === 'app' ? 'application' : 'channel')
+      .map(this.props.dimension === 'app' ? 'application' : 'channel')
       .flatten()
       .reduce((memo, cur) => {
-        const idKey = `${this.state.dimension}Id`;
+        const idKey = `${this.props.dimension}Id`;
         const key = cur[idKey];
 
         return _.defaults({}, {
@@ -49,39 +48,26 @@ export default class PercentageChart extends React.Component {
 
 
     const cardExtra = (
-      <div>
-        <Radio.Group
-          value={this.state.dimension}
-          onChange={(e) => {
-            this.setState({
-              dimension: e.target.value,
-            });
-          }}
-        >
-          <Radio.Button value="app" key="app">App占比</Radio.Button>
-          <Radio.Button value="channel" key="channel">渠道占比</Radio.Button>
-        </Radio.Group>
-        <DatePicker
-          value={this.state.date}
-          onChange={(date) => {
-            this.setState({
-              date,
-            });
-          }}
-          disabledDate={(currentDate) => {
-            return _.findIndex(data, (d) => {
-              return currentDate.isSame(d.date, 'day');
-            }) === -1;
-          }}
-          style={{ marginLeft: 20 }}
-        />
-      </div>
+      <DatePicker
+        value={this.state.date}
+        onChange={(date) => {
+          this.setState({
+            date,
+          });
+        }}
+        disabledDate={(currentDate) => {
+          return _.findIndex(data, (d) => {
+            return currentDate.isSame(d.date, 'day');
+          }) === -1;
+        }}
+        style={{ marginLeft: 20 }}
+      />
     );
 
     const renderPanel = (key, name) => (
       <Tabs.TabPane tab={name} key={key}>
         <Pie
-          hasLegend
+          hasLegend={this.props.dimension === 'app'}
           subTitle={name}
           total={pieData.reduce((pre, now) => now.y + pre, 0)}
           data={pieData}
