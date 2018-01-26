@@ -43,7 +43,7 @@ const havePermissionAsync = new Promise((resolve) => {
   cibnHot,
   loading: loading.effects['cibnHot/fetchFilter'],
 }))
-export default class HotSpot extends PureComponent {
+export default class HotSpot extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -183,7 +183,7 @@ export default class HotSpot extends PureComponent {
                 <Row gutter={12}>
                   {_.map(filter, (options, name) => {
                     return (
-                      <Col span={8}>
+                      <Col span={8} key={name}>
                         <label key={name}>
                           {filterMetadata[name].name}
                           <Select defaultValue="all" style={{ width: 120, marginLeft: 10 }} onChange={(value) => { this.onChangeFilter(name, value) }}>

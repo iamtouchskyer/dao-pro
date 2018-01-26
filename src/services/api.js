@@ -141,7 +141,8 @@ export async function queryCIBNHotPlayCount(params) {
   return graphqlRequest(
     serviceUrl,
     `{\n  playCount(${requestParams}) {\n      count(top: ${params.top || 10}) {\n        videoname,\n        play_count,\n        vid\n      }\n    }\n}`
-  ).then((d) => { console.log('aaaaaaaaaa', d);  return d.playCount.count })
-  .catch(() => { message.error('请求失败') })
+  )
+    .then(d => d.playCount.count)
+    .catch(() => { message.error('请求失败'); });
 }
 
