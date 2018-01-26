@@ -83,7 +83,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['cibnHot'], () => import('../routes/Dashboard/TopList')),
     },
     '/dashboard/recommendation': {
-      component: dynamicWrapper(app, ['project', 'chart', 'recommendation'], () => import('../routes/Dashboard/Recommendation')),
+      component: dynamicWrapper(app, ['chart', 'recommendation'], () => import('../routes/Dashboard/Recommendation')),
       // hideInBreadcrumb: true,
       // name: '工作台',
       // authority: 'admin',

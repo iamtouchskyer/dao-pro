@@ -23,16 +23,13 @@ _.mixin({
   project,
   chart,
   recommendation,
-  loading: loading.effects['project/fetchNotice'] || loading.effects['recommendation/fetchPersonalRecommendation'],
-  recommendationLoading: loading.effects['recommendation/fetchUsers'] || loading.effects['recommendation/fetchPersonalRecommendation'],
-  projectLoading: loading.effects['project/fetchNotice'],
+  gueesYouLikeLoading: loading.effects['recommendation/fetchPersonalRecommendation'],
+  historyLoading: loading.effects['recommendation/fetchPersonalViewHistory'],
+  tagLoading: loading.effects['recommendation/queryCIBNPersonalTags'],
 }))
 export default class Recommendation extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch({
-      type: 'project/fetchNotice',
-    });
     dispatch({
       type: 'chart/fetch',
     });
@@ -82,14 +79,13 @@ export default class Recommendation extends PureComponent {
 
   render() {
     const {
-      project: { notice },
-      projectLoading,
-      recommendationLoading,
       chart: { radarData },
       recommendation,
+      gueesYouLikeLoading,
+      historyLoading,
+      tagLoading,
     } = this.props;
 
-    if (projectLoading === undefined) return null;
     /*
     const {
       tags
@@ -101,8 +97,6 @@ export default class Recommendation extends PureComponent {
       .countUnique()
       .map((value, key) => { return { name: key, value: value + 20 }; })
       .value();
-
-    const loading=false;
 
     const aa = _.map(recommendation.history.data, (historyItem) => {
       return {
@@ -127,22 +121,24 @@ export default class Recommendation extends PureComponent {
       <PageHeaderLayout>
         { this.renderDropdownMenu() }
          
-        <Tabs size="large" tabBarStyle={{ marginBottom: 24 }}>
-          { _.map(recommendation.recommendation.data.listByTimeCategory, (cards, title) =>
+        <Card bordered={false} title="观影历史" style= {{ marginBottom: 24 }}>
+          <Tabs size="large">
+            {_.map(recommendation.recommendation.data.listByTimeCategory, (cards, title) =>
               (
                 <Tabs.TabPane tab={title} key={title}>
-                  <CardGroup loading={false} cardTitle="猜你喜欢" cards={cards} />
+                  <CardGroup loading={gueesYouLikeLoading} cardTitle="猜你喜欢" cards={cards} />
                 </Tabs.TabPane>
               )
             )
-          }
-        </Tabs>
+            }
+          </Tabs>
+        </Card>
 
         <Row gutter={24}>
           <Col xl={16} lg={24} md={24} sm={24} xs={24}>
             <Card bordered={false} title="观影历史">
               <Table
-                loading={loading}
+                loading={historyLoading}
                 rowKey={record => record.key}
                 dataSource={aa}
                 columns={cc}
@@ -153,7 +149,7 @@ export default class Recommendation extends PureComponent {
 
           </Col>
           <Col xl={8} lg={24} md={24} sm={24} xs={24}>
-            <Card title="观影标签" loading={loading} bordered={false} bodyStyle={{ overflow: 'hidden' }}>
+            <Card title="观影标签" loading={tagLoading} bordered={false} bodyStyle={{ overflow: 'hidden' }}>
               <TagCloud
                 data={tags}
                 height={150}
