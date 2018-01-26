@@ -30,6 +30,7 @@ import Trend from '../../components/Trend';
 import NumberInfo from '../../components/NumberInfo';
 import { getTimeDistance } from '../../utils/utils';
 import ChinaMapChart from '../../newmodules/Charts/ChinaMap';
+import PercentageChart from '../../newmodules/Charts/PercentageChart';
 
 import styles from './Analysis.less';
 
@@ -396,7 +397,7 @@ export default class Analysis extends Component {
             ],
             */
           })}
-        {this.renderPast7DayChartCard('miniArea', loading, '过去七天播放时长', '#ed7d31', 
+        {this.renderPast7DayChartCard('miniArea', loading, '过去七天播放时长', '#ed7d31',
             last7DayTotalWatchTimeTrend, { type: 'field', label: '平均播放时长', value: _.sumBy(last7DayTotalWatchTimeTrend, dayData => dayData.y) / 7 })}
       </Row>
     );
@@ -550,7 +551,7 @@ export default class Analysis extends Component {
         { this.renderProvinceData() }
 
         <Row gutter={24}>
-          <Col xl={8} lg={24} md={24} sm={24} xs={24}>
+          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
             <Card
               loading={loading}
               bordered={false}
@@ -592,59 +593,18 @@ export default class Analysis extends Component {
               />
             </Card>
           </Col>
-          <Col xl={8} lg={24} md={24} sm={24} xs={24}>
-            <Card
-              loading={loading}
-              className={styles.salesCard}
-              bordered={false}
-              title="渠道占比"
-              extra={
-                <DatePicker
-                  defaultValue={moment()}
-                  disabledDate={provinceFilter.disabledDate}
-                  style={{ marginLeft: 20 }}
-                />
-              }
-              style={{ marginTop: 12, minHeight: 500 }}
-            >
-              <h4 style={{ marginTop: 8, marginBottom: 32 }}>销售额</h4>
-              <Pie
-                hasLegend
-                subTitle="销售额"
-                total={yuan(salesPieData.reduce((pre, now) => now.y + pre, 0))}
-                data={salesPieData}
-                valueFormat={val => yuan(val)}
-                height={248}
-                lineWidth={4}
-              />
-            </Card>
-          </Col>
-          <Col xl={8} lg={24} md={24} sm={24} xs={24}>
-            <Card
-              loading={loading}
-              className={styles.salesCard}
-              bordered={false}
-              title="App占比"
-              extra={
-                <DatePicker
-                  defaultValue={moment()}
-                  disabledDate={provinceFilter.disabledDate}
-                  style={{ marginLeft: 20 }}
-                />
-              }
-              style={{ marginTop: 12, minHeight: 500 }}
-            >
-              <h4 style={{ marginTop: 8, marginBottom: 32 }}>销售额</h4>
-              <Pie
-                hasLegend
-                subTitle="销售额"
-                total={yuan(salesPieData.reduce((pre, now) => now.y + pre, 0))}
-                data={salesPieData}
-                valueFormat={val => yuan(val)}
-                height={248}
-                lineWidth={4}
-              />
-            </Card>
+          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+            <PercentageChart
+              data={salesPieData}
+              disabledDate={provinceFilter.disabledDate}
+              cardProps={{
+                loading,
+                className: styles.salesCard,
+                bordered: false,
+                title: '百分比分布',
+                style: { marginTop: 12 },
+              }}
+            />
           </Col>
         </Row>
       </div>
