@@ -551,7 +551,7 @@ export default class Analysis extends Component {
         { this.renderProvinceData() }
 
         <Row gutter={24}>
-          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+          <Col xl={24} lg={24} md={24} sm={24} xs={24}>
             <Card
               loading={loading}
               bordered={false}
