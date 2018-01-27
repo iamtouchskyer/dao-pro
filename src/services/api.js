@@ -96,6 +96,7 @@ export async function queryCIBNPersonalTags(hid) {
 
 // const serviceUrl = "http://zlike-mac0.guest.corp.microsoft.com:4000/graphql";
 const serviceUrl = "http://168.63.139.190:3030/popular";
+// const serviceUrl = "http://localhost:3030/popular";
 
 export async function queryCIBNHotFilter(params) {
   // return graphqlRequest(`/api/cibn/hot/filter?${stringify(params)}`);
@@ -130,7 +131,7 @@ export async function queryCIBNHotPlayCount(params) {
   // Too slow, use default filter to mock for now
   const requestParams = [
     params.kind ? `videotype: \"${params.kind}\"` : 'videotype: "tv"',
-    params.language ? `language: \"${params.language}\"` : 'language: "汉语"',
+    params.language ? `language: \"${params.language}\"` : null, // 'language: "汉语"',
     params.category ? `category: \"${params.category}\"` : null, //`category: "${defaultCategory(params.kind)}"`,
     params.area ? `area: \"${params.area}\"` : null,
     params.areaId ? `provinceID: ${params.areaId}` : null,

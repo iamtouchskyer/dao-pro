@@ -135,14 +135,28 @@ export default class HotSpot extends PureComponent {
 
         <Row gutter={24}>
           <Col {...topColResponsiveProps}>
-            {this.renderTopCard('七日热门音乐', {
-              kind: 'music',
+            {this.renderTopCard('七日热门儿童节目', {
+              kind: 'children',
               ...previous7days
             })}
           </Col>
           <Col {...topColResponsiveProps}>
-            {this.renderTopCard('十五日热门音乐', {
-              kind: 'music',
+            {this.renderTopCard('十五日热门儿童节目', {
+              kind: 'children',
+              ...previous15days
+            })}
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          <Col {...topColResponsiveProps}>
+            {this.renderTopCard('七日热门动漫', {
+              kind: 'manga',
+              ...previous7days
+            })}
+          </Col>
+          <Col {...topColResponsiveProps}>
+            {this.renderTopCard('十五日热门动漫', {
+              kind: 'manga',
               ...previous15days
             })}
           </Col>
