@@ -19,13 +19,14 @@ _.mixin({
   },
 });
 
-@connect(({ project, chart, recommendation, loading }) => ({
-  project,
+@connect(({ chart, recommendation, loading }) => ({
   chart,
   recommendation,
+  usersLoading: loading.effects['recommendation/fetchUsers'],
   gueesYouLikeLoading: loading.effects['recommendation/fetchPersonalRecommendation'],
   historyLoading: loading.effects['recommendation/fetchPersonalViewHistory'],
   tagLoading: loading.effects['recommendation/queryCIBNPersonalTags'],
+  summaryLoading: loading.effects['recommendation/queryCIBNPersonalSummary'],
 }))
 export default class Recommendation extends PureComponent {
   componentDidMount() {
@@ -65,6 +66,11 @@ export default class Recommendation extends PureComponent {
       type: 'recommendation/queryCIBNPersonalTags',
       payload: { hid },
     });
+
+    dispatch({
+      type: 'recommendation/queryCIBNPersonalSummary',
+      payload: { hid },
+    });
   }
 
   renderDropdownMenu = () => {
@@ -81,6 +87,7 @@ export default class Recommendation extends PureComponent {
     const {
       chart: { radarData },
       recommendation,
+      usersLoading,
       gueesYouLikeLoading,
       historyLoading,
       tagLoading,
@@ -120,8 +127,8 @@ export default class Recommendation extends PureComponent {
     return (
       <PageHeaderLayout>
         { this.renderDropdownMenu() }
-
-        <Card bordered={false} title="观影历史" style= {{ marginBottom: 24 }}>
+         
+        <Card loading={usersLoading} bordered={false} title="观影历史" style={{ marginBottom: 24 }}>
           <Tabs size="large">
             {_.map(recommendation.recommendation.data.listByTimeCategory, (cards, title) =>
               (

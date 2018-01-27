@@ -94,6 +94,10 @@ export async function queryCIBNPersonalTags(hid) {
   return request(`/api/cibn/users/${hid}?action=tag`);
 }
 
+export async function queryCIBNPersonalSummary(hid) {
+  return request(`/api/cibn/users/${hid}?action=summary`);
+}
+
 // const serviceUrl = "http://zlike-mac0.guest.corp.microsoft.com:4000/graphql";
 const serviceUrl = "http://168.63.139.190:3030/popular";
 // const serviceUrl = "http://localhost:3030/popular";

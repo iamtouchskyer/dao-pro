@@ -4,6 +4,7 @@ import {
   queryCIBNPersonalViewHistory,
   queryCIBNPersonalTags,
   queryCIBNPersonalRecommendationUserList,
+  queryCIBNPersonalSummary,
 } from '../services/api';
 
 export default {
@@ -19,6 +20,7 @@ export default {
         listByTimeCategory: [],
       },
     },
+    summary: '',
     loading: false,
   },
 
@@ -28,6 +30,14 @@ export default {
       yield put({
         type: 'save',
         payload: { tags },
+      });
+    },
+
+    *fetchPersonalSummary({ payload }, { call, put }) {
+      const summary = yield call(queryCIBNPersonalSummary, payload.hid);
+      yield put({
+        type: 'save',
+        payload: { summary },
       });
     },
 
@@ -74,6 +84,7 @@ export default {
             listByTimeCategory: [],
           },
         },
+        summary: '',
       };
     },
   },
