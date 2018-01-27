@@ -15,16 +15,13 @@ import {
   Select,
 } from 'antd';
 import numeral from 'numeral';
-import moment from 'moment';
 import _ from 'lodash';
 import {
   ChartCard,
-  yuan,
   MiniArea,
   MiniBar,
   Field,
   Bar,
-  Pie,
 } from '../../components/Charts';
 import Trend from '../../components/Trend';
 import NumberInfo from '../../components/NumberInfo';
@@ -44,9 +41,6 @@ const { RangePicker } = DatePicker;
 }))
 export default class Analysis extends Component {
   state = {
-    channelType: '0',
-    salesType: 'all',
-    currentTabKey: '',
     rangePickerValue: getTimeDistance('thisYear'),
   };
 
@@ -80,12 +74,6 @@ export default class Analysis extends Component {
     });
   }
 
-  handleChangeSalesType = (e) => {
-    this.setState({
-      salesType: e.target.value,
-    });
-  };
-
   changeFilterValue = (value) => {
     this.props.dispatch({
       type: 'operationData/changeFilterValue',
@@ -94,9 +82,6 @@ export default class Analysis extends Component {
   };
 
   handleTabChange = (key) => {
-    this.setState({
-      currentTabKey: key,
-    });
   };
 
   handleRangePickerChange = (rangePickerValue) => {
@@ -466,14 +451,12 @@ export default class Analysis extends Component {
     );
   };
 
-  render() {
-    const { chart, loading, operationData } = this.props;
+  renderSearch = () => {
+    const { chart, loading } = this.props;
 
     const {
       searchData,
     } = chart;
-
-    if (loading === undefined) return null;
 
     const menu = (
       <Menu>
@@ -530,89 +513,105 @@ export default class Analysis extends Component {
       },
     ];
 
+    return (
+      <Row gutter={24}>
+        <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+          <Card
+            loading={loading}
+            bordered={false}
+            title="热门搜索关键字"
+            extra={iconGroup}
+            style={{ marginTop: 12, minHeight: 500 }}
+          >
+            <Row gutter={68}>
+              <Col sm={12} xs={24} style={{ marginBottom: 12 }}>
+                <NumberInfo
+                  subTitle="搜索用户数"
+                  gap={8}
+                  total="-"
+                  status=""
+                  subTotal="-"
+                />
+                <MiniArea line height={45} data={[]} />
+              </Col>
+              <Col sm={12} xs={24} style={{ marginBottom: 12 }}>
+                <NumberInfo
+                  subTitle="人均搜索次数"
+                  total="-"
+                  status=""
+                  subTotal="-"
+                  gap={8}
+                />
+                <MiniArea line height={45} data={[]} />
+              </Col>
+            </Row>
+            <Table
+              rowKey={record => record.index}
+              size="small"
+              columns={columns}
+              dataSource={searchData}
+              pagination={{
+                style: { marginBottom: 0 },
+                pageSize: 5,
+              }}
+            />
+          </Card>
+        </Col>
+      </Row>
+    );
+  };
+
+  renderPercentizedByAppAndChannel = () => {
+    const { loading, operationData } = this.props;
+
+    return (
+      <Row gutter={24}>
+        <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+          {_.isEmpty(operationData.rawData) ? null : (
+            <PercentageChart
+              data={operationData.rawData || []}
+              dimension="app"
+              cardProps={{
+                loading,
+                className: styles.salesCard,
+                bordered: false,
+                title: 'App占比',
+                style: { marginTop: 12 },
+              }}
+            />
+          )}
+        </Col>
+        <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+          {_.isEmpty(operationData.rawData) ? null : (
+            <PercentageChart
+              data={operationData.rawData || []}
+              dimension="channel"
+              cardProps={{
+                loading,
+                className: styles.salesCard,
+                bordered: false,
+                title: '渠道占比',
+                style: { marginTop: 12 },
+              }}
+            />
+          )}
+        </Col>
+      </Row>
+    );
+  };
+
+  render() {
+    const { loading } = this.props;
+
+    if (loading === undefined) return null;
 
     return (
       <div>
         { this.renderPast7DayChartCardGroup() }
         { this.renderTrend() }
         { this.renderProvinceData() }
-
-        <Row gutter={24}>
-          <Col xl={24} lg={24} md={24} sm={24} xs={24}>
-            <Card
-              loading={loading}
-              bordered={false}
-              title="热门搜索关键字"
-              extra={iconGroup}
-              style={{ marginTop: 12, minHeight: 500 }}
-            >
-              <Row gutter={68}>
-                <Col sm={12} xs={24} style={{ marginBottom: 12 }}>
-                  <NumberInfo
-                    subTitle="搜索用户数"
-                    gap={8}
-                    total="-"
-                    status=""
-                    subTotal="-"
-                  />
-                  <MiniArea line height={45} data={[]} />
-                </Col>
-                <Col sm={12} xs={24} style={{ marginBottom: 12 }}>
-                  <NumberInfo
-                    subTitle="人均搜索次数"
-                    total="-"
-                    status=""
-                    subTotal="-"
-                    gap={8}
-                  />
-                  <MiniArea line height={45} data={[]} />
-                </Col>
-              </Row>
-              <Table
-                rowKey={record => record.index}
-                size="small"
-                columns={columns}
-                dataSource={searchData}
-                pagination={{
-                  style: { marginBottom: 0 },
-                  pageSize: 5,
-                }}
-              />
-            </Card>
-          </Col>
-        </Row>
-        <Row gutter={24}>
-          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-            {_.isEmpty(operationData.rawData) ? null : (
-              <PercentageChart
-                data={operationData.rawData || []}
-                dimension="app"
-                cardProps={{
-                  loading,
-                  className: styles.salesCard,
-                  bordered: false,
-                  title: 'App占比',
-                  style: { marginTop: 12 },
-                }}
-              />
-            )}
-          </Col>
-          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-            {_.isEmpty(operationData.rawData) ? null : (
-              <PercentageChart
-                data={operationData.rawData || []}
-                dimension="channel"
-                cardProps={{
-                  loading,
-                  className: styles.salesCard,
-                  bordered: false,
-                  title: '渠道占比',
-                  style: { marginTop: 12 },
-                }}
-              />
-            )}
-          </Col>
-        </Row>
+        { this.renderPercentizedByAppAndChannel() }
+        { this.renderSearch() }
       </div>
     );
   }

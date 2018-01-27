@@ -25,8 +25,8 @@ _.mixin({
   usersLoading: loading.effects['recommendation/fetchUsers'],
   gueesYouLikeLoading: loading.effects['recommendation/fetchPersonalRecommendation'],
   historyLoading: loading.effects['recommendation/fetchPersonalViewHistory'],
-  tagLoading: loading.effects['recommendation/queryCIBNPersonalTags'],
-  summaryLoading: loading.effects['recommendation/queryCIBNPersonalSummary'],
+  tagLoading: loading.effects['recommendation/fetchPersonalTag'],
+  summaryLoading: loading.effects['recommendation/fetchPersonalSummary'],
 }))
 export default class Recommendation extends PureComponent {
   componentDidMount() {
@@ -63,12 +63,12 @@ export default class Recommendation extends PureComponent {
     });
 
     dispatch({
-      type: 'recommendation/queryCIBNPersonalTags',
+      type: 'recommendation/fetchPersonalTag',
       payload: { hid },
     });
 
     dispatch({
-      type: 'recommendation/queryCIBNPersonalSummary',
+      type: 'recommendation/fetchPersonalSummary',
       payload: { hid },
     });
   }
@@ -80,17 +80,17 @@ export default class Recommendation extends PureComponent {
 
     const users = (recommendation && _.isArray(recommendation.users)) ? recommendation.users : [];
 
-    return (<Dropdowns style={{ marginBottom: 20 }} title="选择用户" menu={users} handleMenuClick={this.onMenuItemClick} />);
+    return (<Dropdowns style={{ marginBottom: 24 }} title="选择用户" menu={users} handleMenuClick={this.onMenuItemClick} />);
   };
 
   render() {
     const {
-      chart: { radarData },
       recommendation,
       usersLoading,
       gueesYouLikeLoading,
       historyLoading,
       tagLoading,
+      summaryLoading,
     } = this.props;
 
     /*
@@ -98,9 +98,7 @@ export default class Recommendation extends PureComponent {
       tags
     } = recommendation;
     */
-    const tags = _.chain(recommendation.history.data)
-      .map(historyItem => `${historyItem.taginfo}|${historyItem.category}`.split('|'))
-      .flatten()
+    const tags = _.chain(recommendation.tags.data)
       .countUnique()
       .map((value, key) => { return { name: key, value: value + 20 }; })
       .value();
@@ -124,16 +122,63 @@ export default class Recommendation extends PureComponent {
       pageSizeOptions: ['10', '20', '50', '100'],
     };
 
+
+    const radarOriginData = [
+      {
+        name: '用户1',
+        ref: 10,
+        koubei: 8,
+        output: 4,
+        contribute: 5,
+        hot: 7,
+      },
+      {
+        name: '用户2',
+        ref: 3,
+        koubei: 9,
+        output: 6,
+        contribute: 3,
+        hot: 1,
+      },
+      {
+        name: '用户3',
+        ref: 4,
+        koubei: 1,
+        output: 6,
+        contribute: 5,
+        hot: 7,
+      },
+    ];
+    const radarData = [];
+    const radarTitleMap = {
+      ref: '宜人性',
+      koubei: '严谨性',
+      output: '外向性',
+      contribute: '神经质',
+      hot: '开放性',
+    };
+    radarOriginData.forEach((item) => {
+      Object.keys(item).forEach((key) => {
+        if (key !== 'name') {
+          radarData.push({
+            name: item.name,
+            label: radarTitleMap[key],
+            value: item[key],
+          });
+        }
+      });
+    });
+
     return (
       <PageHeaderLayout>
         { this.renderDropdownMenu() }
-         
-        <Card loading={usersLoading} bordered={false} title="观影历史" style={{ marginBottom: 24 }}>
+
+        <Card loading={usersLoading} bordered={false} title="猜你喜欢" bodyStyle={{ marginBottom: 4, padding: 4, minHeight: 200 }} >
           <Tabs size="large">
             {_.map(recommendation.recommendation.data.listByTimeCategory, (cards, title) =>
               (
-                <Tabs.TabPane tab={title} key={title}>
-                  <CardGroup loading={gueesYouLikeLoading} cardTitle="猜你喜欢" cards={cards} />
+                <Tabs.TabPane tab={title} key={title} style={{ padding: 0 }}>
+                  <CardGroup loading={gueesYouLikeLoading} cardTitle="" cards={_.take(_.shuffle(cards), 10)} />
                 </Tabs.TabPane>
               )
             )
@@ -142,7 +187,42 @@ export default class Recommendation extends PureComponent {
         </Card>
 
         <Row gutter={24}>
-          <Col xl={16} lg={24} md={24} sm={24} xs={24}>
+          <Col xl={9} lg={24} md={24} sm={24} xs={24}>
+            <Card title="观影标签" loading={tagLoading} bordered={false} style={{ marginBottom: 24, height: 360 }} bodyStyle={{ overflow: 'hidden' }}>
+              <TagCloud
+                data={tags}
+                height={270}
+                loading={tagLoading}
+              />
+            </Card>
+          </Col>
+          <Col xl={6} lg={24} md={24} sm={24} xs={24}>
+            <Card
+              style={{ marginBottom: 24, height: 360 }}
+              bordered={false}
+              title="大五人格分析 -- TBD"
+              loading={radarData.length === 0}
+            >
+              <div className={styles.chart}>
+                <Radar hasLegend height={270} data={radarData} />
+              </div>
+            </Card>
+          </Col>
+          <Col xl={9} lg={24} md={24} sm={24} xs={24}>
+            <Card
+              style={{ marginBottom: 24, height: 360 }}
+              bordered={false}
+              title="用户描述"
+              loading={summaryLoading}
+            >
+              <div className={styles.chart} height="300">
+                {recommendation.summary.data}
+              </div>
+            </Card>
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          <Col xl={24} lg={24} md={24} sm={24} xs={24}>
             <Card bordered={false} title="观影历史">
               <Table
                 loading={historyLoading}
@@ -154,24 +234,6 @@ export default class Recommendation extends PureComponent {
               />
             </Card>
 
-          </Col>
-          <Col xl={8} lg={24} md={24} sm={24} xs={24}>
-            <Card title="观影标签" loading={tagLoading} bordered={false} bodyStyle={{ overflow: 'hidden' }}>
-              <TagCloud
-                data={tags}
-                height={150}
-              />
-            </Card>
-            <Card
-              style={{ marginBottom: 24 }}
-              bordered={false}
-              title="XX 指数"
-              loading={radarData.length === 0}
-            >
-              <div className={styles.chart}>
-                <Radar hasLegend height={343} data={radarData} />
-              </div>
-            </Card>
           </Col>
         </Row>
       </PageHeaderLayout>

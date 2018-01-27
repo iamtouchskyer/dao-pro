@@ -20,7 +20,7 @@ export default {
         listByTimeCategory: [],
       },
     },
-    summary: '',
+    summary: {},
     loading: false,
   },
 
@@ -84,7 +84,7 @@ export default {
             listByTimeCategory: [],
           },
         },
-        summary: '',
+        summary: {},
       };
     },
   },

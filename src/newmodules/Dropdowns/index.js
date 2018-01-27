@@ -35,7 +35,7 @@ export default class DaoDropdown extends Component {
 
   render() {
     return (
-      <Dropdown.Button overlay={this.generateMenu(this.props.menu)}>
+      <Dropdown.Button style={this.props.style} overlay={this.generateMenu(this.props.menu)}>
         {this.state.dropdownTitle}
       </Dropdown.Button>
     );

@@ -23,7 +23,6 @@ export default class CardGroup extends PureComponent {
   render() {
     const {
       cardTitle,
-      extraLinkTitle, extraLink,
       loading,
       cards,
     } = this.props;
@@ -31,8 +30,7 @@ export default class CardGroup extends PureComponent {
     return (
       <Card
         className={styles.projectList}
-        style={{ marginBottom: 24 }}
-        title={cardTitle}
+        style={{ marginBottom: 12 }}
         bordered={false}
         loading={loading}
         bodyStyle={{ padding: 0 }}
