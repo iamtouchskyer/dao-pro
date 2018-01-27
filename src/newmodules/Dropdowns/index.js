@@ -6,7 +6,7 @@ export default class DaoDropdown extends Component {
   constructor(props) {
     super(props);
 
-    this.menu = this.generateMenu(props.menu);
+    // this.menu = this.generateMenu(props.menu);
 
     this.state = {
       dropdownTitle: props.title ? props.title : 'Dropdown',
@@ -18,7 +18,7 @@ export default class DaoDropdown extends Component {
 
     // 必须分行，Don't ask me why
     return (
-            <Menu onClick={this.handleMenuClick}> 
+            <Menu onClick={this.handleMenuClick}>
               {menuItems}
             </Menu>
           );
@@ -35,11 +35,11 @@ export default class DaoDropdown extends Component {
 
   render() {
     return (
-      <Dropdown.Button overlay={this.menu}>
+      <Dropdown.Button overlay={this.generateMenu(this.props.menu)}>
         {this.state.dropdownTitle}
       </Dropdown.Button>
     );
   }
 };
 
-// trigger={['click']}> 
+// trigger={['click']}>
