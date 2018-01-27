@@ -105,7 +105,7 @@ class TagCloud extends Component {
         },
         fontSize(d) {
           // eslint-disable-next-line
-          return Math.pow((d.value - min) / (max - min), 2) * (70 - 20) + 20;
+          return (Math.pow((d.value - min) / (max - min), 2) * (70 - 20) + 20) * 2;
         },
       });
 

@@ -120,7 +120,7 @@ export default class Recommendation extends PureComponent {
     return (
       <PageHeaderLayout>
         { this.renderDropdownMenu() }
-         
+
         <Card bordered={false} title="观影历史" style= {{ marginBottom: 24 }}>
           <Tabs size="large">
             {_.map(recommendation.recommendation.data.listByTimeCategory, (cards, title) =>
