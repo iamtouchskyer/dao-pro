@@ -37,7 +37,7 @@ export default class CardGroup extends PureComponent {
       >
         {
           cards.map(cardItem => (
-            <Card.Grid className={styles.projectGrid} key={cardItem.id} style={{ padding: 4 }}>
+            <Card.Grid className={styles.projectGrid} key={cardItem.vid} style={{ padding: 4 }}>
               <Card
                 bodyStyle={{ padding: 0 }}
                 bordered={false}
