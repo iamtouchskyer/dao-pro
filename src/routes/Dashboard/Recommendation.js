@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
-import { Table, Row, Col, Card, Tabs, List, Avatar } from 'antd';
+import { Table, Row, Col, Card, Tabs, List, Avatar, Radio } from 'antd';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { Radar, TagCloud } from '../../components/Charts';
@@ -47,10 +47,14 @@ export default class Recommendation extends PureComponent {
   }
 
   onMenuItemClick = (target) => {
-    const { dispatch } = this.props;
-
     const index = target.index;
     const hid = target.title;
+
+    this.doFetehByHid(hid);
+  }
+
+  doFetehByHid = (hid) => {
+    const { dispatch } = this.props;
 
     dispatch({
       type: 'recommendation/fetchPersonalRecommendation',
@@ -71,7 +75,7 @@ export default class Recommendation extends PureComponent {
       type: 'recommendation/fetchPersonalSummary',
       payload: { hid },
     });
-  }
+  };
 
   renderDropdownMenu = () => {
     const {
@@ -80,7 +84,24 @@ export default class Recommendation extends PureComponent {
 
     const users = (recommendation && _.isArray(recommendation.users)) ? recommendation.users : [];
 
-    return (<Dropdowns style={{ marginBottom: 24 }} title="选择用户" menu={users} handleMenuClick={this.onMenuItemClick} />);
+    return (<Row><Dropdowns style={{ marginBottom: 12 }} title="选择用户" menu={users} handleMenuClick={this.onMenuItemClick} /></Row>);
+  };
+
+  renderSpecifiedUser = () => {
+    return (
+      <Row style={{ marginBottom: 12 }}>
+        <Radio.Group value="small" onChange={e => this.doFetehByHid(e.target.value)} >
+          <Radio.Button value="00070C448EB2FE4183CEF3FC2C531BDE">游戏爱好者</Radio.Button>
+          <Radio.Button value="000783C6C87BA6A2EA013D5B0E884596">海外用户</Radio.Button>
+          <Radio.Button value="00044891791203A2B7DD92C19F201281">家庭主妇</Radio.Button>
+          <Radio.Button value="001645DB9A1E99C20BB9852E2B4B50A6">电影控</Radio.Button>
+          <Radio.Button value="000044E965457180C090E890D047E42E">家有小宝</Radio.Button>
+          <Radio.Button value="00009B773848B7A8C73E383E368F179D">家有小宝</Radio.Button>
+          <Radio.Button value="000FEE6DEA812413957A98B2C3B40361">家有小宝</Radio.Button>
+          <Radio.Button value="0000D4E279F03603976F7AFF7BE43BEA">戏剧爱好者</Radio.Button>
+        </Radio.Group>
+      </Row>
+    );
   };
 
   render() {
@@ -172,6 +193,7 @@ export default class Recommendation extends PureComponent {
     return (
       <PageHeaderLayout>
         { this.renderDropdownMenu() }
+        { this.renderSpecifiedUser() }
 
         <Card loading={usersLoading} bordered={false} title="猜你喜欢" bodyStyle={{ marginBottom: 4, padding: 4, minHeight: 200 }} >
           <Tabs size="large">
