@@ -67,6 +67,10 @@ export default function request(url, options) {
     .catch((e) => {
       const { dispatch } = store;
       const status = e.name;
+      if (!status) {
+        dispatch(routerRedux.push('/exception/500'));
+        return;
+      }
       if (status === 401) {
         dispatch({
           type: 'login/logout',
