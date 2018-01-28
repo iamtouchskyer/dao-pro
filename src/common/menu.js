@@ -17,10 +17,6 @@ const menuData = [{
     name: '个性化用户',
     path: 'recommendation',
     // hideInMenu: true,
-  }, {
-    name: '特别考虑',
-    path: 'special',
-    // hideInMenu: true,
   }],
 }];
 
