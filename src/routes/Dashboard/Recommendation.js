@@ -1,14 +1,12 @@
 import React, { PureComponent } from 'react';
-import moment from 'moment';
+import _ from 'lodash';
 import { connect } from 'dva';
-import { Table, Row, Col, Card, Tabs, List, Avatar, Radio } from 'antd';
+import { Table, Row, Col, Card, Tabs, Radio, Select } from 'antd';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { Radar, TagCloud } from '../../components/Charts';
 import CardGroup from '../../newmodules/CardGroup';
-import Dropdowns from '../../newmodules/Dropdowns';
 import styles from './Recommendation.less';
-import _ from 'lodash';
 
 _.mixin({
   countUnique: (arr) => {
@@ -46,13 +44,6 @@ export default class Recommendation extends PureComponent {
     });
   }
 
-  onMenuItemClick = (target) => {
-    const index = target.index;
-    const hid = target.title;
-
-    this.doFetehByHid(hid);
-  }
-
   doFetehByHid = (hid) => {
     const { dispatch } = this.props;
 
@@ -84,7 +75,23 @@ export default class Recommendation extends PureComponent {
 
     const users = (recommendation && _.isArray(recommendation.users)) ? recommendation.users : [];
 
-    return (<Row><Dropdowns style={{ marginBottom: 12 }} title="选择用户" menu={users} handleMenuClick={this.onMenuItemClick} /></Row>);
+    return (
+      <Row>
+        <Select
+          defaultValue="选择用户"
+          style={{ width: 300 }}
+          onChange={(value) => {
+            this.doFetehByHid(value);
+          }}
+        >
+          {users.map(user => (
+            <Select.Option value={user} key={user}>
+              {user}
+            </Select.Option>
+          ))}
+        </Select>
+      </Row>
+    );
   };
 
   renderSpecifiedUser = () => {
