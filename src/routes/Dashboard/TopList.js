@@ -88,14 +88,12 @@ export default class TopList extends PureComponent {
           <Col {...topColResponsiveProps}>
             { this.renderTopCard('七日热门电影', {
               kind: 'movie',
-              category: '喜剧',
               ...previous7days
             }) }
           </Col>
           <Col {...topColResponsiveProps}>
             { this.renderTopCard('十五日热门电影', {
               kind: 'movie',
-              category: '喜剧',
               ...previous15days
             }) }
           </Col>
@@ -105,14 +103,12 @@ export default class TopList extends PureComponent {
           <Col {...topColResponsiveProps}>
             { this.renderTopCard('七日热门电视剧', {
               kind: 'tv',
-              category: '都市',
               ...previous7days
             }) }
           </Col>
           <Col {...topColResponsiveProps}>
             { this.renderTopCard('十五日热门电视剧', {
               kind: 'tv',
-              category: '都市',
               ...previous15days
             }) }
           </Col>
@@ -120,28 +116,13 @@ export default class TopList extends PureComponent {
 
         <Row gutter={24}>
           <Col {...topColResponsiveProps}>
-            {this.renderTopCard('七日热门禅文化节目', {
-              kind: 'dhyana',
-              ...previous7days
-            })}
-          </Col>
-          <Col {...topColResponsiveProps}>
-            {this.renderTopCard('十五日热门禅文化节目', {
-              kind: 'dhyana',
-              ...previous15days
-            })}
-          </Col>
-        </Row>
-
-        <Row gutter={24}>
-          <Col {...topColResponsiveProps}>
-            {this.renderTopCard('七日热门儿童节目', {
+            {this.renderTopCard('七日热门少儿节目', {
               kind: 'children',
               ...previous7days
             })}
           </Col>
           <Col {...topColResponsiveProps}>
-            {this.renderTopCard('十五日热门儿童节目', {
+            {this.renderTopCard('十五日热门少儿节目', {
               kind: 'children',
               ...previous15days
             })}
@@ -157,6 +138,49 @@ export default class TopList extends PureComponent {
           <Col {...topColResponsiveProps}>
             {this.renderTopCard('十五日热门动漫', {
               kind: 'manga',
+              ...previous15days
+            })}
+          </Col>
+        </Row>
+
+        <Row gutter={24}>
+          <Col {...topColResponsiveProps}>
+            {this.renderTopCard('七日热门综艺', {
+              kind: 'variety',
+              ...previous7days
+            })}
+          </Col>
+          <Col {...topColResponsiveProps}>
+            {this.renderTopCard('十五日热门综艺', {
+              kind: 'variety',
+              ...previous15days
+            })}
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          <Col {...topColResponsiveProps}>
+            {this.renderTopCard('七日热门戏曲', {
+              kind: 'theatre',
+              ...previous7days
+            })}
+          </Col>
+          <Col {...topColResponsiveProps}>
+            {this.renderTopCard('十五日热门戏曲', {
+              kind: 'theatre',
+              ...previous15days
+            })}
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          <Col {...topColResponsiveProps}>
+            {this.renderTopCard('七日热门禅文化节目', {
+              kind: 'dhyana',
+              ...previous7days
+            })}
+          </Col>
+          <Col {...topColResponsiveProps}>
+            {this.renderTopCard('十五日热门禅文化节目', {
+              kind: 'dhyana',
               ...previous15days
             })}
           </Col>

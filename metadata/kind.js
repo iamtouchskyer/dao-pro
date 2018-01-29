@@ -52,7 +52,7 @@ export default {
     name: '活动',
   },
   theatre: {
-    name: '剧院',
+    name: '戏曲',
   },
   children: {
     name: '少儿',
