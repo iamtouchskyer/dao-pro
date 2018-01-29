@@ -128,7 +128,7 @@ const mappingTable =
       ProvinceId: 229,
     },
     {
-      ProvicenName: '新疆 ',
+      ProvicenName: '新疆',
       ProvinceId: 230,
     },
     {
