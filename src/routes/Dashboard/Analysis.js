@@ -188,7 +188,7 @@ export default class Analysis extends Component {
     return (
       <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }} style={{ marginTop: 12, minHeight: 500 }}>
         <div className={styles.salesCard}>
-          <Tabs tabBarExtraContent={this.renderDatePicker()}>
+          <Tabs>
             {
               this.renderTabPane(
                 { tab: '活跃客户端', key: 'activeclients' },
