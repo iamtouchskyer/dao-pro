@@ -44,18 +44,15 @@ const havePermissionAsync = new Promise((resolve) => {
   loading: loading.effects['cibnHot/fetchFilter'],
 }))
 export default class HotSpot extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      kind: 'movie',
-      filter: {},
-      location: null,
-      rangePickerValue: getTimeDistance('thisYear'),
-    };
-  }
+  state = {
+    kind: 'movie',
+    filter: {},
+    location: null,
+    rangePickerValue: getTimeDistance('thisYear'),
+  };
 
   componentDidMount() {
-    this.onChangeKind('movie');
+    this.fetchFilter(this.state.kind);
   }
 
   fetchFilter(kind) {

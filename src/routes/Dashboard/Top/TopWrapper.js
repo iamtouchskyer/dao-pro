@@ -39,12 +39,11 @@ export default class TopWrapper extends Component {
   render() {
     const { payload } = this.props;
 
-    @Secured(havePermissionAsync)
     @connect(({ cibnHot, loading }) => ({
       playCount: cibnHot.playCount[stringify(payload)],
       // loading: loading.effects['cibnHot/fetchPlayCount'] || loading.models.cibnHot,
     }))
-    class TopMovies extends PureComponent {
+    class TopChart extends PureComponent {
       componentDidMount() {
         this.props.dispatch({
           type: 'cibnHot/fetchPlayCount',
@@ -60,6 +59,6 @@ export default class TopWrapper extends Component {
       }
     }
 
-    return <TopMovies />;
+    return <TopChart />;
   }
 }

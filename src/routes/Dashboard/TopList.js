@@ -43,7 +43,7 @@ const havePermissionAsync = new Promise((resolve) => {
   cibnHot,
   loading: loading.effects['cibnHot/fetchFilter'],
 }))
-export default class HotSpot extends PureComponent {
+export default class TopList extends PureComponent {
   constructor(props) {
     super(props);
   }
