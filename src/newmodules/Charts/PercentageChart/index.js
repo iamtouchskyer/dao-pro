@@ -69,7 +69,7 @@ export default class PercentageChart extends React.Component {
           <Pie
             hasLegend={this.props.dimension === 'app'}
             subTitle={name}
-            total={panelKey === 'totalWatchedTime' ? humanizeMilliseconds(pieData.reduce((pre, now) => now.y + pre, 0)) : pieData.reduce((pre, now) => now.y + pre, 0)}
+            total={panelKey === 'totalWatchedTime' ? humanizeMilliseconds(pieData.reduce((pre, now) => now.y + pre, 0), { hoursOnly: true }) : pieData.reduce((pre, now) => now.y + pre, 0)}
             data={pieData}
             height={248}
             lineWidth={4}
