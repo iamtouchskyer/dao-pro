@@ -25,11 +25,12 @@ import {
 } from '../../components/Charts';
 import Trend from '../../components/Trend';
 import NumberInfo from '../../components/NumberInfo';
-import { getTimeDistance } from '../../utils/utils';
+import { getTimeDistance, humanizeMilliseconds } from '../../utils/utils';
 import ChinaMapChart from '../../newmodules/Charts/ChinaMap';
 import PercentageChart from '../../newmodules/Charts/PercentageChart';
 
 import styles from './Analysis.less';
+import { version } from 'punycode';
 
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
@@ -143,7 +144,7 @@ export default class Analysis extends Component {
     );
   };
 
-  renderTabPane = (tabProps, chartProps, top10Props) => {
+  renderTabPane = (tabProps, chartProps, top10Props, valueFormatter = v => numeral(v).format('0,0')) => {
     return (
       <TabPane {...tabProps}>
         <Row>
@@ -152,6 +153,7 @@ export default class Analysis extends Component {
               <Bar
                 height={380}
                 {...chartProps}
+                valueFormatter={valueFormatter}
               />
             </div>
           </Col>
@@ -163,7 +165,7 @@ export default class Analysis extends Component {
                   <li key={item.title}>
                     <span className={i < 3 ? styles.active : ''}>{i + 1}</span>
                     <span>{item.title}</span>
-                    <span>{numeral(item.total).format('0,0')}</span>
+                    <span>{valueFormatter(item.total)}</span>
                   </li>
                 ))}
               </ul>
@@ -218,6 +220,7 @@ export default class Analysis extends Component {
                 { tab: '播放时长', key: 'totaltime' },
                 { title: '播放时长趋势', data: totalWatchTimeTrend, color: '#ed7d31' },
                 { title: '省份Top10', data: provinceTWTTop10 },
+                humanizeMilliseconds,
               )
             }
 
@@ -335,7 +338,7 @@ export default class Analysis extends Component {
           </TabPane>
           <TabPane tab="播放时长" key="totalWatchedTime">
             {filterBar}
-            <ChinaMapChart height={1200} data={provinceMapData} />
+            <ChinaMapChart height={1200} data={provinceMapData} labelFormatter={humanizeMilliseconds} />
           </TabPane>
         </Tabs>
       </Card>
@@ -382,12 +385,12 @@ export default class Analysis extends Component {
             */
           })}
         {this.renderPast7DayChartCard('miniArea', loading, '过去七天播放时长', '#ed7d31',
-            last7DayTotalWatchTimeTrend, { type: 'field', label: '平均播放时长', value: _.sumBy(last7DayTotalWatchTimeTrend, dayData => dayData.y) / 7 })}
+            last7DayTotalWatchTimeTrend, { type: 'field', label: '平均播放时长', value: _.sumBy(last7DayTotalWatchTimeTrend, dayData => dayData.y) / 7 }, humanizeMilliseconds)}
       </Row>
     );
   }
 
-  renderPast7DayChartCard = (whichChart, loading, title, color, chartData, footer) => {
+  renderPast7DayChartCard = (whichChart, loading, title, color, chartData, footer, valueFormatter = v => numeral(v).format('0,0')) => {
   /* {label: '周同比', percentage: }, */
     const _renderChartCardTrendGroup = (arr) => {
       const _renderTrend = (label, percentage) => {
@@ -423,7 +426,7 @@ export default class Analysis extends Component {
     let footerElement = null;
 
     if (footer.type === 'field') {
-      footerElement = <Field label={footer.label} value={numeral(footer.value).format('0')} />;
+      footerElement = <Field label={footer.label} value={valueFormatter(footer.value)} />;
     } else if (footer.type === 'trend') {
       footerElement = _renderChartCardTrendGroup(footer.value);
     }
@@ -432,7 +435,7 @@ export default class Analysis extends Component {
     if (whichChart === 'miniBar') {
       miniChartElement = (<MiniBar data={chartData} color={color} />);
     } else {
-      miniChartElement = (<MiniArea data={chartData} color={color} />);
+      miniChartElement = (<MiniArea data={chartData} color={color} valueFormatter={valueFormatter} />);
     }
 
     return (

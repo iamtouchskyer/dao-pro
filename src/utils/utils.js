@@ -166,3 +166,16 @@ const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-
 export function isUrl(path) {
   return reg.test(path);
 }
+
+export function humanizeMilliseconds(milliseconds, options) {
+  const duration = moment.duration(milliseconds);
+  const hours = Math.round(duration.asHours());
+  const minutes = duration.minutes();
+  const seconds = duration.seconds();
+
+  if (options && options.hoursOnly) {
+    return `${hours} 小时`;
+  }
+
+  return `${hours} 小时 ${minutes} 分钟 ${seconds} 秒`;
+}

@@ -183,11 +183,10 @@ export default class ChinaMapChart extends React.Component {
     };
 
     const {
-      title,
       height = 800,
       padding = [20, 20, 20, 20],
-      borderWidth = 2,
       data = this.userData,
+      labelFormatter = v => v,
     } = this.props;
 
     return (
@@ -206,7 +205,20 @@ export default class ChinaMapChart extends React.Component {
                 },
               }}
             >
-              <Geom type="polygon" position="longitude*latitude" animate={{ leave: { animation: 'fadeOut' } }} opacity="value" tooltip="name*value" color={['trend', '#ed7d31']} size={0}>
+              <Geom
+                type="polygon"
+                position="longitude*latitude"
+                animate={{ leave: { animation: 'fadeOut' } }}
+                opacity="value"
+                tooltip={['name*value', (name, value) => {
+                  return {
+                    name,
+                    value: labelFormatter(value),
+                  };
+                }]}
+                color={['trend', '#ed7d31']}
+                size={0}
+              >
                 <Label content="name" offset={0} textStyle={{ fill: '#545454', fontSize: 14 }} />
               </Geom>
             </View>

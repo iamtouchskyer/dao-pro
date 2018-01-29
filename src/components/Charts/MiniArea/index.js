@@ -18,6 +18,7 @@ export default class MiniArea extends React.Component {
       xAxis,
       yAxis,
       animate = true,
+      valueFormatter = v => v,
     } = this.props;
 
     const padding = [36, 5, 30, 5];
@@ -38,7 +39,7 @@ export default class MiniArea extends React.Component {
       'x*y',
       (x, y) => ({
         name: x,
-        value: y,
+        value: valueFormatter(y),
       }),
     ];
 

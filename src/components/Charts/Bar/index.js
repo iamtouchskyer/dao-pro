@@ -62,6 +62,7 @@ class Bar extends Component {
       data,
       color = 'rgba(24, 144, 255, 0.85)',
       padding,
+      valueFormatter = v => v,
     } = this.props;
 
     const { autoHideXLabels } = this.state;
@@ -79,7 +80,7 @@ class Bar extends Component {
       'x*y',
       (x, y) => ({
         name: x,
-        value: y,
+        value: valueFormatter(y),
       }),
     ];
 

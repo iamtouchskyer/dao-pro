@@ -10,6 +10,7 @@ import moment from 'moment';
 import {
   Pie,
 } from '../../../components/Charts';
+import { humanizeMilliseconds } from  '../../../utils/utils';
 
 export default class PercentageChart extends React.Component {
   constructor(props) {
@@ -68,10 +69,11 @@ export default class PercentageChart extends React.Component {
           <Pie
             hasLegend={this.props.dimension === 'app'}
             subTitle={name}
-            total={pieData.reduce((pre, now) => now.y + pre, 0)}
+            total={panelKey === 'totalWatchedTime' ? humanizeMilliseconds(pieData.reduce((pre, now) => now.y + pre, 0)) : pieData.reduce((pre, now) => now.y + pre, 0)}
             data={pieData}
             height={248}
             lineWidth={4}
+            valueFormat={panelKey === 'totalWatchedTime' ? v => humanizeMilliseconds(v, { hoursOnly: true }) : v => v}
           />
         </Tabs.TabPane>
       );
