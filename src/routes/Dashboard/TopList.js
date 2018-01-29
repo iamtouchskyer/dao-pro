@@ -71,7 +71,7 @@ export default class TopList extends PureComponent {
       style: { marginBottom: 24 },
     };
 
-    const now = moment(new Date(2018, 0, 18)).startOf('day');
+    const now = moment(new Date(2018, 0, 22)).startOf('day');
     const previous7days = {
       startDate: now.clone().subtract(7, 'day').toDate(),
       endDate: now.toDate()
@@ -88,14 +88,12 @@ export default class TopList extends PureComponent {
           <Col {...topColResponsiveProps}>
             { this.renderTopCard('七日热门电影', {
               kind: 'movie',
-              category: '喜剧',
               ...previous7days
             }) }
           </Col>
           <Col {...topColResponsiveProps}>
             { this.renderTopCard('十五日热门电影', {
               kind: 'movie',
-              category: '喜剧',
               ...previous15days
             }) }
           </Col>
@@ -105,14 +103,12 @@ export default class TopList extends PureComponent {
           <Col {...topColResponsiveProps}>
             { this.renderTopCard('七日热门电视剧', {
               kind: 'tv',
-              category: '都市',
               ...previous7days
             }) }
           </Col>
           <Col {...topColResponsiveProps}>
             { this.renderTopCard('十五日热门电视剧', {
               kind: 'tv',
-              category: '都市',
               ...previous15days
             }) }
           </Col>
