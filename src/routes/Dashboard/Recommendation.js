@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import _ from 'lodash';
 import { connect } from 'dva';
-import { Table, Row, Col, Card, Tabs, Radio, Select } from 'antd';
+import { Timeline, Table, Row, Col, Card, Tabs, Radio, Select, Icon } from 'antd';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { Radar, TagCloud } from '../../components/Charts';
@@ -97,16 +97,18 @@ export default class Recommendation extends PureComponent {
 
   renderSpecifiedUser = () => {
     return (
-      <Row style={{ marginBottom: 12 }}>
+      <Row style={{ marginTop: 12, marginBottom: 12 }}>
         <Radio.Group value="small" onChange={e => this.doFetehByHid(e.target.value)} >
           <Radio.Button value="00070C448EB2FE4183CEF3FC2C531BDE">游戏爱好者</Radio.Button>
           <Radio.Button value="000783C6C87BA6A2EA013D5B0E884596">海外用户</Radio.Button>
           <Radio.Button value="00044891791203A2B7DD92C19F201281">家庭主妇</Radio.Button>
-          <Radio.Button value="001645DB9A1E99C20BB9852E2B4B50A6">电影控</Radio.Button>
+          <Radio.Button value="021A8199D95A3671945B51FCA8A0FFBB">电影控</Radio.Button>
           <Radio.Button value="000044E965457180C090E890D047E42E">家有小宝</Radio.Button>
           <Radio.Button value="00009B773848B7A8C73E383E368F179D">家有小宝</Radio.Button>
-          <Radio.Button value="000FEE6DEA812413957A98B2C3B40361">家有小宝</Radio.Button>
+          <Radio.Button value="04A4E8CBFEAC9AD2D8FD478438ACDA0B">小宝与家人</Radio.Button>
+          <Radio.Button value="056AB4731B3847DC54114F83437F8B20">小宝和家人</Radio.Button>
           <Radio.Button value="0000D4E279F03603976F7AFF7BE43BEA">戏剧爱好者</Radio.Button>
+          <Radio.Button value="0CB295AE7ADE4B049FDAA6F5C4CFF011">连续剧爱好者</Radio.Button>
         </Radio.Group>
       </Row>
     );
