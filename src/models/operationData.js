@@ -166,6 +166,10 @@ const generateDataForView = (operationData) => {
     countOfWhatchedMedia: provinceTNWM,
   };
 
+  _.each(totalWatchTimeTrend, (oneDayWatchTimeTrend) => {
+    oneDayWatchTimeTrend.y = Number(oneDayWatchTimeTrend.y.toFixed(3));
+  });
+
   return {
     newDeviceTrend,
     provinceNDTop10,
@@ -205,6 +209,19 @@ export default {
   effects: {
     *fetchOperationData(args, { call, put }) {
       const operationData = yield call(queryCIBNOperationData);
+
+      _.each(operationData.data, (everyDayData) => {
+        _.each(everyDayData.categories.totalWatchedTime, (watchTimeData) => {
+          _.each(watchTimeData.dimensions.application, (appData) => {
+            appData.total /= (1000 * 3600);
+          });
+
+          _.each(watchTimeData.dimensions.channel, (channelData) => {
+            channelData.total /= (1000 * 3600);
+          });
+        });
+      });
+
       const operationDataForView = yield generateDataForView(operationData);
 
       const provinceFilter = _.defaults({}, {
