@@ -66,10 +66,9 @@ export default class PercentageChart extends React.Component {
       return (
         <Tabs.TabPane tab={name} key={panelKey}>
           <Pie
-            valueFormat={val => val.toLocaleString()}
             hasLegend={this.props.dimension === 'app'}
             subTitle={name}
-            total={pieData.reduce((pre, now) => now.y + pre, 0).toLocaleString()}
+            total={pieData.reduce((pre, now) => now.y + pre, 0)}
             data={pieData}
             height={248}
             lineWidth={4}

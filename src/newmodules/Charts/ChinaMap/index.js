@@ -206,20 +206,7 @@ export default class ChinaMapChart extends React.Component {
                 },
               }}
             >
-              <Geom
-                type="polygon"
-                position="longitude*latitude"
-                animate={{ leave: { animation: 'fadeOut' } }}
-                opacity="value"
-                tooltip={['name*value', (name, value) => {
-                  return {
-                    name,
-                    value: value.toLocaleString(),
-                  };
-                }]}
-                color={['trend', '#ed7d31']}
-                size={0}
-              >
+              <Geom type="polygon" position="longitude*latitude" animate={{ leave: { animation: 'fadeOut' } }} opacity="value" tooltip="name*value" color={['trend', '#ed7d31']} size={0}>
                 <Label content="name" offset={0} textStyle={{ fill: '#545454', fontSize: 14 }} />
               </Geom>
             </View>
