@@ -52,31 +52,31 @@ const mappingTable =
       ProvinceId: 210,
     },
     {
-      ProvicenName: '黑龙江',
+      ProvicenName: '河南',
       ProvinceId: 211,
     },
     {
-      ProvicenName: '河南省',
+      ProvicenName: '黑龙江',
       ProvinceId: 212,
     },
     {
-      ProvicenName: '湖北省',
+      ProvicenName: '湖北',
       ProvinceId: 213,
     },
     {
-      ProvicenName: '湖南省',
+      ProvicenName: '湖南',
       ProvinceId: 214,
     },
     {
-      ProvicenName: '江苏',
+      ProvicenName: '吉林',
       ProvinceId: 215,
     },
     {
-      ProvicenName: '江西',
+      ProvicenName: '江苏',
       ProvinceId: 216,
     },
     {
-      ProvicenName: '吉林',
+      ProvicenName: '江西',
       ProvinceId: 217,
     },
     {
@@ -100,15 +100,15 @@ const mappingTable =
       ProvinceId: 222,
     },
     {
-      ProvicenName: '上海',
+      ProvicenName: '山西',
       ProvinceId: 223,
     },
     {
-      ProvicenName: ' 陕西',
+      ProvicenName: '陕西',
       ProvinceId: 224,
     },
     {
-      ProvicenName: '山西',
+      ProvicenName: '上海',
       ProvinceId: 225,
     },
     {
@@ -124,15 +124,15 @@ const mappingTable =
       ProvinceId: 228,
     },
     {
-      ProvicenName: '香港',
+      ProvicenName: '西藏',
       ProvinceId: 229,
     },
     {
-      ProvicenName: '新疆',
+      ProvicenName: '香港',
       ProvinceId: 230,
     },
     {
-      ProvicenName: '西藏',
+      ProvicenName: '新疆',
       ProvinceId: 231,
     },
     {
