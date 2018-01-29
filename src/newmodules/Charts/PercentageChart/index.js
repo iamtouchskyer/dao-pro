@@ -57,7 +57,7 @@ export default class PercentageChart extends React.Component {
           const key = cur[idKey];
 
           return _.defaults({}, {
-            [key]: _.isNaN(memo[key]) ? Number(cur.total) : memo[key] + cur.total,
+            [key]: _.isNumber(memo[key]) ? memo[key] + cur.total : Number(cur.total),
           }, memo);
         }, {})
         .map((value, key) => ({ x: key, y: value }))
