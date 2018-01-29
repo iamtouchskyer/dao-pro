@@ -18,10 +18,10 @@ export default class DaoDropdown extends Component {
 
     // 必须分行，Don't ask me why
     return (
-            <Menu onClick={this.handleMenuClick}>
-              {menuItems}
-            </Menu>
-          );
+      <Menu onClick={this.handleMenuClick}>
+        {menuItems}
+      </Menu>
+    );
   };
 
   handleMenuClick = (e) => {

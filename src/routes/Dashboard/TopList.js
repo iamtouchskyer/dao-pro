@@ -71,7 +71,7 @@ export default class TopList extends PureComponent {
       style: { marginBottom: 24 },
     };
 
-    const now = moment(new Date(2018, 0, 18)).startOf('day');
+    const now = moment(new Date(2018, 0, 22)).startOf('day');
     const previous7days = {
       startDate: now.clone().subtract(7, 'day').toDate(),
       endDate: now.toDate()
