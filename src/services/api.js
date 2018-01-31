@@ -99,13 +99,13 @@ export async function queryCIBNPersonalSummary(hid) {
 }
 
 // const serviceUrl = "http://zlike-mac0.guest.corp.microsoft.com:4000/graphql";
-const serviceUrl = "http://168.63.139.190:3030/popular";
+// const serviceUrl = "http://stcarec.eastasia.cloudapp.azure.com:3030/popular";
 // const serviceUrl = "http://localhost:3030/popular";
 
 export async function queryCIBNHotFilter(params) {
   // return graphqlRequest(`/api/cibn/hot/filter?${stringify(params)}`);
   return graphqlRequest(
-    serviceUrl,
+    '/api/cibn/popular',
     `{\n  filters(videotype: \"${params.kind}\") {\n    languages\n    areas\n    categories\n  }\n  \n}`
   ).then((d) => { return d.filters })
   .catch(() => { message.error('请求失败') })
@@ -144,7 +144,7 @@ export async function queryCIBNHotPlayCount(params) {
     params.hourOfDay ? `hourOfDay: \"${params.hourOfDay}\"` : null,
   ].filter(i => i !== null).join(',');
   return graphqlRequest(
-    serviceUrl,
+    '/api/cibn/popular',
     `{\n  playCount(${requestParams}) {\n      count(top: ${params.top || 10}) {\n        videoname,\n        play_count,\n        vid\n      }\n    }\n}`
   )
     .then(d => d.playCount.count)
