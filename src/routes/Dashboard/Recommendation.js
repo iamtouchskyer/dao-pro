@@ -6,6 +6,7 @@ import { Table, Row, Col, Card, Tabs, Radio, Select } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { Radar, TagCloud } from '../../components/Charts';
 import CardGroup from '../../newmodules/CardGroup';
+import Scroller from '../../newmodules/Scroller';
 import styles from './Recommendation.less';
 
 _.mixin({
@@ -202,21 +203,44 @@ export default class Recommendation extends PureComponent {
         { this.renderDropdownMenu() }
         { this.renderSpecifiedUser() }
 
-        <Card loading={usersLoading} bordered={false} title="猜你喜欢" bodyStyle={{ marginBottom: 4, padding: 4, minHeight: 200 }} >
-          <Tabs size="large">
-            {_.map(recommendation.recommendation.data.listByTimeCategory, (cards, title) =>
-              (
-                <Tabs.TabPane tab={title} key={title} style={{ padding: 0 }}>
-                  <CardGroup loading={gueesYouLikeLoading} cardTitle="" cards={_.take(_.shuffle(cards), 10)} />
-                </Tabs.TabPane>
-              )
-            )
-            }
-          </Tabs>
-        </Card>
-
         <Row gutter={24}>
-          <Col xl={9} lg={24} md={24} sm={24} xs={24}>
+          <Col xs={15}>
+            <Card style={{ marginBottom: 24, height: 1008 }} bordered={false} >
+              {/* <Scroller
+                data={recommendation.recommendation.data.listByTimeCategory}
+              /> */}
+              <Tabs type="card">
+                <Tabs.TabPane tab="全部" key="fullList">
+                  {/* <CardGroup
+                    loading={gueesYouLikeLoading}
+                    cards={recommendation.recommendation.data.fullList}
+                    cardGridStyle={{ width: '25%' }}
+                  /> */}
+                  <Scroller
+                    gueesYouLikeLoading={gueesYouLikeLoading}
+                    fullData={recommendation.recommendation.data.listByTimeCategory}
+                  />
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="按时间归类" key="listByTimeCategory">
+                  <Tabs size="small" tabPosition="left" tabBarStyle={{ maxHeight: 960 }}>
+                    {_.map(recommendation.recommendation.data.listByTimeCategory, (cards, title) =>
+                      (
+                        <Tabs.TabPane tab={title} key={title} style={{ padding: 0 }}>
+                          <CardGroup
+                            loading={gueesYouLikeLoading}
+                            cards={_.take(_.shuffle(cards), 10)}
+                            cardGridStyle={{ width: '25%' }}
+                          />
+                        </Tabs.TabPane>
+                      )
+                    )
+                    }
+                  </Tabs>
+                </Tabs.TabPane>
+              </Tabs>
+            </Card>
+          </Col>
+          <Col xs={9}>
             <Card title="观影标签" loading={tagLoading} bordered={false} style={{ marginBottom: 24, height: 360 }} bodyStyle={{ overflow: 'hidden' }}>
               <TagCloud
                 data={tags}
@@ -224,8 +248,6 @@ export default class Recommendation extends PureComponent {
                 loading={tagLoading}
               />
             </Card>
-          </Col>
-          <Col xl={6} lg={24} md={24} sm={24} xs={24}>
             <Card
               style={{ marginBottom: 24, height: 360 }}
               bordered={false}
@@ -236,10 +258,8 @@ export default class Recommendation extends PureComponent {
                 <Radar hasLegend height={270} data={radarData} />
               </div>
             </Card>
-          </Col>
-          <Col xl={9} lg={24} md={24} sm={24} xs={24}>
             <Card
-              style={{ marginBottom: 24, height: 360 }}
+              style={{ marginBottom: 24, height: 240 }}
               bordered={false}
               title="用户描述"
               loading={summaryLoading}
@@ -250,6 +270,19 @@ export default class Recommendation extends PureComponent {
             </Card>
           </Col>
         </Row>
+
+        {/* <Card loading={usersLoading} bordered={false} title="猜你喜欢" bodyStyle={{ marginBottom: 4, padding: 4, minHeight: 200 }} >
+          <Tabs size="large">
+            {_.map(recommendation.recommendation.data.listByTimeCategory, (cards, title) =>
+              (
+                <Tabs.TabPane tab={title} key={title} style={{ padding: 0 }}>
+                  <CardGroup loading={gueesYouLikeLoading} cardTitle="" cards={_.take(_.shuffle(cards), 10)} />
+                </Tabs.TabPane>
+              )
+            )
+            }
+          </Tabs>
+        </Card> */}
         <Row gutter={24}>
           <Col xl={24} lg={24} md={24} sm={24} xs={24}>
             <Card bordered={false} title="观影历史">

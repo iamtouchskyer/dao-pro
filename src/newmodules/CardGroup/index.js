@@ -1,20 +1,21 @@
 import React, { PureComponent } from 'react';
+import _ from 'lodash';
 import moment from 'moment';
 import { Link } from 'dva/router';
-import { Card, Row, Col, Avatar, Icon } from 'antd';
+import { Card, Row, Col, Avatar, Icon, Tag } from 'antd';
 import styles from './index.less';
 import Ellipsis from '../../components/Ellipsis';
 
 export default class CardGroup extends PureComponent {
 
-  renderOneLineOfDesc = (label, value) => {
+  renderOneLineOfDesc = (label, value, renderValue = v => <span>{v}</span>) => {
     return (
       <Row gutter={24}>
         <Col xl={8} lg={8} md={8} sm={8} xs={8}>
           {`${label}:`}
         </Col>
         <Col xl={16} lg={16} md={16} sm={16} xs={16}>
-          {value}
+          {renderValue(value)}
         </Col>
       </Row>
     );
@@ -22,9 +23,9 @@ export default class CardGroup extends PureComponent {
 
   render() {
     const {
-      cardTitle,
       loading,
       cards,
+      cardGridStyle = { padding: 4 },
     } = this.props;
 
     return (
@@ -37,18 +38,18 @@ export default class CardGroup extends PureComponent {
       >
         {
           cards.map(cardItem => (
-            <Card.Grid className={styles.projectGrid} key={cardItem.vid} style={{ padding: 4 }}>
+            <Card.Grid className={styles.projectGrid} key={_.uniqueId(cardItem.vid)} style={cardGridStyle}>
               <Card
                 bodyStyle={{ padding: 0 }}
                 bordered={false}
-                key={cardItem.vid}
-                actions={[<Icon type="like" />, <Icon type="dislike" />, <Icon type="ellipsis" />]}
+                key={_.uniqueId(cardItem.vid)}
+                // actions={[<Icon type="like" />, <Icon type="dislike" />, <Icon type="ellipsis" />]}
               >
                 <Card.Meta
-                  style={{ minHeight: 180 }}
+                  style={{ minHeight: 240 }}
                   title={<div className={styles.cardTitle}>{cardItem.vname}</div>}
                   description={(
-                    <div style={{ minHeight: 180 }}>
+                    <div style={{ minHeight: 240 }}>
                       <Ellipsis tooltip lines={8}>
                         { this.renderOneLineOfDesc('地区', cardItem.area) }
                         { this.renderOneLineOfDesc('年份', cardItem.issueyear) }
