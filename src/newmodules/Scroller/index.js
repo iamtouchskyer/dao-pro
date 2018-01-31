@@ -27,13 +27,14 @@ export default class Scroller extends React.Component {
     const values = _.values(this.props.fullData);
     const currentDataKeyIndex = _.indexOf(_.keys(this.props.fullData), this.state.dataKey);
     const dataKeyNext = keys[currentDataKeyIndex + 1];
-    const dataNext = [...this.state.data, ...values[dataKeyNext]];
 
     if (!values[dataKeyNext]) {
       this.setState({
         hasMore: false,
       });
     } else {
+      const dataNext = [...this.state.data, ...values[dataKeyNext]];
+
       this.setState({
         hasMore: dataKeyNext < dataNext.length - 1,
         dataKey: dataKeyNext,
