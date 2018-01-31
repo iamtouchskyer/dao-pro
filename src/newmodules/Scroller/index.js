@@ -24,16 +24,15 @@ export default class Scroller extends React.Component {
 
   handleInfiniteOnLoad = () => {
     const keys = _.keys(this.props.fullData);
-    const values = _.values(this.props.fullData);
     const currentDataKeyIndex = _.indexOf(_.keys(this.props.fullData), this.state.dataKey);
     const dataKeyNext = keys[currentDataKeyIndex + 1];
 
-    if (!values[dataKeyNext]) {
+    if (!this.props.fullData[dataKeyNext]) {
       this.setState({
         hasMore: false,
       });
     } else {
-      const dataNext = [...this.state.data, ...values[dataKeyNext]];
+      const dataNext = [...this.state.data, ...this.props.fullData[dataKeyNext]];
 
       this.setState({
         hasMore: dataKeyNext < dataNext.length - 1,
