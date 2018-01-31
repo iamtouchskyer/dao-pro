@@ -16,7 +16,7 @@ export default class Scroller extends React.Component {
     const values = _.values(this.props.fullData);
 
     this.setState({
-      hasMore: !_.isEmpty(values) && values.length > 1,
+      hasMore: !_.isEmpty(values) && _.first(values).length > 1,
       dataKey: _.first(keys),
       data: _.isEmpty(values) ? [] : _.first(values),
     });
@@ -27,6 +27,7 @@ export default class Scroller extends React.Component {
     const values = _.values(this.props.fullData);
     const currentDataKeyIndex = _.indexOf(_.keys(this.props.fullData), this.state.dataKey);
     const dataKeyNext = keys[currentDataKeyIndex + 1];
+    const dataNext = [...this.state.data, ...values[dataKeyNext]];
 
     if (!values[dataKeyNext]) {
       this.setState({
@@ -34,9 +35,9 @@ export default class Scroller extends React.Component {
       });
     } else {
       this.setState({
-        hasMore: dataKeyNext < values.length - 1,
+        hasMore: dataKeyNext < dataNext.length - 1,
         dataKey: dataKeyNext,
-        data: [...this.state.data, ...values[dataKeyNext]],
+        data: dataNext,
       });
     }
   }

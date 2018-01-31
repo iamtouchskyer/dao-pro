@@ -43,7 +43,7 @@ export default class CardGroup extends PureComponent {
                 bodyStyle={{ padding: 0 }}
                 bordered={false}
                 key={_.uniqueId(cardItem.vid)}
-                // actions={[<Icon type="like" />, <Icon type="dislike" />, <Icon type="ellipsis" />]}
+                actions={[<Icon type="like" />, <Icon type="dislike" />, <Icon type="ellipsis" />]}
               >
                 <Card.Meta
                   style={{ minHeight: 240 }}
