@@ -98,9 +98,7 @@ export async function queryCIBNPersonalSummary(hid) {
   return request(`/api/cibn/users/${hid}?action=summary`);
 }
 
-// const serviceUrl = "http://zlike-mac0.guest.corp.microsoft.com:4000/graphql";
-// const serviceUrl = "http://stcarec.eastasia.cloudapp.azure.com:3030/popular";
-// const serviceUrl = "http://localhost:3030/popular";
+const serviceUrl = "/api/graphql";
 
 export async function queryCIBNHotFilter(params) {
   // return graphqlRequest(`/api/cibn/hot/filter?${stringify(params)}`);
@@ -144,10 +142,10 @@ export async function queryCIBNHotPlayCount(params) {
     params.hourOfDay ? `hourOfDay: \"${params.hourOfDay}\"` : null,
   ].filter(i => i !== null).join(',');
   return graphqlRequest(
-    '/api/cibn/popular',
-    `{\n  playCount(${requestParams}) {\n      count(top: ${params.top || 10}) {\n        videoname,\n        play_count,\n        vid\n      }\n    }\n}`
+    serviceUrl,
+    `{\n  playEvents(${requestParams}) {\n      rank(top: ${params.top || 10}) {\n        videoname,\n        play_count,\n        vid\n      }\n    }\n}`
   )
-    .then(d => d.playCount.count)
+    .then(d => d.playEvents.rank)
     .catch(() => { message.error('请求失败'); });
 }
 
