@@ -222,7 +222,7 @@ export default class Recommendation extends PureComponent {
                 data={recommendation.recommendation.data.listByTimeCategory}
               /> */}
               <Tabs type="card">
-                <Tabs.TabPane tab="全部" key="fullList">
+                <Tabs.TabPane tab="全部推荐" key="fullList">
                   {/* <CardGroup
                     loading={gueesYouLikeLoading}
                     cards={recommendation.recommendation.data.fullList}
@@ -233,7 +233,7 @@ export default class Recommendation extends PureComponent {
                     fullData={recommendation.recommendation.data.listByTimeCategory}
                   />
                 </Tabs.TabPane>
-                <Tabs.TabPane tab="按时间归类" key="listByTimeCategory">
+                <Tabs.TabPane tab="按时间(小时)推荐" key="listByTimeCategory">
                   <Tabs size="small" tabPosition="left" tabBarStyle={{ maxHeight: 960 }}>
                     {_.map(recommendation.recommendation.data.listByTimeCategory, (cards, title) =>
                       (
