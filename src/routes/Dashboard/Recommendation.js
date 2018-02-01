@@ -240,8 +240,8 @@ export default class Recommendation extends PureComponent {
                         <Tabs.TabPane tab={title} key={title} style={{ padding: 0 }}>
                           <CardGroup
                             loading={gueesYouLikeLoading}
-                            cards={_.take(_.shuffle(cards), 10)}
-                            cardGridStyle={{ width: '33.33%' }}
+                            cards={cards}
+                            cardGridStyle={{ width: '25%' }}
                           />
                         </Tabs.TabPane>
                       )
