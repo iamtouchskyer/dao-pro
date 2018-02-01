@@ -133,7 +133,7 @@ const proxy = {
   'GET /api/cibn/operationdata': 'http://localhost:3030/',
   'GET /api/cibn/users': 'http://localhost:3030/',
   'GET /api/cibn/popular': 'http://localhost:3030/popular',
-  'POST /api/cibn/popular': 'http://localhost:3030/popular',
+  'POST /api/graphql': 'http://localhost:3030/',
 
   // 'GET /api/cibn/operationdata': CIBN.getFakeOperationData,
   // 'GET /api/cibn/hot/filter': CIBNHot.getFilterForVideoKind,
