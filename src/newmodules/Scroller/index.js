@@ -57,7 +57,7 @@ export default class Scroller extends React.Component {
           <CardGroup
             loading={gueesYouLikeLoading}
             cards={this.state.data}
-            cardGridStyle={{ width: '50%' }}
+            cardGridStyle={{ width: '25%' }}
           />
         </InfiniteScroll>
       </div>

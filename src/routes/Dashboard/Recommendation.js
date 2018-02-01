@@ -28,6 +28,14 @@ _.mixin({
   summaryLoading: loading.effects['recommendation/fetchPersonalSummary'],
 }))
 export default class Recommendation extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      currentHid: '',
+    };
+  }
+
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
@@ -46,6 +54,8 @@ export default class Recommendation extends PureComponent {
   }
 
   doFetehByHid = (hid) => {
+    this.setState({ currentHid : hid });
+
     const { dispatch } = this.props;
 
     dispatch({
@@ -80,7 +90,7 @@ export default class Recommendation extends PureComponent {
       <Row>
         <Select
           defaultValue="选择用户"
-          style={{ width: 300 }}
+          style={{ width: 400 }}
           onChange={(value) => {
             this.doFetehByHid(value);
           }}
@@ -98,7 +108,7 @@ export default class Recommendation extends PureComponent {
   renderSpecifiedUser = () => {
     return (
       <Row style={{ marginTop: 12, marginBottom: 12 }}>
-        <Radio.Group value="small" onChange={e => this.doFetehByHid(e.target.value)} >
+        <Radio.Group value={this.state.currentHid} onChange={e => this.doFetehByHid(e.target.value)} >
           <Radio.Button value="00070C448EB2FE4183CEF3FC2C531BDE">游戏爱好者</Radio.Button>
           <Radio.Button value="000783C6C87BA6A2EA013D5B0E884596">海外用户</Radio.Button>
           <Radio.Button value="00044891791203A2B7DD92C19F201281">家庭主妇</Radio.Button>
@@ -231,7 +241,7 @@ export default class Recommendation extends PureComponent {
                           <CardGroup
                             loading={gueesYouLikeLoading}
                             cards={_.take(_.shuffle(cards), 10)}
-                            cardGridStyle={{ width: '25%' }}
+                            cardGridStyle={{ width: '33.33%' }}
                           />
                         </Tabs.TabPane>
                       )
