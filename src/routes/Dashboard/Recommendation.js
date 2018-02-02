@@ -44,6 +44,8 @@ export default class Recommendation extends PureComponent {
     dispatch({
       type: 'recommendation/fetchUsers',
     });
+
+    this.doFetehByHid('00070C448EB2FE4183CEF3FC2C531BDE');
   }
 
   componentWillUnmount() {
@@ -226,7 +228,7 @@ export default class Recommendation extends PureComponent {
                   {/* <CardGroup
                     loading={gueesYouLikeLoading}
                     cards={recommendation.recommendation.data.fullList}
-                    cardGridStyle={{ width: '25%' }}
+                    cardGridStyle={{ width: '25%', padding: 4 }}
                   /> */}
                   <Scroller
                     gueesYouLikeLoading={gueesYouLikeLoading}
@@ -241,7 +243,7 @@ export default class Recommendation extends PureComponent {
                           <CardGroup
                             loading={gueesYouLikeLoading}
                             cards={cards}
-                            cardGridStyle={{ width: '25%' }}
+                            cardGridStyle={{ width: '25%', padding: 4 }}
                           />
                         </Tabs.TabPane>
                       )
