@@ -103,7 +103,7 @@ const serviceUrl = "/api/graphql";
 export async function queryCIBNHotFilter(params) {
   // return graphqlRequest(`/api/cibn/hot/filter?${stringify(params)}`);
   return graphqlRequest(
-    '/api/cibn/popular',
+    serviceUrl,
     `{\n  filters(videotype: \"${params.kind}\") {\n    languages\n    areas\n    categories\n  }\n  \n}`
   ).then((d) => { return d.filters })
   .catch(() => { message.error('请求失败') })
